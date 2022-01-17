@@ -1,7 +1,7 @@
-import {int, ints, createAssocArray, Map} from "../src/index";
+import {int, numbers, createAssocArray, Map} from "../src/index";
 
 test("AssocArray", () => {
-    let a : Map<int, string | null> = createAssocArray(ints);
+    let a : Map<int, string | null> = createAssocArray(numbers);
     a.set(1, "one");
     a.set(2, null);
     expect(a.get(1)).toBe("one");

@@ -1,4 +1,5 @@
-import { int, nat } from "./primitives";
+import { combineHashCodes, Hashables } from "./hashable";
+import { int, nat, numbers } from "./primitives";
 
 export function isInt(x : any) : x is int {
     return Number.isInteger(x);

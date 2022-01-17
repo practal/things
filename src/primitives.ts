@@ -2,17 +2,17 @@ import { Equatables } from "./equatable";
 import { combineHashCodes, Hashables } from "./hashable";
 import { iterateCodepoints } from "./utils";
 
-
 export type Primitive = number | string | boolean | symbol | bigint
 
 export type int = number 
 
 export type nat = number
 
-export const ints : Hashables<int> = {
+export const numbers : Hashables<number> = {
     
-    hash(t: int): int {
-        return t;
+    hash(t: number): int {
+        if (Number.isInteger(t)) return t;
+        return strings.hash(`${t}`);
     },
 
     equals(lhs: number, rhs: number): boolean {
@@ -63,4 +63,22 @@ export const bigints : Hashables<bigint> = {
         return lhs === rhs;
     }
 
+}
+
+export const NumberArrays : Hashables<readonly number[]> = {
+
+    hash(t: readonly number[]): int {
+        let codes = t.map(x => numbers.hash(x));
+        return combineHashCodes(codes);
+    },
+
+    equals(lhs: readonly number[], rhs: readonly number[]): boolean {
+        let len = lhs.length;
+        if (len != rhs.length) return false;
+        for (let i=0; i<len; i++) {
+            if (lhs[i] !== rhs[i]) return false;
+        }
+        return true;
+    }
+    
 }
