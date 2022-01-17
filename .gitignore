@@ -1,0 +1,5 @@
+dist/
+.DS_store
+node_modules/
+*.test.js
+*.test.d.ts
