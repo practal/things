@@ -1,0 +1,38 @@
+{
+    "name": "things",
+    "version": "0.0.2",
+    "description": "Data structures and algorithms for TypeScript",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "files": [
+      "/dist"
+    ],
+    "scripts": {
+      "build": "tsc",
+      "test": "jest"
+    },
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/practal/things.git"
+    },
+    "keywords": [
+      "Data Structures",
+      "Algorithms"
+    ],
+    "author": "Steven Obua",
+    "license": "ISC",
+    "bugs": {
+      "url": "https://github.com/practal/things/issues"
+    },
+    "homepage": "https://github.com/practal/things#readme",
+    "devDependencies": {
+      "@types/jest": "^27.0.3",
+      "jest": "^27.4.5",
+      "ts-jest": "^27.1.2"
+    },
+    "jest": {
+        "preset": "ts-jest",
+        "testEnvironment": "node"
+    }
+  }
+  

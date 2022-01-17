@@ -1,0 +1,12 @@
+{
+    "include": ["src/**/*"],
+    "compilerOptions": {
+        "target": "es2018", 
+        "declaration": true,
+        "outDir": "./dist", 
+        "rootDir": "./src",
+        "module": "commonjs",
+        "baseUrl": ".",
+        "strict": true
+    }
+}
