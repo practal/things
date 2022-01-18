@@ -1,12 +1,13 @@
-import {int, numbers, createAssocArray, Map, nat, createHashMap, jsMap, MutableMap} from "../src/index";
+import {int, numbers, AssocArrayFor,  nat, HashMapFor, MutableMap} from "../src/index";
 
 test("AssocArray", () => {
-    let a : Map<int, string | null> = createAssocArray(numbers);
+    let a : Map<int, string | null> = AssocArrayFor(numbers);
     a.set(1, "one");
     a.set(2, null);
     expect(a.get(1)).toBe("one");
     expect(a.get(2)).toBe(null);
     expect(a.get(3)).toBe(undefined);
+    console.log(`${a}`);
 });
 
 function randomNat(max : nat = Number.MAX_SAFE_INTEGER) : number {
@@ -18,8 +19,8 @@ function coinflip() : boolean {
 }
 
 test("HashMap<number, number>", () => {
-    let a : MutableMap<number, number> = createHashMap(numbers);
-    let b : MutableMap<number, number> = jsMap();
+    let a : Map<number, number> = HashMapFor(numbers);
+    let b : Map<number, number> = new Map();
     let N = 10000;
     for (let i = 0; i < N/2; i ++) {
         let key = randomNat(N);
@@ -39,4 +40,19 @@ test("HashMap<number, number>", () => {
         expect(a.get(i)).toBe(b.get(i));
     }
     console.log(`size of a = ${a.size}, size of b = ${b.size}`);
+});
+
+test("SpeedDemon", () => {
+    let a : Map<number, number> = HashMapFor(numbers);
+    let N = 100000;
+    for (let i = 0; i < N/2; i ++) {
+        let key = randomNat(N);
+        if (coinflip()) {
+            let value = randomNat();
+            a.set(key, value);
+        } else {
+            let da = a.delete(key);
+        }
+    }
+    console.log(`size of a = ${a.size}`);
 });
