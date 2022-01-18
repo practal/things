@@ -1,6 +1,7 @@
 import { defaultEquatables, Equatable, Equatables } from "./equatable";
 import { MutableMap } from "./map";
 import { int, nat } from "./primitives";
+import { Thing } from "./thing";
 import { joinStrings } from "./utils";
 
 export function AssocArray<Key extends Equatable, Value>(keyValues : Iterable<[Key, Value]> = []) {
@@ -15,12 +16,18 @@ export function AssocArrayFor<Key, Value>(Keys : Equatables<Key>, keyValues : It
     return m;
 }
 
-class AssocArrayImpl<Key, Value> implements MutableMap<Key, Value> {
+class AssocArrayImpl<Key, Value> extends Thing implements MutableMap<Key, Value> {
+
+    static {
+        Object.freeze(AssocArrayImpl.prototype);
+    }
 
     private content : [Key, Value][]
 
     constructor(private Keys : Equatables<Key>) {
+        super();
         this.content = [];
+        Object.freeze(this);
     }
     
     [Symbol.iterator](): IterableIterator<[Key, Value]> {
@@ -29,6 +36,10 @@ class AssocArrayImpl<Key, Value> implements MutableMap<Key, Value> {
 
     get [Symbol.toStringTag](): string {
         return `AssocArray(${joinStrings(", ", this.content.map(kv => `${kv[0]} -> ${kv[1]}`))})`;
+    }
+
+    public toString() : string {
+        return `AssocArray(${joinStrings(", ", this.content.map(kv => `${kv[0]} -> ${kv[1]}`))})`;       
     }
 
     get(key: Key): Value | undefined {

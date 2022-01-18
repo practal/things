@@ -21,7 +21,7 @@ function coinflip() : boolean {
 test("HashMap<number, number>", () => {
     let a : Map<number, number> = HashMapFor(numbers);
     let b : Map<number, number> = new Map();
-    let N = 10000;
+    let N = 100000;
     for (let i = 0; i < N/2; i ++) {
         let key = randomNat(N);
         if (coinflip()) {
@@ -39,12 +39,13 @@ test("HashMap<number, number>", () => {
     for (let i = 0; i <= N; i ++) {
         expect(a.get(i)).toBe(b.get(i));
     }
+    //(a as any).get = 3;
     console.log(`size of a = ${a.size}, size of b = ${b.size}`);
 });
 
 test("SpeedDemon", () => {
     let a : Map<number, number> = HashMapFor(numbers);
-    let N = 100000;
+    let N = 1000000;
     for (let i = 0; i < N/2; i ++) {
         let key = randomNat(N);
         if (coinflip()) {

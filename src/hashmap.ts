@@ -2,6 +2,7 @@ import { AssocArrayFor } from "./assoc_array";
 import { defaultHashables, Hashable, Hashables } from "./hashable";
 import { MutableMap } from "./map";
 import { int, nat } from "./primitives";
+import { Thing } from "./thing";
 import { joinStrings } from "./utils";
 
 export function HashMap<K extends Hashable, V>(keyValues : Iterable<[K, V]> = []) : MutableMap<K, V> {
@@ -16,15 +17,29 @@ export function HashMapFor<K, V>(Keys : Hashables<K>, keyValues : Iterable<[K, V
     return map;
 }
 
-class HashMapImpl<Key, Value> implements MutableMap<Key, Value> {
+class Counter {
+    private counter : int = 0;
+    get get(): int { return this.counter; }
+    increment() { this.counter += 1; }
+    decrement() { this.counter -= 1; }
+    reset() { this.counter = 0; }
+}
 
-    private map : Map<int, MutableMap<Key, Value>>;
+class HashMapImpl<Key, Value> extends Thing implements MutableMap<Key, Value> {
 
-    private count : nat;
+    static {
+        Object.freeze(HashMapImpl.prototype);
+    }
+
+    private readonly map : Map<int, MutableMap<Key, Value>>;
+
+    private readonly counter : Counter
 
     constructor(private Keys : Hashables<Key>) {
+        super();
         this.map = new Map();
-        this.count = 0;
+        this.counter = new Counter();
+        Object.freeze(this);
     }
 
     [Symbol.iterator](): IterableIterator<[Key, Value]> {
@@ -37,7 +52,7 @@ class HashMapImpl<Key, Value> implements MutableMap<Key, Value> {
 
     clear(): void {
         this.map.clear();
-        this.count = 0;
+        this.counter.reset();
     }
 
     delete(key: Key): boolean {
@@ -45,7 +60,7 @@ class HashMapImpl<Key, Value> implements MutableMap<Key, Value> {
         const keyValues = this.map.get(code);
         if (keyValues === undefined) return false;
         if (keyValues.delete(key)) {
-            this.count -= 1;
+            this.counter.decrement(); 
             if (keyValues.size === 0) {
                 this.map.delete(code);
             }
@@ -63,7 +78,7 @@ class HashMapImpl<Key, Value> implements MutableMap<Key, Value> {
         const oldValue = keyValues.remove(key);
         const newSize = keyValues.size;
         if (newSize < oldSize) {
-            this.count -= 1;
+            this.counter.decrement();
             if (newSize === 0) {
                 this.map.delete(code);
             }
@@ -92,11 +107,11 @@ class HashMapImpl<Key, Value> implements MutableMap<Key, Value> {
             let keyValues = AssocArrayFor<Key, Value>(this.Keys);
             keyValues.set(key, value);
             this.map.set(code, keyValues);
-            this.count += 1;
+            this.counter.increment(); 
         } else {
             let oldSize = keyValues.size;
             keyValues.set(key, value);
-            if (oldSize < keyValues.size) this.count += 1;
+            if (oldSize < keyValues.size) this.counter.increment(); 
         }
         return this;
     }
@@ -108,12 +123,12 @@ class HashMapImpl<Key, Value> implements MutableMap<Key, Value> {
             let keyValues = AssocArrayFor<Key, Value>(this.Keys);
             keyValues.set(key, value);
             this.map.set(code, keyValues);
-            this.count += 1;
+            this.counter.increment(); 
             return undefined;
         } else {
             let oldSize = keyValues.size;
             let old = keyValues.put(key, value);
-            if (oldSize < keyValues.size) this.count += 1;
+            if (oldSize < keyValues.size) this.counter.increment(); 
             return old;
         }
     }
@@ -125,18 +140,18 @@ class HashMapImpl<Key, Value> implements MutableMap<Key, Value> {
             let keyValues = AssocArrayFor<Key, Value>(this.Keys);
             keyValues.set(key, value);
             this.map.set(code, keyValues);
-            this.count += 1;
+            this.counter.increment();
             return undefined;
         } else {
             let oldSize = keyValues.size;
             let old = keyValues.putIfUndefined(key, value);
-            if (oldSize < keyValues.size) this.count += 1;
+            if (oldSize < keyValues.size) this.counter.increment(); 
             return old;
         }
     }
 
     get size(): nat {
-        return this.count;
+        return this.counter.get;
     }
 
     forEach(callbackfn: (value: Value, key: Key, map: MutableMap<Key, Value>) => void, thisArg?: any): void {
