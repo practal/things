@@ -1,12 +1,12 @@
 import { defaultEquatables, Equatable, Equatables } from "./equatable";
-import { MutableMap } from "./map";
+import { Dict, MutableMap } from "./map";
 import { nat } from "./primitives";
 
-export function createAssocArray<Key, Value>(Keys : Equatables<Key>) : MutableMap<Key, Value> {
+export function createAssocArray<Key, Value>(Keys : Equatables<Key>) : Dict<Key, Value> {
     return new AssocArrayImpl(Keys);
 }
 
-export function AssocArray<Key extends Equatable, Value>(...keyValues : [Key, Value][]) : MutableMap<Key, Value> {
+export function AssocArray<Key extends Equatable, Value>(keyValues : Iterable<[Key, Value]> = []) : Dict<Key, Value> {
     let m = new AssocArrayImpl<Key, Value>(defaultEquatables<Key>());
     for (let [k, v] of keyValues) {
         m.set(k, v);
@@ -14,7 +14,7 @@ export function AssocArray<Key extends Equatable, Value>(...keyValues : [Key, Va
     return m;
 }
 
-class AssocArrayImpl<Key, Value> implements MutableMap<Key, Value> {
+class AssocArrayImpl<Key, Value> implements Dict<Key, Value> {
 
     private content : [Key, Value][]
 
@@ -65,6 +65,28 @@ class AssocArrayImpl<Key, Value> implements MutableMap<Key, Value> {
         return true;
     }
 
+    put(key: Key, value: Value): Value | undefined {
+        const i = this.find(key);
+        if (i === undefined) {
+            this.content.push([key, value]);
+            return undefined;
+        } else {
+            const oldValue = this.content[i][1];
+            this.content[i][1] = value;
+            return oldValue;
+        }
+    }
+
+    putIfAbsent(key: Key, value: Value): Value | undefined {
+        const i = this.find(key);
+        if (i === undefined) {
+            this.content.push([key, value]);
+            return undefined;
+        } else {
+            return this.content[i][1];
+        }
+    }
+
     clear() {
         this.content = [];
     }
@@ -72,5 +94,7 @@ class AssocArrayImpl<Key, Value> implements MutableMap<Key, Value> {
     get size(): nat {
         return this.content.length;
     }
+
+
 
 }
