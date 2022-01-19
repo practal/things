@@ -27,3 +27,7 @@ const anyEquatables: Equatables<any> = {
 export function jsEquatables<T>() : Equatables<T> {
     return anyEquatables;
 }
+
+export function invalidEquals(lhs : any, rhs : any) : never {
+    throw new Error(`Cannot test ${lhs} and ${rhs} for equality`);
+}

@@ -1,4 +1,4 @@
-import { Equatables } from "./equatable";
+import { Equatables, invalidEquals } from "./equatable";
 import { combineHashCodes, Hashable, Hashables } from "./hashable";
 import { Thing } from "./thing";
 import { iterateCodepoints } from "./utils";
@@ -98,6 +98,7 @@ export class Int extends Thing implements Hashable {
     }
 
     equals(other : Int) : boolean {
+        if (!(other instanceof Int)) invalidEquals(this, other);
         return this.value === other.value;
     }
 
@@ -105,6 +106,9 @@ export class Int extends Thing implements Hashable {
         return this.value;
     }
 
+    toString() : string {
+        return `${this.value}`;
+    }
 }
 
 export class MutableInt extends Thing implements Hashable {
@@ -124,6 +128,7 @@ export class MutableInt extends Thing implements Hashable {
     }
 
     equals(other : MutableInt) : boolean {
+        if (!(other instanceof MutableInt)) invalidEquals(this, other);
         return this.#value == other.#value;
     }
 
@@ -150,6 +155,9 @@ export class MutableInt extends Thing implements Hashable {
         this.#value--;
     }
 
+    toString() : string {
+        return `${this.value}`;
+    }
 }
 
 export class Nat extends Thing implements Hashable {
@@ -166,6 +174,7 @@ export class Nat extends Thing implements Hashable {
     }
 
     equals(other : Nat) : boolean {
+        if (!(other instanceof Nat)) invalidEquals(this, other);
         return this.value === other.value;
     }
 
@@ -173,6 +182,9 @@ export class Nat extends Thing implements Hashable {
         return this.value;
     }
 
+    toString() : string {
+        return `${this.value}`;
+    }
 }
 
 export class MutableNat extends Thing implements Hashable {
@@ -192,6 +204,7 @@ export class MutableNat extends Thing implements Hashable {
     }
 
     equals(other : MutableNat) : boolean {
+        if (!(other instanceof MutableNat)) invalidEquals(this, other);
         return this.#value == other.#value;
     }
 
@@ -204,7 +217,7 @@ export class MutableNat extends Thing implements Hashable {
     }
 
     set value(v : nat) {
-        if (!(Number.isInteger(v) && v >= 0)) throw new Error(`Integer expected, found: ${v}`);
+        if (!(Number.isInteger(v) && v >= 0)) throw new Error(`Natural number expected, found: ${v}`);
         this.#value = v;
     }
 
@@ -218,6 +231,9 @@ export class MutableNat extends Thing implements Hashable {
         this.#value--;
     }
 
+    toString() : string {
+        return `${this.value}`;
+    }
 }
 
 export class Num extends Thing implements Hashable {
@@ -241,6 +257,9 @@ export class Num extends Thing implements Hashable {
         return numbers.hash(this.value);
     }
 
+    toString() : string {
+        return `${this.value}`;
+    }
 }
 
 export class MutableNum extends Thing implements Hashable {
@@ -284,6 +303,9 @@ export class MutableNum extends Thing implements Hashable {
         this.#value--;
     }
 
+    toString() : string {
+        return `${this.value}`;
+    }
 }
 
 

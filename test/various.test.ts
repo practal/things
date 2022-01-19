@@ -107,3 +107,11 @@ test("immutable Nat", () => {
     let n = new Nat(1);
     expect(() => (n as any).value = 5).toThrow();
 });
+
+test("equals Nat MutableInt", () => {
+    let n = new Nat(7);
+    let m = new MutableInt(7);
+    let x = 7;
+    expect(n.equals(m)).toBe(true);
+    //expect(m.equals(n as MutableInt)).toBe(true);
+});
