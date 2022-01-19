@@ -1,6 +1,6 @@
 import { Equatable, Equatables } from "./equatable";
 
-export interface Comparables<T> extends Equatables<T> {
+export interface PartialOrder<T> extends Equatables<T> {
 
     /**
      * Compares lhs with rhs and returns a number C, where:
@@ -33,9 +33,9 @@ export interface Comparable extends Equatable {
      * It is thus possible to represent partial orders, by returning NaN if this and other are not comparable.
      * Comparison must have the following properties:
      * * *Compatible with equality*: C === 0 is true iff this.equals(other) is true
-     * * *Antisymmetry*: For all x we have
-     *   * this.compare(x) < 0 implies x.compare(this) > 0
-     *   * this.compare(x) > 0 implies x.compare(this) < 0 
+     * * *Antisymmetry*: For all other we have
+     *   * this.compare(other) < 0 implies other.compare(this) > 0
+     *   * this.compare(other) > 0 implies other.compare(this) < 0 
      */
     compare(other : any) : number
 
