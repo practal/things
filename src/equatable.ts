@@ -5,6 +5,7 @@ export interface Equality<T> {
      * * *Reflexivity*: equals(x, x) is true for any x : T
      * * *Symmetry*: if equals(x, y) is true for any x, y : T, then equals(y, x) is true as well
      * * *Transitivity*: if equals(x, y) is true, and equals(y, z) is true for any x, y, z : T, then x.equals(z) is true as well
+     * * *Undefinedness*: if equals(undefined, x) or equals(x, undefined) is true for any x : T, then x === undefined
      */ 
     equals(lhs : T, rhs : T) : boolean
 
@@ -17,6 +18,7 @@ export interface Equatable {
      * * *Reflexivity*: x.equals(x) is true
      * * *Symmetry*: if x.equals(y) is true, then y.equals(x) is true as well
      * * *Transitivity*: if x.equals(y) is true, and y.equals(z) is true, then x.equals(z) is true as well
+     * * *Undefinedness*: x.equals(undefined) is not true
      */ 
     equals(other : any) : boolean
 
