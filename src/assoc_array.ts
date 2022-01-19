@@ -45,7 +45,7 @@ class AssocArrayImpl<Key, Value> extends Thing implements MutableMap<Key, Value>
 
     get(key: Key): Value | undefined {
         for (let [k, v] of this.content) {
-            if (this.Keys.equals(key, k)) {
+            if (this.Keys.equals(k, key)) {
                 return v;
             }
         }
@@ -54,7 +54,7 @@ class AssocArrayImpl<Key, Value> extends Thing implements MutableMap<Key, Value>
 
     has(key: Key): boolean {
         for (let [k, v] of this.content) {
-            if (this.Keys.equals(key, k)) {
+            if (this.Keys.equals(k, key)) {
                 return true;
             }
         }
@@ -64,7 +64,7 @@ class AssocArrayImpl<Key, Value> extends Thing implements MutableMap<Key, Value>
     private find(key : Key) : int {
         for (let i = 0; i < this.content.length; i++) {
             let [k, v] = this.content[i];
-            if (this.Keys.equals(key, k)) return i;
+            if (this.Keys.equals(k, key)) return i;
         }
         return -1;
     }

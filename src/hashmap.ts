@@ -2,7 +2,7 @@ import { AssocArrayFor } from "./assoc_array";
 import { defaultHashables, Hashable, Hashables } from "./hashable";
 import { MutableMap } from "./map";
 import { int, MutableInt, nat } from "./primitives";
-import { Thing } from "./thing";
+import { finalClass, Thing } from "./thing";
 import { joinStrings } from "./utils";
 
 export function HashMap<K extends Hashable, V>(keyValues : Iterable<[K, V]> = []) : MutableMap<K, V> {
@@ -30,6 +30,7 @@ class HashMapImpl<Key, Value> extends Thing implements MutableMap<Key, Value> {
 
     constructor(private Keys : Hashables<Key>) {
         super();
+        if (new.target !== HashMapImpl) finalClass("HashMapImpl");
         this.map = new Map();
         this.counter = new MutableInt();
         Object.freeze(this);

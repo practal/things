@@ -1,6 +1,6 @@
 import { Equatables, invalidEquals } from "./equatable";
 import { combineHashCodes, Hashable, Hashables } from "./hashable";
-import { Thing } from "./thing";
+import { finalClass, Thing } from "./thing";
 import { iterateCodepoints } from "./utils";
 
 export type Primitive = number | string | boolean | symbol | bigint
@@ -93,6 +93,7 @@ export class Int extends Thing implements Hashable {
 
     constructor (public readonly value : int = 0) {
         super();
+        if (new.target !== Int) finalClass("Int");
         if (!Number.isInteger(value)) throw new Error(`Integer expected, found: ${value}`);
         Object.freeze(this);
     }
@@ -107,7 +108,7 @@ export class Int extends Thing implements Hashable {
     }
 
     toString() : string {
-        return `${this.value}`;
+        return `Int(${this.value})`;
     }
 }
 
@@ -122,6 +123,7 @@ export class MutableInt extends Thing implements Hashable {
 
     constructor (_value : int = 0) {
         super();
+        if (new.target !== MutableInt) finalClass("MutableInt");
         if (!Number.isInteger(_value)) throw new Error(`Integer expected, found: ${_value}`);
         this.#value = _value;
         Object.freeze(this);
@@ -129,7 +131,7 @@ export class MutableInt extends Thing implements Hashable {
 
     equals(other : MutableInt) : boolean {
         if (!(other instanceof MutableInt)) invalidEquals(this, other);
-        return this.#value == other.#value;
+        return this.#value == other.value;
     }
 
     get hash(): int {
@@ -156,7 +158,7 @@ export class MutableInt extends Thing implements Hashable {
     }
 
     toString() : string {
-        return `${this.value}`;
+        return `MutableInt(${this.value})`;
     }
 }
 
@@ -169,6 +171,7 @@ export class Nat extends Thing implements Hashable {
 
     constructor (public readonly value : nat = 0) {
         super();
+        if (new.target !== Nat) finalClass("Nat");
         if (!(Number.isInteger(value) && value >= 0)) throw new Error(`Natural number expected, found: ${value}`);
         Object.freeze(this);
     }
@@ -183,7 +186,7 @@ export class Nat extends Thing implements Hashable {
     }
 
     toString() : string {
-        return `${this.value}`;
+        return `Nat(${this.value})`;
     }
 }
 
@@ -198,6 +201,7 @@ export class MutableNat extends Thing implements Hashable {
 
     constructor (_value : nat = 0) {
         super();
+        if (new.target !== MutableNat) finalClass("MutableNat");
         if (!(Number.isInteger(_value) && _value >= 0)) throw new Error(`Integer expected, found: ${_value}`);
         this.#value = _value;
         Object.freeze(this);
@@ -232,7 +236,7 @@ export class MutableNat extends Thing implements Hashable {
     }
 
     toString() : string {
-        return `${this.value}`;
+        return `MutableNat(${this.value})`;
     }
 }
 
@@ -245,6 +249,7 @@ export class Num extends Thing implements Hashable {
 
     constructor (public readonly value : number = 0) {
         super();
+        if (new.target !== Num) finalClass("Num");
         if (typeof(value) !== "number") throw new Error(`Number expected, found: ${value}`);
         Object.freeze(this);
     }
@@ -258,7 +263,7 @@ export class Num extends Thing implements Hashable {
     }
 
     toString() : string {
-        return `${this.value}`;
+        return `Num(${this.value})`;
     }
 }
 
@@ -273,6 +278,7 @@ export class MutableNum extends Thing implements Hashable {
     
     constructor (_value : number = 0) {
         super();
+        if (new.target !== MutableNum) finalClass("MutableNum");
         if (typeof(_value) !== "number") throw new Error(`Number expected, found: ${_value}`);
         this.#value = _value;
         Object.freeze(this);
@@ -304,7 +310,7 @@ export class MutableNum extends Thing implements Hashable {
     }
 
     toString() : string {
-        return `${this.value}`;
+        return `MutableNum(${this.value})`;
     }
 }
 

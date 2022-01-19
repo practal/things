@@ -13,3 +13,7 @@ export class Thing implements Equatable {
     }
 
 }
+
+export function finalClass(name : string) : never {
+    throw new Error(`Cannot subclass final class ${name}.`);
+}
