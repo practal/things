@@ -11,13 +11,13 @@ export interface Hashable extends Equatable {
 
 }
 
-export interface Hashables<T> extends Equality<T> {
+export interface Hash<T> extends Equality<T> {
 
     hash(t : T) : int
 
 }
 
-export function defaultHashables<T extends Hashable>() : Hashables<T> {
+export function canonicalHash<T extends Hashable>() : Hash<T> {
     return new class {
         equals(lhs : T, rhs : T) : boolean {
             return lhs.equals(rhs);

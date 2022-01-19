@@ -1,5 +1,5 @@
 import { AssocArrayFor } from "./assoc_array";
-import { defaultHashables, Hashable, Hashables } from "./hashable";
+import { canonicalHash, Hashable, Hash } from "./hashable";
 import { MutableMap } from "./map";
 import { MutableInt } from "./numberthing";
 import { int, nat } from "./primitives";
@@ -7,10 +7,10 @@ import { finalClass, Thing } from "./thing";
 import { joinStrings } from "./utils";
 
 export function HashMap<K extends Hashable, V>(keyValues : Iterable<[K, V]> = []) : MutableMap<K, V> {
-    return HashMapFor(defaultHashables(), keyValues);
+    return HashMapFor(canonicalHash(), keyValues);
 }
 
-export function HashMapFor<K, V>(Keys : Hashables<K>, keyValues : Iterable<[K, V]> = []) : MutableMap<K, V> {
+export function HashMapFor<K, V>(Keys : Hash<K>, keyValues : Iterable<[K, V]> = []) : MutableMap<K, V> {
     let map = new HashMapImpl<K, V>(Keys);
     for (let [k, v] of keyValues) {
         map.set(k, v);
@@ -29,7 +29,7 @@ class HashMapImpl<Key, Value> extends Thing implements MutableMap<Key, Value> {
 
     private readonly counter : MutableInt
 
-    constructor(private Keys : Hashables<Key>) {
+    constructor(private Keys : Hash<Key>) {
         super();
         if (new.target !== HashMapImpl) finalClass("HashMapImpl");
         this.map = new Map();

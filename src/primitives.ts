@@ -1,5 +1,5 @@
 import { Equality, invalidEquals } from "./equatable";
-import { combineHashCodes, Hashable, Hashables } from "./hashable";
+import { combineHashCodes, Hashable, Hash } from "./hashable";
 import { finalClass, Thing } from "./thing";
 import { iterateCodepoints } from "./utils";
 
@@ -9,7 +9,7 @@ export type int = number
 
 export type nat = number
 
-export const numbers : Hashables<number> = {
+export const numbers : Hash<number> = {
     
     hash(t: number): int {
         if (Number.isInteger(t)) return t;
@@ -22,7 +22,7 @@ export const numbers : Hashables<number> = {
     
 }
 
-export const booleans : Hashables<boolean> = {
+export const booleans : Hash<boolean> = {
 
     hash(b: boolean): int {
         return b ? 1 : 0;
@@ -42,7 +42,7 @@ export const symbols : Equality<symbol> = {
 
 }
 
-export const strings : Hashables<string> = {
+export const strings : Hash<string> = {
 
     hash(s: string): int {
         return combineHashCodes(iterateCodepoints(s));
@@ -54,7 +54,7 @@ export const strings : Hashables<string> = {
 
 }
 
-export const bigints : Hashables<bigint> = {
+export const bigints : Hash<bigint> = {
 
     hash(x: bigint): int {
         return strings.hash(`${x}`);
@@ -66,7 +66,7 @@ export const bigints : Hashables<bigint> = {
 
 }
 
-export const NumberArrays : Hashables<readonly number[]> = {
+export const NumberArrays : Hash<readonly number[]> = {
 
     hash(t: readonly number[]): int {
         let codes = t.map(x => numbers.hash(x));
