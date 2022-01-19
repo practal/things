@@ -1,8 +1,3 @@
-/**
- * This is a comment about equality. Where will it go?
- * @module
- */
-
 export interface Equality<T> {
 
     /**
