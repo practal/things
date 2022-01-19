@@ -1,4 +1,4 @@
-import { Equatables, invalidEquals } from "./equatable";
+import { Equality, invalidEquals } from "./equatable";
 import { combineHashCodes, Hashable, Hashables } from "./hashable";
 import { finalClass, Thing } from "./thing";
 import { iterateCodepoints } from "./utils";
@@ -34,7 +34,7 @@ export const booleans : Hashables<boolean> = {
 
 }
 
-export const symbols : Equatables<symbol> = {
+export const symbols : Equality<symbol> = {
 
     equals(lhs: symbol, rhs: symbol): boolean {
         return lhs === rhs;

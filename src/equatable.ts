@@ -1,9 +1,9 @@
 /**
- * This is a comment about equatable things. Where will it go?
+ * This is a comment about equality. Where will it go?
  * @module
  */
 
-export interface Equatables<T> {
+export interface Equality<T> {
 
     /**
      * Tests if lhs is equal to rhs. Equality testing must obey the following rules:
@@ -28,7 +28,7 @@ export interface Equatable {
 }
 
 /** Defines equals(lhs, rhs) as lhs.equals(rhs). */
-export function canonicalEquality<T extends Equatable>() : Equatables<T> {
+export function canonicalEquality<T extends Equatable>() : Equality<T> {
     return new class {
         equals(lhs : T, rhs : T) : boolean {
             return lhs.equals(rhs);
@@ -36,14 +36,14 @@ export function canonicalEquality<T extends Equatable>() : Equatables<T> {
     };
 }
 
-const anyEquatables: Equatables<any> = {
+const anyEquatables: Equality<any> = {
     equals(lhs : any, rhs : any) : boolean {
         return lhs === rhs;
     }
 }
 
 /** Defines equals(lhs, rhs) as lhs === rhs. */
-export function strictEquality<T>() : Equatables<T> {
+export function strictEquality<T>() : Equality<T> {
     return anyEquatables;
 }
 

@@ -1,4 +1,4 @@
-import { canonicalEquality, Equatable, Equatables } from "./equatable";
+import { canonicalEquality, Equatable, Equality } from "./equatable";
 import { MutableMap } from "./map";
 import { int, nat } from "./primitives";
 import { Thing } from "./thing";
@@ -8,7 +8,7 @@ export function AssocArray<Key extends Equatable, Value>(keyValues : Iterable<[K
     return AssocArrayFor(canonicalEquality(), keyValues);
 }
 
-export function AssocArrayFor<Key, Value>(Keys : Equatables<Key>, keyValues : Iterable<[Key, Value]> = []) : MutableMap<Key, Value> {
+export function AssocArrayFor<Key, Value>(Keys : Equality<Key>, keyValues : Iterable<[Key, Value]> = []) : MutableMap<Key, Value> {
     let m = new AssocArrayImpl<Key, Value>(Keys);
     for (let [k, v] of keyValues) {
         m.set(k, v);
@@ -25,7 +25,7 @@ class AssocArrayImpl<Key, Value> extends Thing implements MutableMap<Key, Value>
 
     private content : [Key, Value][]
 
-    constructor(private Keys : Equatables<Key>) {
+    constructor(private Keys : Equality<Key>) {
         super();
         this.content = [];
         Object.freeze(this);

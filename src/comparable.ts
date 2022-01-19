@@ -1,6 +1,6 @@
-import { Equatable, Equatables } from "./equatable";
+import { Equatable, Equality } from "./equatable";
 
-export interface PartialOrder<T> extends Equatables<T> {
+export interface PartialOrder<T> extends Equality<T> {
 
     /**
      * Compares lhs with rhs and returns a number C, where:

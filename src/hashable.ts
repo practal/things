@@ -1,4 +1,4 @@
-import { Equatable, Equatables } from "./equatable";
+import { Equatable, Equality } from "./equatable";
 import { int } from "./primitives";
 
 export interface Hashable extends Equatable {
@@ -11,7 +11,7 @@ export interface Hashable extends Equatable {
 
 }
 
-export interface Hashables<T> extends Equatables<T> {
+export interface Hashables<T> extends Equality<T> {
 
     hash(t : T) : int
 
