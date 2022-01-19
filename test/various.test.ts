@@ -123,3 +123,8 @@ test("equals Nat MutableInt number", () => {
     expect(n.equals(new Nat(8))).toBe(false);
     expect(() => (x as any).equals(n)).toThrow();
 });
+
+test("comparison", () => {
+    console.log(Number.NaN < 0);
+    console.log(-0 === 0);
+});
