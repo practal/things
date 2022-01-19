@@ -69,7 +69,9 @@ export const Anything: Hash<any> & PartialOrder<any> = {
             if (lhs < rhs) return -1;
             else if (lhs > rhs) return 1;
             else if (lhs === rhs) return 0;
-            else return Number.NaN;
+            else {
+                return Number.isNaN(lhs) && Number.isNaN(rhs) ? 0 : Number.NaN;
+            }
         }
     }
 }

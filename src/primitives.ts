@@ -1,6 +1,6 @@
 import { Equality, invalidEquals } from "./equatable";
 import { combineHashCodes, Hashable, Hash } from "./hashable";
-import { finalClass, Thing } from "./thing";
+import { finalClass, Thing, Things } from "./thing";
 import { iterateCodepoints } from "./utils";
 
 export type Primitive = number | string | boolean | symbol | bigint
@@ -9,20 +9,50 @@ export type int = number
 
 export type nat = number
 
-export const numbers : Hash<number> = {
+export const ints : Things<int> = {
+    
+    hash(t: int): int {
+        return t;
+    },
+
+    equals(lhs: int, rhs: int): boolean {
+        return lhs === rhs;
+    },
+    
+    compare(lhs: int, rhs: int): number {
+        if (lhs < rhs) return -1;
+        else if (lhs > rhs) return 1;
+        else return 0;
+    }
+}
+
+Object.freeze(ints);
+
+export const numbers : Things<number> = {
     
     hash(t: number): int {
         if (Number.isInteger(t)) return t;
-        return strings.hash(`${t}`);
+        else return strings.hash(`${t}`);
     },
 
     equals(lhs: number, rhs: number): boolean {
-        return lhs === rhs;
-    }
+        return lhs === rhs || (Number.isNaN(lhs) && Number.isNaN(rhs));
+    },
     
+    compare(lhs: number, rhs: number): number {
+        if (Number.isNaN(lhs) && Number.isNaN(rhs)) {
+            return 0;
+        } else {
+            if (lhs < rhs) return -1;
+            else if (lhs > rhs) return 1;
+            else return 0;
+        }
+    }
 }
 
-export const booleans : Hash<boolean> = {
+Object.freeze(numbers);
+
+export const booleans : Things<boolean> = {
 
     hash(b: boolean): int {
         return b ? 1 : 0;
@@ -30,9 +60,15 @@ export const booleans : Hash<boolean> = {
 
     equals(lhs: boolean, rhs: boolean): boolean {
         return lhs === rhs;
+    },
+
+    compare(lhs: boolean, rhs: boolean): number {
+        return (lhs ? 1 : 0) - (rhs ? 1 : 0);
     }
 
 }
+
+Object.freeze(booleans);
 
 export const symbols : Equality<symbol> = {
 
@@ -42,7 +78,9 @@ export const symbols : Equality<symbol> = {
 
 }
 
-export const strings : Hash<string> = {
+Object.freeze(symbols);
+
+export const strings : Things<string> = {
 
     hash(s: string): int {
         return combineHashCodes(iterateCodepoints(s));
@@ -50,11 +88,19 @@ export const strings : Hash<string> = {
 
     equals(lhs: string, rhs: string): boolean {
         return lhs === rhs;
+    },
+
+    compare(lhs: string, rhs: string): number {
+        if (lhs < rhs) return -1;
+        else if (lhs > rhs) return 1;
+        else return 0;
     }
 
 }
 
-export const bigints : Hash<bigint> = {
+Object.freeze(strings);
+
+export const bigints : Things<bigint> = {
 
     hash(x: bigint): int {
         return strings.hash(`${x}`);
@@ -62,9 +108,17 @@ export const bigints : Hash<bigint> = {
 
     equals(lhs: bigint, rhs: bigint): boolean {
         return lhs === rhs;
+    },
+
+    compare(lhs: bigint, rhs: bigint): number {
+        if (lhs < rhs) return -1;
+        else if (lhs > rhs) return 1;
+        else return 0;
     }
 
 }
+
+Object.freeze(bigints);
 
 export const NumberArrays : Hash<readonly number[]> = {
 
@@ -77,11 +131,13 @@ export const NumberArrays : Hash<readonly number[]> = {
         let len = lhs.length;
         if (len != rhs.length) return false;
         for (let i=0; i<len; i++) {
-            if (lhs[i] !== rhs[i]) return false;
+            if (!numbers.equals(lhs[i], rhs[i])) return false;
         }
         return true;
     }
     
 }
+
+Object.freeze(NumberArrays);
 
 

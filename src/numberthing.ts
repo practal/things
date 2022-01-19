@@ -1,5 +1,5 @@
 import { Hashable } from "./hashable";
-import { int, nat, numbers } from "./primitives";
+import { int, ints, nat, numbers } from "./primitives";
 import { finalClass, Thing } from "./thing";
 
 export type NumberThing = Int | MutableInt | Nat | MutableNat | Num | MutableNum;
@@ -32,6 +32,11 @@ export class Int extends Thing implements Hashable {
         return this.value === other.value;
     }
 
+    compare(other : NumberThing) : number {
+        if (!isNumberThing(other)) return Number.NaN;
+        return ints.compare(this.value, other.value);        
+    }
+
     get hash(): number {
         return this.value;
     }
@@ -61,6 +66,11 @@ export class MutableInt extends Thing implements Hashable {
     equals(other : NumberThing) : boolean {
         assertNumberThing(other);
         return this.#value == other.value;
+    }
+
+    compare(other : NumberThing) : number {
+        if (!isNumberThing(other)) return Number.NaN;
+        return ints.compare(this.#value, other.value);        
     }
 
     get hash(): int {
@@ -110,6 +120,11 @@ export class Nat extends Thing implements Hashable {
         return this.value === other.value;
     }
 
+    compare(other : NumberThing) : number {
+        if (!isNumberThing(other)) return Number.NaN;
+        return ints.compare(this.value, other.value);        
+    }
+
     get hash(): number {
         return this.value;
     }
@@ -139,6 +154,11 @@ export class MutableNat extends Thing implements Hashable {
     equals(other : NumberThing) : boolean {
         assertNumberThing(other);
         return this.#value == other.value;
+    }
+
+    compare(other : NumberThing) : number {
+        if (!isNumberThing(other)) return Number.NaN;
+        return ints.compare(this.value, other.value);        
     }
 
     get hash(): int {
@@ -185,7 +205,12 @@ export class Num extends Thing implements Hashable {
 
     equals(other : NumberThing) : boolean {
         assertNumberThing(other);
-        return this.value === other.value;
+        return numbers.equals(this.value, other.value);
+    }
+
+    compare(other : NumberThing) : number {
+        if (!isNumberThing(other)) return Number.NaN;
+        return numbers.compare(this.value, other.value);        
     }
 
     get hash(): number {
@@ -216,7 +241,12 @@ export class MutableNum extends Thing implements Hashable {
 
     equals(other : NumberThing) : boolean {
         assertNumberThing(other);
-        return this.#value === other.value;
+        return numbers.equals(this.#value, other.value);
+    }
+
+    compare(other : NumberThing) : number {
+        if (!isNumberThing(other)) return Number.NaN;
+        return numbers.compare(this.value, other.value);        
     }
 
     get hash(): number {
