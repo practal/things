@@ -33,7 +33,7 @@ export function finalClass(finalClass : string) : never {
     throw new Error(`Cannot subclass final class ${finalClass}.`);
 }
 
-export const Things: Hash<any> & PartialOrder<any> = {
+export const Anything: Hash<any> & PartialOrder<any> = {
 
     equals(lhs : any, rhs : any) : boolean {
         if (lhs instanceof Thing) {
@@ -74,10 +74,18 @@ export const Things: Hash<any> & PartialOrder<any> = {
     }
 }
 
-Object.freeze(Things);
+Object.freeze(Anything);
 
-export function canonicalThings<T>() : Hash<T> & PartialOrder<T> {
-    return Things;
+export interface Something extends Hashable, Comparable { }
+
+export interface Things<T> extends Hash<T>, PartialOrder<T> {}
+
+export function canonicalThings<T extends Something>() : Things<T> {
+    return new class {
+        equals(lhs : T, rhs : T) : boolean { return lhs.equals(rhs); }
+        hash(t : T) : int { return t.hash; }
+        compare(lhs : any, rhs : any) : number { return lhs.compare(rhs); }        
+    };
 }
 
 Object.freeze(canonicalThings);
