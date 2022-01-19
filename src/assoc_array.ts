@@ -20,6 +20,7 @@ class AssocArrayImpl<Key, Value> extends Thing implements MutableMap<Key, Value>
 
     static {
         Object.freeze(AssocArrayImpl.prototype);
+        Object.freeze(AssocArrayImpl);
     }
 
     private content : [Key, Value][]

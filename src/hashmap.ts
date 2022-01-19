@@ -29,6 +29,7 @@ class HashMapImpl<Key, Value> extends Thing implements MutableMap<Key, Value> {
 
     static {
         Object.freeze(HashMapImpl.prototype);
+        Object.freeze(HashMapImpl);
     }
 
     private readonly map : Map<int, MutableMap<Key, Value>>;

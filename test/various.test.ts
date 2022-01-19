@@ -1,4 +1,4 @@
-import {int, numbers, AssocArrayFor,  nat, HashMapFor, MutableMap} from "../src/index";
+import {int, numbers, AssocArrayFor,  nat, HashMapFor, MutableMap, Int, HashMap, MutableInt, Num} from "../src/index";
 
 test("AssocArray", () => {
     let a : Map<int, string | null> = AssocArrayFor(numbers);
@@ -43,13 +43,58 @@ test("HashMap<number, number>", () => {
     console.log(`size of a = ${a.size}, size of b = ${b.size}`);
 });
 
-test("SpeedDemon", () => {
+test("SpeedDemon number", () => {
     let a : Map<number, number> = HashMapFor(numbers);
     let N = 1000000;
     for (let i = 0; i < N/2; i ++) {
         let key = randomNat(N);
         if (coinflip()) {
             let value = randomNat();
+            a.set(key, value);
+        } else {
+            let da = a.delete(key);
+        }
+    }
+    console.log(`size of a = ${a.size}`);
+});
+
+test("SpeedDemon Int", () => {
+    let a : Map<Int, Int> = HashMap();
+    let N = 1000000;
+    for (let i = 0; i < N/2; i ++) {
+        let key = new Int(randomNat(N));
+        if (coinflip()) {
+            let value = new Int(randomNat());
+            a.set(key, value);
+        } else {
+            let da = a.delete(key);
+        }
+    }
+    console.log(`size of a = ${a.size}`);
+});
+
+test("SpeedDemon MutableInt", () => {
+    let a : Map<MutableInt, MutableInt> = HashMap();
+    let N = 1000000;
+    for (let i = 0; i < N/2; i ++) {
+        let key = new MutableInt(randomNat(N));
+        if (coinflip()) {
+            let value = new MutableInt(randomNat());
+            a.set(key, value);
+        } else {
+            let da = a.delete(key);
+        }
+    }
+    console.log(`size of a = ${a.size}`);
+});
+
+test("SpeedDemon Num", () => {
+    let a : Map<Num, Num> = HashMap();
+    let N = 1000000;
+    for (let i = 0; i < N/2; i ++) {
+        let key = new Num(randomNat(N));
+        if (coinflip()) {
+            let value = new Num(randomNat());
             a.set(key, value);
         } else {
             let da = a.delete(key);
