@@ -1,7 +1,7 @@
 import { AssocArrayFor } from "./assoc_array";
 import { defaultHashables, Hashable, Hashables } from "./hashable";
 import { MutableMap } from "./map";
-import { int, nat } from "./primitives";
+import { int, MutableInt, nat } from "./primitives";
 import { Thing } from "./thing";
 import { joinStrings } from "./utils";
 
@@ -34,12 +34,12 @@ class HashMapImpl<Key, Value> extends Thing implements MutableMap<Key, Value> {
 
     private readonly map : Map<int, MutableMap<Key, Value>>;
 
-    private readonly counter : Counter
+    private readonly counter : MutableInt
 
     constructor(private Keys : Hashables<Key>) {
         super();
         this.map = new Map();
-        this.counter = new Counter();
+        this.counter = new MutableInt();
         Object.freeze(this);
     }
 
@@ -53,7 +53,7 @@ class HashMapImpl<Key, Value> extends Thing implements MutableMap<Key, Value> {
 
     clear(): void {
         this.map.clear();
-        this.counter.reset();
+        this.counter.value = 0;
     }
 
     delete(key: Key): boolean {
@@ -152,7 +152,7 @@ class HashMapImpl<Key, Value> extends Thing implements MutableMap<Key, Value> {
     }
 
     get size(): nat {
-        return this.counter.get;
+        return this.counter.value;
     }
 
     forEach(callbackfn: (value: Value, key: Key, map: MutableMap<Key, Value>) => void, thisArg?: any): void {

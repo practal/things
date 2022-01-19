@@ -91,7 +91,7 @@ export class Int extends Thing implements Hashable {
         Object.freeze(Int);
     }
 
-    constructor (private readonly _value : int) {
+    constructor (private readonly _value : int = 0) {
         super();
         if (!Number.isInteger(_value)) throw new Error(`Integer expected, found: ${_value}`);
         Object.freeze(this);
@@ -118,11 +118,10 @@ export class MutableInt extends Thing implements Hashable {
         Object.freeze(MutableInt);
     }
 
-    constructor (private _value : int) {
+    constructor (private _value : int = 0) {
         super();
         if (!Number.isInteger(_value)) throw new Error(`Integer expected, found: ${_value}`);
         this._value = _value;
-        Object.freeze(this);
     }
 
     equals(other : MutableInt) : boolean {
@@ -142,6 +141,16 @@ export class MutableInt extends Thing implements Hashable {
         this._value = v;
     }
 
+    increment() {
+        if (this._value > Number.MAX_SAFE_INTEGER) throw new Error(`Int increment overflow`);
+        this._value++;
+    }
+
+    decrement() {
+        if (this._value < Number.MIN_SAFE_INTEGER) throw new Error(`Int decrement overflow`);
+        this._value--;
+    }
+
 }
 
 export class Nat extends Thing implements Hashable {
@@ -151,7 +160,7 @@ export class Nat extends Thing implements Hashable {
         Object.freeze(Nat);
     }
 
-    constructor (private readonly _value : nat) {
+    constructor (private readonly _value : nat = 0) {
         super();
         if (!(Number.isInteger(_value) && _value >= 0)) throw new Error(`Natural number expected, found: ${_value}`);
         Object.freeze(this);
@@ -178,11 +187,10 @@ export class MutableNat extends Thing implements Hashable {
         Object.freeze(MutableNat);
     }
 
-    constructor (private _value : nat) {
+    constructor (private _value : nat = 0) {
         super();
         if (!(Number.isInteger(_value) && _value >= 0)) throw new Error(`Integer expected, found: ${_value}`);
         this._value = _value;
-        Object.freeze(this);
     }
 
     equals(other : MutableNat) : boolean {
@@ -202,6 +210,16 @@ export class MutableNat extends Thing implements Hashable {
         this._value = v;
     }
 
+    increment() {
+        if (this._value > Number.MAX_SAFE_INTEGER) throw new Error(`Nat increment overflow`);
+        this._value++;
+    }
+
+    decrement() {
+        if (this._value < 1) throw new Error(`Nat decrement overflow`);
+        this._value--;
+    }
+
 }
 
 export class Num extends Thing implements Hashable {
@@ -211,7 +229,7 @@ export class Num extends Thing implements Hashable {
         Object.freeze(Num);
     }
 
-    constructor (private readonly _value : number) {
+    constructor (private readonly _value : number = 0) {
         super();
         if (typeof(_value) !== "number") throw new Error(`Number expected, found: ${_value}`);
         Object.freeze(this);
@@ -238,10 +256,9 @@ export class MutableNum extends Thing implements Hashable {
         Object.freeze(MutableNum);
     }
 
-    constructor (private _value : number) {
+    constructor (private _value : number = 0) {
         super();
         if (typeof(_value) !== "number") throw new Error(`Number expected, found: ${_value}`);
-        Object.freeze(this);
     }
 
     equals(other : MutableNum) : boolean {
@@ -259,6 +276,14 @@ export class MutableNum extends Thing implements Hashable {
     set value(v : number) {
         if (typeof(v) !== "number") throw new Error(`Number expected, found: ${v}`);
         this._value = v;
+    }
+
+    increment() {
+        this._value++;
+    }
+
+    decrement() {
+        this._value--;
     }
 
 }
