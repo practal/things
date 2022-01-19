@@ -4,11 +4,11 @@ import { int, nat } from "./primitives";
 import { Thing } from "./thing";
 import { joinStrings } from "./utils";
 
-export function AssocArray<Key extends Equatable, Value>(keyValues : Iterable<[Key, Value]> = []) {
+export function AssocArray<Key extends Equatable, Value>(keyValues : Iterable<[Key, Value]> = []) : MutableMap<Key, Value> {
     return AssocArrayFor(defaultEquatables(), keyValues);
 }
 
-export function AssocArrayFor<Key, Value>(Keys : Equatables<Key>, keyValues : Iterable<[Key, Value]> = []) {
+export function AssocArrayFor<Key, Value>(Keys : Equatables<Key>, keyValues : Iterable<[Key, Value]> = []) : MutableMap<Key, Value> {
     let m = new AssocArrayImpl<Key, Value>(Keys);
     for (let [k, v] of keyValues) {
         m.set(k, v);

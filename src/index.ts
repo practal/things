@@ -6,3 +6,4 @@ export * from "./hashmap";
 export * from "./primitives";
 export * from "./sign";
 export * from "./utils";
+export * from "./numberthing";

@@ -6,7 +6,13 @@ export interface Equatables<T> {
 
 export interface Equatable {
 
-    equals(other : this) : boolean
+    /**
+     * Tests if this object is equal to other. Equality testing must obey the following rules:
+     * * *Reflexivity*: x.equals(x) is true
+     * * *Symmetry*: if x.equals(y) is true, then y.equals(x) is true as well
+     * * *Transitivity*: if x.equals(y) is true, and y.equals(z) is true, then x.equals(z) is true as well
+     */ 
+    equals(other : any) : boolean
 
 }
 

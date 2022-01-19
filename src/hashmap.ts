@@ -1,7 +1,8 @@
 import { AssocArrayFor } from "./assoc_array";
 import { defaultHashables, Hashable, Hashables } from "./hashable";
 import { MutableMap } from "./map";
-import { int, MutableInt, nat } from "./primitives";
+import { MutableInt } from "./numberthing";
+import { int, nat } from "./primitives";
 import { finalClass, Thing } from "./thing";
 import { joinStrings } from "./utils";
 

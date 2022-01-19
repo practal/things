@@ -1,5 +1,6 @@
 {
     "include": ["src/**/*"],
+
     "compilerOptions": {
         "target": "es2015", 
         "declaration": true,
@@ -8,5 +9,12 @@
         "module": "commonjs",
         "baseUrl": ".",
         "strict": true
-    }
+    },
+
+    "typedocOptions": {
+        "entryPoints": ["src/index.ts"],
+        "out": "docs",
+        "excludeInternal": true,
+        "intentionallyNotExported": []
+    }    
 }
