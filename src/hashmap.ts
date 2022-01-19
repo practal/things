@@ -17,14 +17,6 @@ export function HashMapFor<K, V>(Keys : Hashables<K>, keyValues : Iterable<[K, V
     return map;
 }
 
-class Counter {
-    private counter : int = 0;
-    get get(): int { return this.counter; }
-    increment() { this.counter += 1; }
-    decrement() { this.counter -= 1; }
-    reset() { this.counter = 0; }
-}
-
 class HashMapImpl<Key, Value> extends Thing implements MutableMap<Key, Value> {
 
     static {

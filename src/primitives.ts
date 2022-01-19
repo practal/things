@@ -91,22 +91,18 @@ export class Int extends Thing implements Hashable {
         Object.freeze(Int);
     }
 
-    constructor (private readonly _value : int = 0) {
+    constructor (public readonly value : int = 0) {
         super();
-        if (!Number.isInteger(_value)) throw new Error(`Integer expected, found: ${_value}`);
+        if (!Number.isInteger(value)) throw new Error(`Integer expected, found: ${value}`);
         Object.freeze(this);
     }
 
     equals(other : Int) : boolean {
-        return this._value === other._value;
+        return this.value === other.value;
     }
 
     get hash(): number {
-        return this._value;
-    }
-
-    get value(): int {
-        return this._value;
+        return this.value;
     }
 
 }
@@ -118,37 +114,40 @@ export class MutableInt extends Thing implements Hashable {
         Object.freeze(MutableInt);
     }
 
-    constructor (private _value : int = 0) {
+    #value : int
+
+    constructor (_value : int = 0) {
         super();
         if (!Number.isInteger(_value)) throw new Error(`Integer expected, found: ${_value}`);
-        this._value = _value;
+        this.#value = _value;
+        Object.freeze(this);
     }
 
     equals(other : MutableInt) : boolean {
-        return this._value == other._value;
+        return this.#value == other.#value;
     }
 
     get hash(): int {
-        return this._value;
+        return this.#value;
     }
 
     get value(): int {
-        return this._value;
+        return this.#value;
     }
 
     set value(v : int) {
         if (!Number.isInteger(v)) throw new Error(`Integer expected, found: ${v}`);
-        this._value = v;
+        this.#value = v;
     }
 
     increment() {
-        if (this._value > Number.MAX_SAFE_INTEGER) throw new Error(`Int increment overflow`);
-        this._value++;
+        if (this.#value > Number.MAX_SAFE_INTEGER) throw new Error(`Int increment overflow`);
+        this.#value++;
     }
 
     decrement() {
-        if (this._value < Number.MIN_SAFE_INTEGER) throw new Error(`Int decrement overflow`);
-        this._value--;
+        if (this.#value < Number.MIN_SAFE_INTEGER) throw new Error(`Int decrement overflow`);
+        this.#value--;
     }
 
 }
@@ -160,22 +159,18 @@ export class Nat extends Thing implements Hashable {
         Object.freeze(Nat);
     }
 
-    constructor (private readonly _value : nat = 0) {
+    constructor (public readonly value : nat = 0) {
         super();
-        if (!(Number.isInteger(_value) && _value >= 0)) throw new Error(`Natural number expected, found: ${_value}`);
+        if (!(Number.isInteger(value) && value >= 0)) throw new Error(`Natural number expected, found: ${value}`);
         Object.freeze(this);
     }
 
     equals(other : Nat) : boolean {
-        return this._value === other._value;
+        return this.value === other.value;
     }
 
     get hash(): number {
-        return this._value;
-    }
-
-    get value(): nat {
-        return this._value;
+        return this.value;
     }
 
 }
@@ -187,37 +182,40 @@ export class MutableNat extends Thing implements Hashable {
         Object.freeze(MutableNat);
     }
 
-    constructor (private _value : nat = 0) {
+    #value : nat
+
+    constructor (_value : nat = 0) {
         super();
         if (!(Number.isInteger(_value) && _value >= 0)) throw new Error(`Integer expected, found: ${_value}`);
-        this._value = _value;
+        this.#value = _value;
+        Object.freeze(this);
     }
 
     equals(other : MutableNat) : boolean {
-        return this._value == other._value;
+        return this.#value == other.#value;
     }
 
     get hash(): int {
-        return this._value;
+        return this.#value;
     }
 
     get value(): nat {
-        return this._value;
+        return this.#value;
     }
 
     set value(v : nat) {
         if (!(Number.isInteger(v) && v >= 0)) throw new Error(`Integer expected, found: ${v}`);
-        this._value = v;
+        this.#value = v;
     }
 
     increment() {
-        if (this._value > Number.MAX_SAFE_INTEGER) throw new Error(`Nat increment overflow`);
-        this._value++;
+        if (this.#value > Number.MAX_SAFE_INTEGER) throw new Error(`Nat increment overflow`);
+        this.#value++;
     }
 
     decrement() {
-        if (this._value < 1) throw new Error(`Nat decrement overflow`);
-        this._value--;
+        if (this.#value < 1) throw new Error(`Nat decrement overflow`);
+        this.#value--;
     }
 
 }
@@ -229,22 +227,18 @@ export class Num extends Thing implements Hashable {
         Object.freeze(Num);
     }
 
-    constructor (private readonly _value : number = 0) {
+    constructor (public readonly value : number = 0) {
         super();
-        if (typeof(_value) !== "number") throw new Error(`Number expected, found: ${_value}`);
+        if (typeof(value) !== "number") throw new Error(`Number expected, found: ${value}`);
         Object.freeze(this);
     }
 
     equals(other : Num) : boolean {
-        return this._value === other._value;
+        return this.value === other.value;
     }
 
     get hash(): number {
-        return numbers.hash(this._value);
-    }
-
-    get value(): number {
-        return this._value;
+        return numbers.hash(this.value);
     }
 
 }
@@ -256,34 +250,38 @@ export class MutableNum extends Thing implements Hashable {
         Object.freeze(MutableNum);
     }
 
-    constructor (private _value : number = 0) {
+    #value : number
+    
+    constructor (_value : number = 0) {
         super();
         if (typeof(_value) !== "number") throw new Error(`Number expected, found: ${_value}`);
+        this.#value = _value;
+        Object.freeze(this);
     }
 
     equals(other : MutableNum) : boolean {
-        return this._value === other._value;
+        return this.#value === other.#value;
     }
 
     get hash(): number {
-        return numbers.hash(this._value);
+        return numbers.hash(this.#value);
     }
 
     get value(): number {
-        return this._value;
+        return this.#value;
     }
 
     set value(v : number) {
         if (typeof(v) !== "number") throw new Error(`Number expected, found: ${v}`);
-        this._value = v;
+        this.#value = v;
     }
 
     increment() {
-        this._value++;
+        this.#value++;
     }
 
     decrement() {
-        this._value--;
+        this.#value--;
     }
 
 }

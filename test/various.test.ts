@@ -1,4 +1,4 @@
-import {int, numbers, AssocArrayFor,  nat, HashMapFor, MutableMap, Int, HashMap, MutableInt, Num} from "../src/index";
+import {int, numbers, AssocArrayFor,  nat, HashMapFor, MutableMap, Int, HashMap, MutableInt, Num, Nat} from "../src/index";
 
 test("AssocArray", () => {
     let a : Map<int, string | null> = AssocArrayFor(numbers);
@@ -101,4 +101,9 @@ test("SpeedDemon Num", () => {
         }
     }
     console.log(`size of a = ${a.size}`);
+});
+
+test("immutable Nat", () => {
+    let n = new Nat(1);
+    expect(() => (n as any).value = 5).toThrow();
 });
