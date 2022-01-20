@@ -9,5 +9,4 @@ export * from "./numberthing";
 export * from "./comparable";
 export * from "./thing";
 
-export * as NewComparable from "./interfaces/comparable";
-export * as Cloneable from "./interfaces/cloneable";
+export * as Reboot from "./reboot";
