@@ -19,3 +19,18 @@ export interface Cloneable {
     clone(force? : boolean) : this
 
 }
+
+export interface Cloning<T> {
+
+    /**
+     * Makes a clone of t, with copy-on-write semantics being the default. 
+     * 
+     * If force is false or undefined, then this should execute in constant time, and incur almost no runtime cost. 
+     * For immutable t, this is easily achieved by just returning t itself. 
+     * For mutable things, this can be achieved by delaying the actual copying until the first modification of the clone.
+     * 
+     * If force is true, then the actual copying should be done without delay.
+     */
+    cloneOf(t : T, force? : boolean) : T
+
+}
