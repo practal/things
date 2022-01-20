@@ -1,7 +1,7 @@
-import { combineHashes, hashOfString, iterateCodepoints } from "../implementations/utils";
+import { hashOfString } from "./utils";
 import { ComparisonResult, EQUAL, UNRELATED } from "../interfaces/comparable";
 import { Something } from "../interfaces/things";
-import { int } from "./primitives";
+import { int } from "../interfaces/primitives";
 
 /** The abstract base class used for all implementations of the [[Something]] interface in the [[things]] package. */
 export abstract class Thing implements Something {

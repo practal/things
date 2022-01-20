@@ -1,4 +1,4 @@
-import { int, nat } from "../general/primitives";
+import { int, nat } from "../interfaces/primitives";
 
 /** Returns a sequence of the [codepoints](https://unicode.org/glossary/#code_point) of a string. */
 export function* iterateCodepoints(s : string): Generator<nat, void, unknown> {
