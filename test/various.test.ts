@@ -21,7 +21,7 @@ function coinflip() : boolean {
 test("HashMap<number, number>", () => {
     let a : Map<number, number> = HashMapFor(numbers);
     let b : Map<number, number> = new Map();
-    let N = 100000;
+    let N = 1000;
     for (let i = 0; i < N/2; i ++) {
         let key = randomNat(N);
         if (coinflip()) {
@@ -45,7 +45,7 @@ test("HashMap<number, number>", () => {
 
 test("SpeedDemon number", () => {
     let a : Map<number, number> = HashMapFor(numbers);
-    let N = 1000000;
+    let N = 100000;
     for (let i = 0; i < N/2; i ++) {
         let key = randomNat(N);
         if (coinflip()) {
@@ -60,7 +60,7 @@ test("SpeedDemon number", () => {
 
 test("SpeedDemon Int", () => {
     let a : Map<Int, Int> = HashMap();
-    let N = 1000000;
+    let N = 100000;
     for (let i = 0; i < N/2; i ++) {
         let key = new Int(randomNat(N));
         if (coinflip()) {
@@ -75,7 +75,7 @@ test("SpeedDemon Int", () => {
 
 test("SpeedDemon MutableInt", () => {
     let a : Map<MutableInt, MutableInt> = HashMap();
-    let N = 1000000;
+    let N = 100000;
     for (let i = 0; i < N/2; i ++) {
         let key = new MutableInt(randomNat(N));
         if (coinflip()) {
@@ -90,7 +90,7 @@ test("SpeedDemon MutableInt", () => {
 
 test("SpeedDemon Num", () => {
     let a : Map<Num, Num> = HashMap();
-    let N = 1000000;
+    let N = 100000;
     for (let i = 0; i < N/2; i ++) {
         let key = new Num(randomNat(N));
         if (coinflip()) {
@@ -124,7 +124,65 @@ test("equals Nat MutableInt number", () => {
     expect(() => (x as any).equals(n)).toThrow();
 });
 
-test("comparison", () => {
-    console.log(Number.NaN < 0);
-    console.log(-0 === 0);
+enum R {
+    LESS = -1,
+    EQUAL,
+    GREATER,
+    UNRELATED
+}
+
+const LESS = -1;
+
+test("JavaScript Behaviour: enum", () => {
+    expect(R.LESS).toBe(-1);
+    (R as any).LESS = 42;
+    expect(R.LESS).toBe(42);
+    Object.freeze(R);
+    expect(() => {(R as any).LESS = 66;}).toThrow();
+    expect(R.LESS).toBe(42);
+    expect(LESS).toBe(-1);
+    expect(() => {(LESS as any) = 2;}).toThrow();
+    expect(LESS).toBe(-1);
+    expect(() => {(LESS as any).x = 7;}).toThrow();
+
+    function test() : -1 {
+        return LESS;
+    }
+    
+    console.log(`typeof LESS = ${typeof LESS}`)
 });
+
+test("JavaScript Behaviour: undefined", () => {
+    expect(undefined === undefined).toBe(true);
+    expect(undefined == undefined).toBe(true);
+    let m = new Map();
+    m.set(undefined, 7);
+    m.set(undefined, 6);
+    expect(m.size).toBe(1);
+    expect(m.get(undefined)).toBe(6);
+    m.set(undefined, undefined);
+    expect(m.get(undefined)).toBe(undefined);
+    expect(m.size).toBe(1);
+});
+
+test("JavaScript Behaviour: NaN", () => {
+    expect(Number.NaN < 0).toBe(false);
+    expect(-0 === 0).toBe(true);
+    expect(Number.NaN === Number.NaN).toBe(false);
+    expect(Number.NaN == Number.NaN).toBe(false);
+    expect(Number.NaN === undefined).toBe(false);
+    expect(Number.NaN == undefined).toBe(false);
+
+    let m = new Map();
+    m.set(Number.NaN, 7);
+    m.set(Number.NaN, 6);
+    expect(m.size).toBe(1);
+    expect(m.get(Number.NaN)).toBe(6);
+    m.set(Number.NaN, Number.NaN);
+    expect(m.get(Number.NaN)).toBe(Number.NaN);
+    expect(Number.isNaN(m.get(Number.NaN))).toBe(true);
+    expect(m.size).toBe(1);
+});
+
+
+
