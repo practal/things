@@ -1,3 +1,4 @@
+import { iterateCodepoints, joinStrings } from "../src/implementations/utils";
 import {int, numbers, AssocArrayFor,  nat, HashMapFor, MutableMap, Int, HashMap, MutableInt, Num, Nat} from "../src/index";
 
 test("AssocArray", () => {
@@ -148,11 +149,11 @@ test("JavaScript Behaviour: enum", () => {
     function test() : -1 {
         return LESS;
     }
-    
+
     console.log(`typeof LESS = ${typeof LESS}`)
 });
 
-test("JavaScript Behaviour: undefined", () => {
+test("JavaScript Behaviour: undefined and null", () => {
     expect(undefined === undefined).toBe(true);
     expect(undefined == undefined).toBe(true);
     let m = new Map();
@@ -163,6 +164,21 @@ test("JavaScript Behaviour: undefined", () => {
     m.set(undefined, undefined);
     expect(m.get(undefined)).toBe(undefined);
     expect(m.size).toBe(1);
+
+    expect(0 == null).toBe(false);
+    expect(null == undefined).toBe(true);
+    expect(false == null).toBe(false);
+    expect(undefined == undefined).toBe(true);
+    expect((undefined as any) < (undefined as any)).toBe(false);
+    expect(null == null).toBe(true);
+    expect((null as any) < (null as any)).toBe(false);
+    expect((undefined as any) < 1).toBe(false);
+
+    expect(false < true).toBe(true);
+
+    expect((false as any) < 1).toBe(true);
+
+    expect((true as any) >= 1).toBe(true);
 });
 
 test("JavaScript Behaviour: NaN", () => {

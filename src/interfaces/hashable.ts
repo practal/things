@@ -1,5 +1,5 @@
 import { Equatable, Equality } from "./equatable";
-import { int } from "../primitives";
+import { int } from "../general/primitives";
 
 export interface Hashable extends Equatable {
 

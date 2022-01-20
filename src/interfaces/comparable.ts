@@ -1,11 +1,9 @@
 import { Equatable, Equality } from "./equatable";
 
-export type UNRELATED = 0;
-export type LESS = 1;
-export type EQUAL = 2;
-export type GREATER = 3;
-
-export type ComparisonResult = UNRELATED | LESS | EQUAL | GREATER;
+/**
+ * The type of comparison results, used by [[PartialOrder.compare]] and [[Comparable.compareTo]].
+ */
+export type ComparisonResult = 0 | 1 | 2 | 3;
 
 export const UNRELATED : ComparisonResult = 0;
 export const LESS : ComparisonResult = 1;
