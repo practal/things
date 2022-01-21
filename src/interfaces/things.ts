@@ -15,6 +15,8 @@ export interface Something extends Equatable, Cloneable, Comparable, Hashable {
     /** Returns a human-readable description of this thing. */
     toString() : string
 
+    clone(force? : boolean) : Something;
+
 } 
 
 /** 

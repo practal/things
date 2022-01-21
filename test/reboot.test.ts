@@ -15,6 +15,36 @@ test("JavaScript Behaviour: reboot", () => {
     console.log("n.equals(e)", n.equals(e));
 });
 
+test("JavaScript Behaviour: bigint", () => {
+    let i = BigInt(Number.MAX_SAFE_INTEGER);
+    i = i * i;
+    let x : number = 2;
+    let X : Number = new Number(2);
+    expect(x < i).toBe(true);
+    expect(x == X).toBe(true);
+    expect(typeof(x as any) === "number").toBe(true);
+    expect(typeof(X) === "object").toBe(true);
+    let b : bigint = BigInt(2);
+    let B = Object(BigInt(2));
+    let c : bigint = BigInt(3);
+    let C = Object(BigInt(3));
+    expect(typeof(b)).toBe("bigint");    
+    expect(typeof(B)).toBe("object");   
+    expect(b == B).toBe(true); 
+    expect(b === B).toBe(false); 
+    expect((x as any) == b).toBe(true);
+    expect((x as any) === b).toBe(false);
+    expect((x as any) == B).toBe(true);
+    expect((x as any) === B).toBe(false);
+    expect(b < C).toBe(true);
+    expect(B < C).toBe(true);
+    expect(B < c).toBe(true);
+    expect(b < c).toBe(true);
+    expect(x < c).toBe(true);
+    expect(x < C).toBe(true);
+    expect(B instanceof BigInt).toBe(true);
+});
+
 /*test("SpeedDemon number", () => {
     let a : Map<number, number> = HashMapFor(numbers);
     let N = 100000;

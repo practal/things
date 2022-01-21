@@ -16,7 +16,7 @@ export interface Cloneable {
      * 
      * If force is true, then the actual copying should be done without delay.
      */
-    clone(force? : boolean) : this
+    clone(force? : boolean) : Cloneable
 
 }
 
