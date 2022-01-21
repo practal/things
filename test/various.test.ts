@@ -47,7 +47,7 @@ test("HashMap<number, number>", () => {
 
 test("SpeedDemon number", () => {
     let a : Map<number, number> = HashMapFor(numbers);
-    let N = 100000;
+    let N = 1000000;
     for (let i = 0; i < N/2; i ++) {
         let key = randomNat(N);
         if (coinflip()) {
@@ -62,7 +62,7 @@ test("SpeedDemon number", () => {
 
 test("SpeedDemon Int", () => {
     let a : Map<Int, Int> = HashMap();
-    let N = 100000;
+    let N = 1000000;
     for (let i = 0; i < N/2; i ++) {
         let key = new Int(randomNat(N));
         if (coinflip()) {
@@ -77,7 +77,7 @@ test("SpeedDemon Int", () => {
 
 test("SpeedDemon MutableInt", () => {
     let a : Map<MutableInt, MutableInt> = HashMap();
-    let N = 100000;
+    let N = 1000000;
     for (let i = 0; i < N/2; i ++) {
         let key = new MutableInt(randomNat(N));
         if (coinflip()) {
@@ -92,7 +92,7 @@ test("SpeedDemon MutableInt", () => {
 
 test("SpeedDemon Num", () => {
     let a : Map<Num, Num> = HashMap();
-    let N = 100000;
+    let N = 1000000;
     for (let i = 0; i < N/2; i ++) {
         let key = new Num(randomNat(N));
         if (coinflip()) {
@@ -212,13 +212,6 @@ test("JavaScript Behaviour: various", () => {
         }
     }
 
-    let i = BigInt(Number.MAX_SAFE_INTEGER);
-    for (let j=1; j<=10; j++) { i = i * i; }
-    console.log(`isNumber(${i}) = ${isNumber(i)}`);
-
-    let a : number = 2;
-    let b : Number = new Number(2);
-    console.log("a", typeof a, "b", typeof b);
 });
 
 
