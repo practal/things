@@ -1,3 +1,4 @@
+import { ComparisonResult, EQUAL, GREATER, LESS, UNRELATED } from "../interfaces/comparable";
 import { int, nat } from "../interfaces/primitives";
 
 export function freeze(x : any) {
@@ -54,3 +55,15 @@ export function hashOfString(s : string) : int {
 }
 
 freeze(hashOfString);
+
+export function mirrorComparisonResult(c : ComparisonResult) : ComparisonResult {
+    switch (c) {
+        case LESS: return GREATER;
+        case GREATER: return LESS;
+        case EQUAL: return EQUAL;
+        case UNRELATED: return UNRELATED;
+        default: throw new Error(`ComparisonResult expected, found: ${c}`);
+    }
+}
+
+freeze(mirrorComparisonResult);
