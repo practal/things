@@ -1,4 +1,4 @@
-import { hashOfString } from "./utils";
+import { freeze, hashOfString } from "./utils";
 import { ComparisonResult, EQUAL, UNRELATED } from "../interfaces/comparable";
 import { Something } from "../interfaces/things";
 import { int } from "../interfaces/primitives";
@@ -8,8 +8,7 @@ export abstract class Thing implements Something {
 
     static {
         Object.setPrototypeOf(Thing.prototype, null);
-        Object.freeze(Thing.prototype);
-        Object.freeze(Thing);
+        freeze(Thing);
     }
 
     abstract toString(): string 

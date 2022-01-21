@@ -1,5 +1,5 @@
 /** The union of all [primitive types](https://developer.mozilla.org/en-US/docs/Glossary/Primitive) of JavaScript. */
-export type primitive = number | string | boolean | symbol | bigint | null | undefined
+export type primitive = number | string | boolean | symbol | bigint | null | undefined 
 
 /** 
  * The type of integers. 

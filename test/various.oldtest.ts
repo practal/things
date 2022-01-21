@@ -1,3 +1,4 @@
+import { primitives } from "../src/implementations/primitives";
 import { iterateCodepoints, joinStrings } from "../src/implementations/utils";
 import {int, numbers, AssocArrayFor,  nat, HashMapFor, MutableMap, Int, HashMap, MutableInt, Num, Nat} from "../src/index";
 
@@ -150,7 +151,6 @@ test("JavaScript Behaviour: enum", () => {
         return LESS;
     }
 
-    console.log(`typeof LESS = ${typeof LESS}`)
 });
 
 test("JavaScript Behaviour: undefined and null", () => {
@@ -198,6 +198,27 @@ test("JavaScript Behaviour: NaN", () => {
     expect(m.get(Number.NaN)).toBe(Number.NaN);
     expect(Number.isNaN(m.get(Number.NaN))).toBe(true);
     expect(m.size).toBe(1);
+});
+
+test("JavaScript Behaviour: various", () => {
+    console.log("typeof primitives = ", typeof primitives);
+    expect(typeof primitives).toBe("object");
+
+    function isNumber(x : BigInt) : boolean {
+        try {
+            return x === BigInt(Number(x));
+        } catch {
+            return false;
+        }
+    }
+
+    let i = BigInt(Number.MAX_SAFE_INTEGER);
+    for (let j=1; j<=10; j++) { i = i * i; }
+    console.log(`isNumber(${i}) = ${isNumber(i)}`);
+
+    let a : number = 2;
+    let b : Number = new Number(2);
+    console.log("a", typeof a, "b", typeof b);
 });
 
 

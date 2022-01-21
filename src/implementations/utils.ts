@@ -1,5 +1,14 @@
 import { int, nat } from "../interfaces/primitives";
 
+export function freeze(x : any) {
+    Object.freeze(x.prototype);
+    Object.freeze(x);
+}
+
+export function finalClass(finalClass : string) : never {
+    throw new Error(`Cannot subclass final class ${finalClass}.`);
+}
+
 /** Returns a sequence of the [codepoints](https://unicode.org/glossary/#code_point) of a string. */
 export function* iterateCodepoints(s : string): Generator<nat, void, unknown> {
     for (let v of s) {
@@ -25,7 +34,7 @@ export function joinStrings(separator : string, strings : Iterable<string>) : st
     return result;
 }
 
-Object.freeze(joinStrings);
+freeze(joinStrings);
 
 /** Combines a sequence of hashes into a single hash. */ 
 export function combineHashes(hashes : Iterable<int>) : int {
@@ -37,11 +46,11 @@ export function combineHashes(hashes : Iterable<int>) : int {
     return sum;
 }
 
-Object.freeze(combineHashes);
+freeze(combineHashes);
 
 /** Calculates the hash of a string. */
 export function hashOfString(s : string) : int {
     return combineHashes(iterateCodepoints(s));
 }
 
-Object.freeze(hashOfString);
+freeze(hashOfString);

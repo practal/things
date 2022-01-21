@@ -1,19 +1,19 @@
 import { Things } from "../interfaces/things";
 import { ComparisonResult, EQUAL, GREATER, LESS, UNRELATED } from "../interfaces/comparable"
-import { hashOfString } from "./utils";
+import { freeze, hashOfString } from "./utils";
 import { int, primitive } from "../interfaces/primitives";
 
 
 /** 
- * Implements the [[Things]] interface for all primitive types. 
+ * Implements the [[Things]] interface for any subtype of all primitive types. 
  * 
  * Comparison is based on the built-in JavaScript operators === and <, but diverges from 
  * it for Number.NaN: equals(NaN, NaN) holds, so that [[Equality.equals | equality is reflexive]].
  */
-export class primitives<P extends primitive> implements Things<P> {
+export class Primitives<P extends primitive> implements Things<P> {
 
     static {
-        Object.freeze(primitives);
+        freeze(Primitives);
     }
 
     hashOf(t: P): int {
@@ -43,13 +43,14 @@ export class primitives<P extends primitive> implements Things<P> {
     }
 }
 
-/** 
- * Implements the [[Things]] interface for all integers. 
- */
- export class ints implements Things<int> {
+export const primitives : Things<primitive> = new Primitives<primitive>();
+
+freeze(primitives);
+
+class _ints implements Things<int> {
 
     static {
-        Object.freeze(ints);
+        freeze(_ints);
     }
 
     hashOf(t: int): int { 
@@ -72,11 +73,17 @@ export class primitives<P extends primitive> implements Things<P> {
 
 }
 
-/** Implements the [[Things]] interface for all booleans. */ 
-export class booleans implements Things<boolean> {
+/** 
+ * Implements the [[Things]] interface for all integers. 
+ */
+export const ints : Things<int> = new _ints();
+
+freeze(ints);
+
+class _booleans implements Things<boolean> {
 
     static {
-        Object.freeze(booleans);
+        freeze(_booleans);
     }
 
     hashOf(b: boolean): int { 
@@ -98,12 +105,24 @@ export class booleans implements Things<boolean> {
 
 }
 
+/** 
+ * Implements the [[Things]] interface for all booleans. 
+ */
+export const booleans : Things<boolean> = new _booleans();
+
+freeze(booleans);
+
 /** Implements the [[Things]] interface for all numbers. */ 
-export type numbers = primitives<number>
+export const numbers : Things<number> = new Primitives<number>();
+
+freeze(numbers);
 
 /** Implements the [[Things]] interface for all strings. */ 
-export type strings = primitives<string>
+export const strings = new Primitives<string>();
+
+freeze(strings);
 
 /** Implements the [[Things]] interface for all bigints. */ 
-export type bigints = primitives<bigint>
+export const bigints = new Primitives<bigint>();
 
+freeze(bigints);

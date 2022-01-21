@@ -12,5 +12,4 @@ export * from "./interfaces/things";
 
 export * from "./implementations/primitives"
 export * from "./implementations/thing"
-
 export * as utils from "./implementations/utils"
