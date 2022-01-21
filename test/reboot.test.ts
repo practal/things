@@ -13,6 +13,7 @@ test("JavaScript Behaviour: reboot", () => {
     console.log("n.equals(c)", n.equals(c));
     console.log("n.equals(d)", n.equals(d));
     console.log("n.equals(e)", n.equals(e));
+    expect((1 as any) == "1").toBe(true);
 });
 
 test("JavaScript Behaviour: bigint", () => {
