@@ -3,13 +3,15 @@ import { Equatable, Equality } from "../interfaces/equatable";
 import { MutableMap } from "../interfaces/map";
 import { int, nat } from "../interfaces/primitives";
 import { Thing } from "./thing";
-import { joinStrings } from "./utils";
+import { freeze, joinStrings } from "./utils";
 import { ComparisonResult } from "../interfaces/comparable";
 import { Anything } from "./anything";
 
 export function AssocArray<Key, Value>(keyValues : Iterable<[Key, Value]> = []) : MutableMap<Key, Value> {
     return AssocArrayFor(Anything, Anything, keyValues);
 }
+
+freeze(AssocArray);
 
 export function AssocArrayFor<Key, Value>(Keys : Things<Key>, Values : Things<Value>, keyValues : Iterable<[Key, Value]> = []) : MutableMap<Key, Value> {
     let m = new AssocArrayImpl<Key, Value>(Keys, Values);
@@ -19,11 +21,12 @@ export function AssocArrayFor<Key, Value>(Keys : Things<Key>, Values : Things<Va
     return m;
 }
 
+freeze(AssocArray);
+
 class AssocArrayImpl<Key, Value> extends Thing implements MutableMap<Key, Value> {
     
     static {
-        Object.freeze(AssocArrayImpl.prototype);
-        Object.freeze(AssocArrayImpl);
+        freeze(AssocArrayImpl);
     }
 
     private _Keys : Things<Key>;
