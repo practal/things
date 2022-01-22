@@ -12,7 +12,7 @@ function isJSNumeric(x : any) : x is number | Number | bigint | BigInt {
  * Implements the [[Things]] interface for any value. 
  * Cloning is supported only for values of type [[Thing]], and for primitive types and their wrappers. 
  */
-export const Anything: Things<any> = {
+export const Anything : Things<any> = {
 
     hashOf: function (t: any): number {
         if (t instanceof Thing) {

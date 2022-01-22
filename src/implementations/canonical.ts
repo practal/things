@@ -7,30 +7,31 @@ import { freeze } from "./utils";
 import { Hash, Hashable } from "../interfaces/hashable";
 import { Anything } from "./anything";
 
-/** Implements Equality according to [SameValueZero](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Equality_comparisons_and_sameness#same-value-zero_equality). */
+/** 
+ * Implements [[Things]] based on [same-value-zero equality](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Equality_comparisons_and_sameness#same-value-zero_equality), 
+ * 
+ * * Equality is [same-value-zero equality](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Equality_comparisons_and_sameness#same-value-zero_equality),
+ *   i.e. it works like strict equality (===) except that NaN is equal to itself.
+ * * Comparison is the same as for [[Anything]], except that if lhs and rhs are equal according to [[Anything]], but not equal according to same-value-zero, then lhs and rhs are deemed to be [[UNRELATED]].
+ * * Cloning and hashing are the same as for [[Anything]].
+ * 
+ */
 export const SameValueZero : Things<any> = {
 
-    /** 
-     * Implements [SameValueZero](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Equality_comparisons_and_sameness#same-value-zero_equality) equality, 
-     * i.e. it works like strict equality (===) except that NaN is equal to itself. 
-     */
     equals(lhs: any, rhs: any): boolean {
         return lhs === rhs || (Number.isNaN(lhs) && Number.isNaN(rhs));
     },
 
-    /** Same as [[Anything.compareTo]], except that if lhs and rhs are equal according to [[Anything.compareTo]], but not equal according to SameValueZero, then lhs and rhs are deemed to be [[UNRELATED]]. */
     compare(lhs: any, rhs: any): ComparisonResult {
         if (lhs === rhs || (Number.isNaN(lhs) && Number.isNaN(rhs))) return EQUAL;
         const c = Anything.compare(lhs, rhs);
         if (c === EQUAL) return UNRELATED; else return c;
     },
     
-    /** Same as [[Anything.cloneOf]]. */
     cloneOf(t : any, force? : boolean) : any {
         return Anything.cloneOf(t, force);
     },
 
-    /** Same as [[Anything.hashOf]]. */
     hashOf(t : any) : int {
         return Anything.hashOf(t);
     }
