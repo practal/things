@@ -20,6 +20,8 @@ export function isNumeric(x : any) : x is Numeric {
     return typeof x === "number" || typeof x === "bigint" || isNumberThing(x) || x instanceof Number || x instanceof BigInt;
 }
 
+freeze(isNumeric);
+
 function equals(lhs : number, rhs : Numeric) : boolean {
     if (typeof rhs === "number") return numbers.equals(lhs, rhs);
     else if (isNumberThing(rhs)) return numbers.equals(lhs, rhs.value);
@@ -99,8 +101,8 @@ export class MutableNum extends Thing {
         return `MutableNum(${this.#value.toString()})`;
     }
 
-    clone(force?: boolean): MutableNum {
-        return new MutableNum(this.#value);
+    clone(force?: boolean): this {
+        return new MutableNum(this.#value) as this;
     }
 
     equals(other : Numeric) : boolean {
@@ -195,8 +197,8 @@ export class MutableInt extends Thing {
         return `MutableInt(${this.#value.toString()})`;
     }
 
-    clone(force?: boolean): MutableInt {
-        return new MutableInt(this.#value);
+    clone(force?: boolean): this {
+        return new MutableInt(this.#value) as this;
     }
 
     equals(other : Numeric) : boolean {
@@ -299,8 +301,8 @@ export class MutableNat extends Thing {
         return `MutableNat(${this.#value.toString()})`;
     }
 
-    clone(force?: boolean): MutableNat {
-        return new MutableNat(this.#value);
+    clone(force?: boolean): this {
+        return new MutableNat(this.#value) as this;
     }
 
     equals(other : Numeric) : boolean {

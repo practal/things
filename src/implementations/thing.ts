@@ -13,7 +13,7 @@ export abstract class Thing implements Something {
 
     abstract toString(): string 
     
-    abstract clone(force?: boolean): Thing
+    abstract clone(force?: boolean): this
 
     /**
      * Implements equality via ===, JavaScript's built-in strict equality.

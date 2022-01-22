@@ -15,6 +15,10 @@ test("JavaScript Behaviour: reboot", () => {
     console.log("n.equals(e)", n.equals(e));
     expect((1 as any) == "1").toBe(true);
     expect((false as any) < "5").toBe(true);
+
+    let M = new Map();
+ 
+    expect(M instanceof Map).toBe(true);
 });
 
 test("JavaScript Behaviour: bigint", () => {

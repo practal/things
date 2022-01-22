@@ -8,7 +8,7 @@ import { combineHashes, freeze } from "./utils";
  * Compares two maps based on the given partial order on values. 
  * This operation is only well-defined under the assumption that the two equalities on keys are compatible with each other.
  */
-export function MapCompare<K, V>(F : Map<K, V>, G : Map<K, V>, Values : PartialOrder<V>) : ComparisonResult {
+export function MapCompare<K, V>(F : ReadonlyMap<K, V>, G : ReadonlyMap<K, V>, Values : PartialOrder<V>) : ComparisonResult {
     if (F === G) { return 0; }
     let c = ints.compare(F.size, G.size);
     if (c != EQUAL) { return c; }
@@ -31,7 +31,7 @@ freeze(MapCompare);
 /**
  * Computes the hash of a map based on the given hash functions for keys and values.
  */
-export function MapHash<K, V>(M : Map<K, V>, Keys : Hash<K>, Values : Hash<V>) : int {
+export function MapHash<K, V>(M : ReadonlyMap<K, V>, Keys : Hash<K>, Values : Hash<V>) : int {
     function* run() {
         yield M.size;
         for (let [k, v] of M) {
