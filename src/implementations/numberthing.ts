@@ -11,6 +11,8 @@ export function isNumberThing(x : any) : x is NumberThing {
     return x instanceof Num || x instanceof MutableNum || x instanceof Int || x instanceof MutableInt || x instanceof Nat || x instanceof MutableNat;
 }
 
+freeze(isNumberThing);
+
 /** The union of all numerical types known to this package. This includes the built-in numerical types of JavaScript, and all [[NumberThing]]s. */
 export type Numeric = number | Number | bigint | BigInt | NumberThing
 

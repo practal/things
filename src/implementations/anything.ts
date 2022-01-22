@@ -2,7 +2,7 @@ import { bigints, booleans, numbers, strings } from "../implementations/primitiv
 import { ComparisonResult, EQUAL, GREATER, LESS, UNRELATED } from "../interfaces/comparable";
 import { Things } from "../interfaces/things";
 import { Thing } from "./thing";
-import { mirrorComparisonResult } from "./utils";
+import { freeze, mirrorComparisonResult } from "./utils";
 
 function isJSNumeric(x : any) : x is number | Number | bigint | BigInt {
     return typeof x === "number" || x instanceof Number || typeof x === "bigint" || x instanceof BigInt;
@@ -90,4 +90,4 @@ export const Anything: Things<any> = {
     }
 };
 
-Object.freeze(Anything);
+freeze(Anything);
