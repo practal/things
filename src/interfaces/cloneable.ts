@@ -24,24 +24,6 @@ export interface Cloneable {
 
 }
 
-export interface Cloning<T> {
-
-    /**
-     * Makes a clone of t, instantaneously. 
-     * 
-     * This should execute in constant time, and incur almost no runtime cost. 
-     * For immutable t, this is easily achieved by just returning t itself. 
-     * For mutable things, this can be achieved using [copy-on-write](https://en.wikipedia.org/wiki/Copy-on-write), i.e. delaying the actual copying until the first modification.
-     */
-    cloneOf(t : T) : T;
-
-    /**
-     * After you are done with a clone, call this method with the clone as its argument to optimize resource usage and avoid unnecessary copying. 
-     */ 
-    release(clone : T) : void;
-
-}
-
 /** A [[Mutable]] is a [[Cloneable]] which can be overwritten in place via [[assign]]. */
 export interface Mutable extends Cloneable {
 

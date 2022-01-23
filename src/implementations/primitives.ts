@@ -38,11 +38,6 @@ export class Primitives<P extends primitive> implements Things<P> {
         }
     }
 
-    cloneOf(t: P): P {
-        return t;
-    }
-
-    release(t : P): void {}
 }
 
 export const primitives : Things<primitive> = new Primitives<primitive>();
@@ -68,12 +63,6 @@ class _ints implements Things<int> {
         else if (lhs > rhs) return GREATER;
         else return EQUAL;
     }
-
-    cloneOf(t: int): int {
-        return t;
-    }
-
-    release(t: int): void {}
 
 }
 
@@ -102,12 +91,6 @@ class _booleans implements Things<boolean> {
         if (lhs === rhs) return EQUAL;
         else return lhs < rhs ? LESS : GREATER;
     }
-
-    cloneOf(t: boolean): boolean {
-        return t;
-    }
-
-    release(t: boolean): void {}
 
 }
 

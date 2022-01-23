@@ -28,14 +28,6 @@ export const SameValueZero : Things<any> = {
         if (c === EQUAL) return UNRELATED; else return c;
     },
     
-    cloneOf(t : any) : any {
-        return Anything.cloneOf(t);
-    },
-
-    release(t : any): void {
-        Anything.release(t);
-    },
-
     hashOf(t : any) : int {
         return Anything.hashOf(t);
     }
@@ -58,36 +50,6 @@ class CanonicalEquality<T extends Equatable> implements Equality<T> {
     }   
 
 }
-
-/** Defines equals(lhs, rhs) as lhs.equals(rhs). */
-export function canonicalEquality<T extends Equatable>() : Equality<T> {
-    return Object.freeze(new CanonicalEquality<T>());
-}
-
-freeze(canonicalEquality);
-
-class CanonicalHash<T extends Hashable> implements Hash<T> {
-
-    static {
-        freeze(CanonicalHash);
-    }
-
-    equals(lhs : T, rhs : T) : boolean {
-        return lhs.isEqualTo(rhs);
-    }
-
-    hashOf(t : T) : int {
-        return t.hash;
-    }       
-
-}
-
-/** Implements [[Things]] based on the funtionality of [[Hashable]]. */
-export function canonicalHash<T extends Hashable>() : Hash<T> {
-    return Object.freeze(new CanonicalHash<T>()); 
-}
-
-freeze(canonicalHash);
 
 class CanonicalThings<T extends Something> implements Things<T> {
 

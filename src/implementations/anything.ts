@@ -70,15 +70,6 @@ export const Anything : Things<any> = {
                 } else return UNRELATED;
             }
         }
-    },
-
-    cloneOf(t: any): any {
-        if (t instanceof Thing) return t.clone();
-        else return t;
-    },
-
-    release(t: any): void {
-        if (t instanceof Thing) t.release();
     }
 
 };
