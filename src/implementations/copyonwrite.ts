@@ -12,7 +12,7 @@ import { freeze } from "./utils";
  * While interested, a client can access the [[value]] and freely read from it. It is only allowed to write to it though if [[canWrite]] is true.
  * To ensure that [[canWrite]] is true before writing, use [[copyIfNeeded]]. Use [[set]] to replace the value altogether regardless of [[canWrite]]. 
  * 
- * The following is an example of how to implement [[Cloneable]] and [[Mutable]] by wrapping internal data via CopyOnWrite:
+ * The following is an example of how to implement [[Cloneable]] and [[Mutable]] by wrapping internal data with CopyOnWrite:
  * 
  * ```
  * class Vector<E> implements Cloneable, Mutable {
