@@ -62,9 +62,11 @@ export class Num extends Thing {
         return `Num(${this.value.toString()})`;
     }
 
-    clone(force?: boolean): this {
+    clone(): this {
         return this;
     }
+
+    release(): void {}
 
     equals(other : Numeric) : boolean {
         return equals(this.value, other);
@@ -101,9 +103,11 @@ export class MutableNum extends Thing {
         return `MutableNum(${this.#value.toString()})`;
     }
 
-    clone(force?: boolean): this {
+    clone(): this {
         return new MutableNum(this.#value) as this;
     }
+
+    release(): void {}
 
     equals(other : Numeric) : boolean {
         return equals(this.#value, other);
@@ -158,9 +162,11 @@ export class Int extends Thing {
         return `Int(${this.value.toString()})`;
     }
 
-    clone(force?: boolean): this {
+    clone(): this {
         return this;
     }
+
+    release(): void {}
 
     equals(other : Numeric) : boolean {
         return equals(this.value, other);
@@ -197,9 +203,11 @@ export class MutableInt extends Thing {
         return `MutableInt(${this.#value.toString()})`;
     }
 
-    clone(force?: boolean): this {
+    clone(): this {
         return new MutableInt(this.#value) as this;
     }
+
+    release(): void {}
 
     equals(other : Numeric) : boolean {
         return equals(this.#value, other);
@@ -262,9 +270,11 @@ export class Nat extends Thing {
         return `Nat(${this.value.toString()})`;
     }
 
-    clone(force?: boolean): this {
+    clone(): this {
         return this;
     }
+
+    release(): void {}
 
     equals(other : Numeric) : boolean {
         return equals(this.value, other);
@@ -301,9 +311,11 @@ export class MutableNat extends Thing {
         return `MutableNat(${this.#value.toString()})`;
     }
 
-    clone(force?: boolean): this {
+    clone(): this {
         return new MutableNat(this.#value) as this;
     }
+
+    release(): void {}
 
     equals(other : Numeric) : boolean {
         return equals(this.#value, other);

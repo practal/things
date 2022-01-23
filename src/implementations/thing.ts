@@ -13,7 +13,9 @@ export abstract class Thing implements Something {
 
     abstract toString(): string 
     
-    abstract clone(force?: boolean): this
+    abstract clone(): this
+
+    abstract release(): void;
 
     /**
      * Implements equality via ===, JavaScript's built-in strict equality.

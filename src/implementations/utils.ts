@@ -67,3 +67,16 @@ export function mirrorComparisonResult(c : ComparisonResult) : ComparisonResult 
 }
 
 freeze(mirrorComparisonResult);
+
+export function isNumber(x : any) : x is number | Number {
+    return typeof(x) === "number" || x instanceof Number;
+}
+
+export function isString(x : any) : x is string | String {
+    return typeof(x) === "string" || x instanceof String;
+}
+
+export function isFunction(x : any) : x is Function {
+    return x instanceof Function;
+}
+

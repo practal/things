@@ -14,7 +14,7 @@ function isJSNumeric(x : any) : x is number | Number | bigint | BigInt {
  */
 export const Anything : Things<any> = {
 
-    hashOf: function (t: any): number {
+    hashOf(t: any): number {
         if (t instanceof Thing) {
             return t.hash;
         } else {
@@ -28,7 +28,7 @@ export const Anything : Things<any> = {
         }
     },
 
-    equals: function (lhs: any, rhs: any): boolean {
+    equals(lhs: any, rhs: any): boolean {
         if (lhs instanceof Thing) {
             return lhs.isEqualTo(rhs);
         } else if (rhs instanceof Thing) {
@@ -46,7 +46,7 @@ export const Anything : Things<any> = {
         }
     },
 
-    compare: function (lhs: any, rhs: any): ComparisonResult {
+    compare(lhs: any, rhs: any): ComparisonResult {
         if (lhs instanceof Thing) {
             return lhs.compareTo(rhs);
         } else if (rhs instanceof Thing) {
@@ -72,22 +72,15 @@ export const Anything : Things<any> = {
         }
     },
 
-    cloneOf: function (t: any, force?: boolean): any {
-        if (t instanceof Thing) return t.clone(force);
-        if (t instanceof Number || t instanceof String || t instanceof BigInt || t instanceof Symbol || t instanceof Boolean || t == null)
-            return t;
-        else {
-            const ty = typeof t;
-            switch (ty) {
-                case "number": return t;
-                case "string": return t;
-                case "boolean": return t;
-                case "bigint": return t;
-                case "symbol": return t;
-                default: throw new Error(`Don't know how to clone object of type ${ty}`);
-            }
-        }
+    cloneOf(t: any): any {
+        if (t instanceof Thing) return t.clone();
+        else return t;
+    },
+
+    release(t: any): void {
+        if (t instanceof Thing) t.release();
     }
+
 };
 
 freeze(Anything);

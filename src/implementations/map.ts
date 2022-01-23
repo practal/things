@@ -2,13 +2,14 @@ import { int } from "../interfaces/primitives";
 import { Hash } from "../interfaces/hashable";
 import { ints } from "./primitives";
 import { ComparisonResult, EQUAL, PartialOrder, UNRELATED } from "../interfaces/comparable";
-import { combineHashes, freeze } from "./utils";
+import { combineHashes, freeze, isFunction, isNumber } from "./utils";
+import { MapThing } from "../interfaces/map";
 
 /** 
  * Compares two maps based on the given partial order on values. 
  * This operation is only well-defined under the assumption that the two equalities on keys are compatible with each other.
  */
-export function MapCompare<K, V>(F : ReadonlyMap<K, V>, G : ReadonlyMap<K, V>, Values : PartialOrder<V>) : ComparisonResult {
+export function MapCompare<K, V>(F : MapThing<K, V>, G : MapThing<K, V>, Values : PartialOrder<V>) : ComparisonResult {
     if (F === G) { return 0; }
     let c = ints.compare(F.size, G.size);
     if (c != EQUAL) { return c; }
@@ -31,7 +32,7 @@ freeze(MapCompare);
 /**
  * Computes the hash of a map based on the given hash functions for keys and values.
  */
-export function MapHash<K, V>(M : ReadonlyMap<K, V>, Keys : Hash<K>, Values : Hash<V>) : int {
+export function MapHash<K, V>(M : MapThing<K, V>, Keys : Hash<K>, Values : Hash<V>) : int {
     function* run() {
         yield M.size;
         for (let [k, v] of M) {
@@ -43,3 +44,7 @@ export function MapHash<K, V>(M : ReadonlyMap<K, V>, Keys : Hash<K>, Values : Ha
 }
 
 freeze(MapHash);
+
+export function isMapThing<K, V>(m : any) : m is MapThing<K, V> {
+    return isNumber(m.size) && isFunction(m.get) && isFunction(m.has) && m.entries !== undefined;
+}

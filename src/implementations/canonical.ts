@@ -28,8 +28,12 @@ export const SameValueZero : Things<any> = {
         if (c === EQUAL) return UNRELATED; else return c;
     },
     
-    cloneOf(t : any, force? : boolean) : any {
-        return Anything.cloneOf(t, force);
+    cloneOf(t : any) : any {
+        return Anything.cloneOf(t);
+    },
+
+    release(t : any): void {
+        Anything.release(t);
     },
 
     hashOf(t : any) : int {
@@ -103,9 +107,14 @@ class CanonicalThings<T extends Something> implements Things<T> {
         return t.hash;
     }       
 
-    cloneOf(t : T, force? : boolean) : T {
-        return t.clone(force) as T;
+    cloneOf(t : T) : T {
+        return t.clone() as T;
     }
+
+    release(t : T): void {
+        t.release();
+    }
+
 
 }
 
