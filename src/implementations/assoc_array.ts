@@ -215,11 +215,15 @@ class AssocArrayImpl<Key, Value> extends MutableThing implements MutableMap<Key,
     }
 
     isEqualTo(other: any): boolean {
+        if (this === other) return true;
+        if (other instanceof AssocArrayImpl && this.content === other.content) return true;
         if (!isMapThing(other)) return false;
         return MapCompare(this, other, this.Values()) === EQUAL;
     }
 
     compareTo(other: any): ComparisonResult {
+        if (this === other) return EQUAL;
+        if (other instanceof AssocArrayImpl && this.content === other.content) return EQUAL;
         if (!isMapThing(other)) return UNRELATED;
         return MapCompare(this, other, this.Values());
     }
