@@ -1,13 +1,12 @@
 import { Things } from "../interfaces/things";
 import { MutableMap } from "../interfaces/map";
 import { int, nat } from "../interfaces/primitives";
-import { MutableThing, Thing } from "./thing";
+import { MutableThing } from "./thing";
 import { freeze, joinStrings } from "./utils";
 import { ComparisonResult, EQUAL, UNRELATED } from "../interfaces/comparable";
 import { Anything } from "./anything";
 import { isMapThing, MapCompare, MapHash } from "./map";
 import { CopyOnWrite } from "./copyonwrite";
-import { Mutable } from "../interfaces/cloneable";
 
 export function AssocArray<Key, Value>(keyValues : Iterable<[Key, Value]> = []) : MutableMap<Key, Value> {
     return AssocArrayFor(Anything, Anything, keyValues);
@@ -89,18 +88,15 @@ class AssocArrayImpl<Key, Value> extends MutableThing implements MutableMap<Key,
         return -1;
     }
 
-    private prepareWriting() {
-        const newContent = this.content.write(content => {
+    private copyIfNeeded() {
+        this.content = this.content.copyIfNeeded(content => {
             return [...content];
         });
-        if (newContent !== undefined) {
-            this.content = newContent;
-        }
     }
 
     set(key: Key, value: Value): this {
         const i = this.find(key);
-        this.prepareWriting();
+        this.copyIfNeeded();
         if (i < 0) {
             this.content.value.push([key, value]);
         } else {
@@ -112,12 +108,12 @@ class AssocArrayImpl<Key, Value> extends MutableThing implements MutableMap<Key,
     put(key: Key, value: Value): Value | undefined {
         const i = this.find(key);
         if (i < 0) {
-            this.prepareWriting();
+            this.copyIfNeeded();
             this.content.value.push([key, value]);
             return undefined;
         } else {
             const oldValue = this.content.value[i][1];
-            this.prepareWriting();
+            this.copyIfNeeded();
             this.content.value[i][1] = value;
             return oldValue;
         }
@@ -126,13 +122,13 @@ class AssocArrayImpl<Key, Value> extends MutableThing implements MutableMap<Key,
     putIfUndefined(key: Key, value: Value): Value | undefined {
         const i = this.find(key);
         if (i < 0) {
-            this.prepareWriting();
+            this.copyIfNeeded();
             this.content.value.push([key, value]);
             return undefined;
         } else {
             const old = this.content.value[i][1];
             if (old === undefined) {
-                this.prepareWriting();
+                this.copyIfNeeded();
                 this.content.value[i][1] = value;    
             }
             return old;
@@ -142,7 +138,7 @@ class AssocArrayImpl<Key, Value> extends MutableThing implements MutableMap<Key,
     delete(key: Key): boolean {
         const i = this.find(key);
         if (i < 0) return false;
-        this.prepareWriting();
+        this.copyIfNeeded();
         this.content.value.splice(i, 1);
         return true;
     }
@@ -150,27 +146,27 @@ class AssocArrayImpl<Key, Value> extends MutableThing implements MutableMap<Key,
     remove(key: Key): Value | undefined {
         const i = this.find(key);
         if (i < 0) return undefined;
-        this.prepareWriting();
+        this.copyIfNeeded();
         const old = this.content.value[i][1];
         this.content.value.splice(i, 1);
         return old;
     }
 
     clear() {
-        this.prepareWriting();
-        this.content.value = [];
+        this.content = this.content.set([]);
     }
 
     assign(it : Iterable<[Key, Value]>) : void {
-        this.prepareWriting();
         if (it instanceof AssocArrayImpl && this.Keys() === it.Keys() && this.Values() === it.Values()) {
-            this.content = it.content.clone();
+            it.content.acquire();
+            this.content.release();
+            this.content = it.content;
         } else {
             const temp = new AssocArrayImpl(this.Keys(), this.Values());
             for (let [k, v] of it) {
                 temp.put(k, v);
             }
-            this.content.value = temp.content.value;
+            this.content = this.content.set(temp.content.value);
         }
     }
 
@@ -210,7 +206,7 @@ class AssocArrayImpl<Key, Value> extends MutableThing implements MutableMap<Key,
     }
 
     clone(): this {
-        this.content.clone();
+        this.content.acquire();
         return this;
     }
 

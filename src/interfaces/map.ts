@@ -68,7 +68,9 @@ export interface MutableMap<Key, Value> extends Map<Key, Value>, MutableMapThing
 
     remove(key : Key) : Value | undefined
 
-    assign(value : Iterable<[Key, Value]>) : void;
+    assign(value : this) : void;
+
+    assign(it : Iterable<[Key, Value]>) : void;
 
 }
 

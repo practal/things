@@ -42,11 +42,13 @@ export interface Cloning<T> {
 
 }
 
-/** A [[Mutable]] is a [[Cloneable]] which can be overwritten in place via `assign`. */
+/** A [[Mutable]] is a [[Cloneable]] which can be overwritten in place via [[assign]]. */
 export interface Mutable extends Cloneable {
 
     /**
      * Overwrites the current value of this object with the value passed as the argument. 
+     * 
+     * Just like [[clone]], this operation is supposed to perform in constant time, and incur almost no runtime cost. 
      */
      assign(value : this) : void;
 
