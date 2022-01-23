@@ -8,7 +8,7 @@ import { freeze } from "./utils";
  * Here is an example for how to use CopyOnWrite:
  * 
  * ```
- * class Vector<E> implements Cloneable {
+ * class Vector<E extends number | string | boolean> implements Cloneable {
  *
  *     #elements : CopyOnWrite<E[]>;
  *  
@@ -96,7 +96,7 @@ export class CopyOnWrite<V>  {
 }
 
 /** Example, for documentation purposes only. */
-class Vector<E> implements Cloneable {
+class Vector<E extends number | string | boolean> implements Cloneable {
 
     #elements : CopyOnWrite<E[]>;
     
