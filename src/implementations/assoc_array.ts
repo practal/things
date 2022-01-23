@@ -89,7 +89,7 @@ class AssocArrayImpl<Key, Value> extends MutableThing implements MutableMap<Key,
     }
 
     private copyIfNeeded() {
-        this.content = this.content.copyIfNeeded(content => {
+        this.content = this.content.copyIfShared(content => {
             return [...content];
         });
     }

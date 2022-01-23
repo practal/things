@@ -10,7 +10,7 @@ import { freeze } from "./utils";
  * A client does not need to ever release, but should do so when possible to maximise sharing and minimise copying.
  * 
  * While interested, a client can access the [[value]] and freely read from it. It is only allowed to write to it though if [[canWrite]] is true.
- * To ensure that [[canWrite]] is true before writing, use [[copyIfNeeded]]. Use [[set]] to replace the value altogether regardless of [[canWrite]]. 
+ * To ensure that [[canWrite]] is true before writing, use [[copyIfShared]]. Use [[set]] to replace the value altogether regardless of [[canWrite]]. 
  * 
  * The following is an example of how to implement [[Cloneable]] and [[Mutable]] by wrapping internal data with CopyOnWrite:
  * 
@@ -41,7 +41,7 @@ import { freeze } from "./utils";
  *     }
  *
  *     set(index : number, value : E) {
- *         this.#elements = this.#elements.copyIfNeeded(elements => [...elements]);
+ *         this.#elements = this.#elements.copyIfShared(elements => [...elements]);
  *         this.#elements.value[index] = value;
  *     }
  * 
@@ -69,10 +69,12 @@ export class CopyOnWrite<V>  {
     }
 
     private refs : nat;
+    private _value : V;
 
-    /** Creates a new CopyOnWrite wrapper for _value. The caller of the constructor is its only client. */
-    constructor (private _value : V) {
+    /** Creates a new CopyOnWrite wrapper for the given value. The caller of the constructor is its only client. */
+    constructor (value : V) {
         this.refs = 1;
+        this._value = value;
     }
 
     /** Registers a new client interested in the value of this CopyOnWrite wrapper. */
@@ -88,11 +90,11 @@ export class CopyOnWrite<V>  {
 
     /**
      * If [[canWrite]] is true, this just returns `this`. Otherwise the client copies the value 
-     * to a fresh CopyOnWrite wrapper for which [[canWrite]] is true. It then release this wrapper, and returns the fresh one.
+     * to a fresh CopyOnWrite wrapper for which [[canWrite]] is true. It then releases `this`, and returns the fresh one.
      */
-    copyIfNeeded(copy : (value: V) => V) : CopyOnWrite<V> {
+    copyIfShared(copy : (value: V) => V) : CopyOnWrite<V> {
         if (this.refs === 1) return this;
-        if (this.refs < 1) throw new Error("CopyOnWrite: Cannot write, clone first");
+        if (this.refs < 1) throw new Error("CopyOnWrite: Cannot copy with zero refs.");
         const w = copy(this._value);
         const c = new CopyOnWrite(w);
         this.refs -= 1;
@@ -111,8 +113,8 @@ export class CopyOnWrite<V>  {
     }
 
     /**
-     * If [[canWrite]] is true, this sets the new value of this CopyOnWrite wrapper, and return `this`.
-     * Otherwise a new wrapper with the new value is created, and returned after releasing this wrapper.
+     * If [[canWrite]] is true, this sets the new value of this CopyOnWrite wrapper, and returns `this`.
+     * Otherwise a new wrapper with the new value is created, and returned after releasing `this`.
      */
     set(v: V) : CopyOnWrite<V> {
         if (this.refs === 1) {
@@ -156,7 +158,7 @@ class Vector<E> implements Cloneable, Mutable {
     }
 
     set(index : number, value : E) {
-        this.#elements = this.#elements.copyIfNeeded(elements => [...elements]);
+        this.#elements = this.#elements.copyIfShared(elements => [...elements]);
         this.#elements.value[index] = value;
     }
 
