@@ -1,3 +1,4 @@
+import { Mutable } from "./cloneable";
 import { int } from "./primitives";
 import { Something, Things } from "./things";
 
@@ -55,7 +56,7 @@ export interface MutableMapThing<Key, Value> extends MapThing<Key, Value> {
 }
 
 /** The base interface for all mutable maps implemented in the [[things]] package. */
-export interface MutableMap<Key, Value> extends Map<Key, Value>, MutableMapThing<Key, Value>, Something {
+export interface MutableMap<Key, Value> extends Map<Key, Value>, MutableMapThing<Key, Value>, Something, Mutable {
 
     Keys() : Things<Key>
 
@@ -66,6 +67,8 @@ export interface MutableMap<Key, Value> extends Map<Key, Value>, MutableMapThing
     putIfUndefined(key : Key, value : Value) : Value | undefined
 
     remove(key : Key) : Value | undefined
+
+    assign(value : Iterable<[Key, Value]>) : void;
 
 }
 

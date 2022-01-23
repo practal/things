@@ -1,13 +1,13 @@
 import { Things } from "../interfaces/things";
-import { Equatable, Equality } from "../interfaces/equatable";
 import { MutableMap } from "../interfaces/map";
 import { int, nat } from "../interfaces/primitives";
-import { Thing } from "./thing";
+import { MutableThing, Thing } from "./thing";
 import { freeze, joinStrings } from "./utils";
 import { ComparisonResult, EQUAL, UNRELATED } from "../interfaces/comparable";
 import { Anything } from "./anything";
 import { isMapThing, MapCompare, MapHash } from "./map";
 import { CopyOnWrite } from "./copyonwrite";
+import { Mutable } from "../interfaces/cloneable";
 
 export function AssocArray<Key, Value>(keyValues : Iterable<[Key, Value]> = []) : MutableMap<Key, Value> {
     return AssocArrayFor(Anything, Anything, keyValues);
@@ -25,7 +25,7 @@ export function AssocArrayFor<Key, Value>(Keys : Things<Key>, Values : Things<Va
 
 freeze(AssocArray);
 
-class AssocArrayImpl<Key, Value> extends Thing implements MutableMap<Key, Value> {
+class AssocArrayImpl<Key, Value> extends MutableThing implements MutableMap<Key, Value> {
     
     static {
         freeze(AssocArrayImpl);
@@ -159,6 +159,19 @@ class AssocArrayImpl<Key, Value> extends Thing implements MutableMap<Key, Value>
     clear() {
         this.prepareWriting();
         this.content.value = [];
+    }
+
+    assign(it : Iterable<[Key, Value]>) : void {
+        this.prepareWriting();
+        if (it instanceof AssocArrayImpl && this.Keys() === it.Keys() && this.Values() === it.Values()) {
+            this.content = it.content.clone();
+        } else {
+            const temp = new AssocArrayImpl(this.Keys(), this.Values());
+            for (let [k, v] of it) {
+                temp.put(k, v);
+            }
+            this.content.value = temp.content.value;
+        }
     }
 
     get size(): nat {

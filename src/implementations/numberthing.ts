@@ -1,8 +1,8 @@
 import { int, nat } from "../interfaces/primitives";
 import { ComparisonResult, EQUAL, GREATER, LESS, UNRELATED } from "../interfaces/comparable";
 import { numbers } from "./primitives";
-import { Thing } from "./thing";
-import { finalClass, freeze } from "./utils";
+import { MutableThing, Thing } from "./thing";
+import { asNumber, finalClass, freeze, numberOf } from "./utils";
 
 /** Numerical [[Things]]s */
 export type NumberThing = Num | MutableNum | Int | MutableInt | Nat | MutableNat
@@ -23,18 +23,15 @@ export function isNumeric(x : any) : x is Numeric {
 freeze(isNumeric);
 
 function equals(lhs : number, rhs : Numeric) : boolean {
-    if (typeof rhs === "number") return numbers.equals(lhs, rhs);
-    else if (isNumberThing(rhs)) return numbers.equals(lhs, rhs.value);
-    else if (rhs instanceof Number) return numbers.equals(lhs, rhs.valueOf());
-    else if (typeof rhs === "bigint" || rhs instanceof BigInt) return (lhs as any)  == rhs;
-    else return false;
+    const n = numberOf(rhs);
+    if (n === undefined) return false;
+    return numbers.equals(lhs, n);
 }
 
 function compare(lhs : number, rhs : Numeric) : ComparisonResult {
-    if (typeof rhs === "number") return numbers.compare(lhs, rhs);
-    else if (isNumberThing(rhs)) return numbers.compare(lhs, rhs.value);
-    else if (rhs instanceof Number) return numbers.compare(lhs, rhs.valueOf());
-    else if (typeof rhs === "bigint" || rhs instanceof BigInt) {
+    const n = numberOf(rhs);
+    if (n !== undefined) return numbers.compare(lhs, n);
+    if (typeof rhs === "bigint" || rhs instanceof BigInt) {
         if ((lhs as any) < rhs) return LESS;
         else if ((lhs as any) > rhs) return GREATER;
         else if ((lhs as any) == rhs) return EQUAL;
@@ -80,10 +77,14 @@ export class Num extends Thing {
         return numbers.hashOf(this.value);
     }
 
+    valueOf() : number {
+        return this.value;
+    }
+
 }
 
 /** A [[Thing]] guaranteed to represent a mutable number. */
-export class MutableNum extends Thing {
+export class MutableNum extends MutableThing {
 
     static {
         freeze(MutableNum);
@@ -130,6 +131,10 @@ export class MutableNum extends Thing {
         this.#value = v;
     }
 
+    assign(other : Numeric) : void {
+        this.value = asNumber(other);
+    }
+
     /** Increments the value and returns the new value. */
     increment() : number {
         this.#value++;
@@ -139,6 +144,10 @@ export class MutableNum extends Thing {
     /** Decrements the value and returns the new value. */
     decrement() : number {
         this.#value--;
+        return this.#value;
+    }
+
+    valueOf() : number {
         return this.#value;
     }
 
@@ -180,10 +189,13 @@ export class Int extends Thing {
         return this.value;
     }
 
+    valueOf() : number {
+        return this.value;
+    }
 }
 
 /** A [[Thing]] guaranteed to represent a mutable integer. */
-export class MutableInt extends Thing {
+export class MutableInt extends MutableThing {
 
     static {
         freeze(MutableInt);
@@ -230,6 +242,10 @@ export class MutableInt extends Thing {
         this.#value = v;
     }
 
+    assign(other : Numeric) : void {
+        this.value = asNumber(other);
+    }    
+
     /** Increments the value and returns the new value. */
     increment() : int {
         if (this.#value <= Number.MAX_SAFE_INTEGER) {
@@ -250,6 +266,9 @@ export class MutableInt extends Thing {
         }
     }
 
+    valueOf() : number {
+        return this.#value;
+    }
 }
 
 /** An immutable [[Thing]] guaranteed to represent a natural number. */
@@ -288,10 +307,13 @@ export class Nat extends Thing {
         return this.value;
     }
 
+    valueOf() : number {
+        return this.value;
+    }
 }
 
 /** A [[Thing]] guaranteed to represent a mutable natural number. */
-export class MutableNat extends Thing {
+export class MutableNat extends MutableThing {
 
     static {
         freeze(MutableNat);
@@ -338,6 +360,10 @@ export class MutableNat extends Thing {
         this.#value = v;
     }
 
+    assign(other : Numeric) : void {
+        this.value = asNumber(other);
+    }
+    
     /** Increments the value and returns the new value. */
     increment() : nat {
         if (this.#value <= Number.MAX_SAFE_INTEGER) {
@@ -358,6 +384,9 @@ export class MutableNat extends Thing {
         }
     }
 
+    valueOf() : number {
+        return this.#value;
+    }
 }
 
 

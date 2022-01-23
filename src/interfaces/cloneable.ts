@@ -2,8 +2,9 @@
  * A Cloneable object can be cloned, i.e. it can be copied with [[clone | copy-on-write semantics]].
  * 
  * Subsequent changes of the copy/clone do not affect the original object.
- * Of course this isolation from changes is only true for modifications through the official API of the object: 
- * Mutations done to accessible nested objects nested in the original without cloning them first will show in both the original and the clone.
+ * Note that cloning is *shallow*: 
+ * * Isolation from changes only holds for modifications through the official API of the object. 
+ * * Mutations done to accessible nested objects without cloning them first will show in both the original and the clone.
  **/
 export interface Cloneable {
 
@@ -40,3 +41,17 @@ export interface Cloning<T> {
     release(clone : T) : void;
 
 }
+
+/** A [[Mutable]] is a [[Cloneable]] which can be overwritten in place via `assign`. */
+export interface Mutable extends Cloneable {
+
+    /**
+     * Overwrites the current value of this object with the value passed as the argument. 
+     */
+     assign(value : this) : void;
+
+}
+
+
+
+

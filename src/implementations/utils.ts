@@ -80,3 +80,25 @@ export function isFunction(x : any) : x is Function {
     return x instanceof Function;
 }
 
+/** Tries to turn its numeric argument into a number, and returns undefined if that is not possible. */
+export function numberOf(x : any) : number | undefined {
+    const v = x.valueOf();
+    if (typeof v === "number") return v;
+    else if (typeof v == "bigint") {
+        try {
+            let n = Number(v);
+            if ((n as any) == v) return n;
+            else return undefined;
+        } catch {
+            return undefined;
+        }
+    } else return undefined;
+}
+
+/** Tries to turn its numeric argument into a number, and throws an exception if that fails. */
+export function asNumber(x : any) : number {
+    const v = numberOf(x);
+    if (v === undefined) throw new Error(`cannot convert ${x} to number`);
+    else return v;
+}
+

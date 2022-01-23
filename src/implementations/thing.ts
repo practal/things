@@ -2,6 +2,7 @@ import { freeze, hashOfString } from "./utils";
 import { ComparisonResult, EQUAL, UNRELATED } from "../interfaces/comparable";
 import { Something } from "../interfaces/things";
 import { int } from "../interfaces/primitives";
+import { Mutable } from "../interfaces/cloneable";
 
 /** The abstract base class used for all implementations of the [[Something]] interface in the [[things]] package. */
 export abstract class Thing implements Something {
@@ -46,5 +47,16 @@ export abstract class Thing implements Something {
     get hash(): int {
         return hashOfString(this.toString());
     }
+
+}
+
+/** The abstract base class used for all *mutable* implementations of the [[Something]] interface in the [[things]] package. */
+export abstract class MutableThing extends Thing implements Mutable {
+
+    static {
+        freeze(MutableThing);
+    }
+
+    abstract assign(value : this): void;
 
 }
