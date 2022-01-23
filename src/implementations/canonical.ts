@@ -35,22 +35,6 @@ export const SameValueZero : Things<any> = {
 
 freeze(SameValueZero);
 
-class CanonicalEquality<T extends Equatable> implements Equality<T> {
-    
-    static {
-        freeze(CanonicalEquality);
-    }
-
-    constructor() {
-        Object.freeze(this);
-    }
-
-    equals(lhs : T, rhs : T) : boolean {
-        return lhs.isEqualTo(rhs);
-    }   
-
-}
-
 class CanonicalThings<T extends Something> implements Things<T> {
 
     static {
