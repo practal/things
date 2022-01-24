@@ -12,9 +12,9 @@ class HashMapImpl<Key, Value> extends MutableThing implements MutableMap<Key, Va
         freeze(HashMapImpl);
     }
 
-    private readonly map : CopyOnWrite<Map<int, MutableMap<Key, Value>>>;
+    private map : CopyOnWrite<Map<int, MutableMap<Key, Value>>>;
 
-    private readonly counter : MutableInt
+    private counter : MutableInt
 
     constructor(private _Keys : Things<Key>, private _Values : Things<Value>) {
         super();
@@ -27,6 +27,10 @@ class HashMapImpl<Key, Value> extends MutableThing implements MutableMap<Key, Va
     Keys() { return this._Keys; }
 
     Values() { return this._Values; }
+
+    private copyIfNeeded() {
+        throw new Error("Not implemented");
+    }
 
     put(key: Key, value: Value): Value | undefined {
         throw new Error("Method not implemented.");
