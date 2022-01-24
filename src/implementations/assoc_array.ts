@@ -34,13 +34,13 @@ class AssocArrayImpl<Key, Value> extends MutableThing implements MutableMap<Key,
     private _Values : Things<Value>;
     
     /// Should be made # so that it doesn't freeze
-    private content : CopyOnWrite<[Key, Value][]>;
+    #content : CopyOnWrite<[Key, Value][]>;
 
     constructor(Keys : Things<Key>, Values : Things<Value>) {
         super();
         this._Keys = Keys;
         this._Values = Values;
-        this.content = new CopyOnWrite([]);
+        this.#content = new CopyOnWrite([]);
         Object.freeze(this);
     }
 
@@ -57,12 +57,12 @@ class AssocArrayImpl<Key, Value> extends MutableThing implements MutableMap<Key,
     }
 
     public toString() : string {
-        return `AssocArray(${joinStrings(", ", this.content.value.map(kv => `${kv[0]} -> ${kv[1]}`))})`;       
+        return `AssocArray(${joinStrings(", ", this.#content.value.map(kv => `${kv[0]} -> ${kv[1]}`))})`;       
     }
 
     get(key: Key): Value | undefined {
         const K = this.Keys();
-        for (let [k, v] of this.content.value) {
+        for (let [k, v] of this.#content.value) {
             if (K.equals(k, key)) {
                 return v;
             }
@@ -72,7 +72,7 @@ class AssocArrayImpl<Key, Value> extends MutableThing implements MutableMap<Key,
 
     has(key: Key): boolean {
         const K = this.Keys();
-        for (let [k, v] of this.content.value) {
+        for (let [k, v] of this.#content.value) {
             if (K.equals(k, key)) {
                 return true;
             }
@@ -82,7 +82,7 @@ class AssocArrayImpl<Key, Value> extends MutableThing implements MutableMap<Key,
 
     private find(key : Key) : int {
         const K = this.Keys();
-        const content = this.content.value;
+        const content = this.#content.value;
         for (let i = 0; i < content.length; i++) {
             let [k, v] = content[i];
             if (K.equals(k, key)) return i;
@@ -91,7 +91,7 @@ class AssocArrayImpl<Key, Value> extends MutableThing implements MutableMap<Key,
     }
 
     private copyIfNeeded() {
-        this.content = this.content.copyIfShared(content => {
+        this.#content = this.#content.copyIfShared(content => {
             return [...content];
         });
     }
@@ -100,9 +100,9 @@ class AssocArrayImpl<Key, Value> extends MutableThing implements MutableMap<Key,
         const i = this.find(key);
         this.copyIfNeeded();
         if (i < 0) {
-            this.content.value.push([key, value]);
+            this.#content.value.push([key, value]);
         } else {
-            this.content.value[i][1] = value;
+            this.#content.value[i][1] = value;
         }
         return this;
     }
@@ -111,12 +111,12 @@ class AssocArrayImpl<Key, Value> extends MutableThing implements MutableMap<Key,
         const i = this.find(key);
         if (i < 0) {
             this.copyIfNeeded();
-            this.content.value.push([key, value]);
+            this.#content.value.push([key, value]);
             return undefined;
         } else {
-            const oldValue = this.content.value[i][1];
+            const oldValue = this.#content.value[i][1];
             this.copyIfNeeded();
-            this.content.value[i][1] = value;
+            this.#content.value[i][1] = value;
             return oldValue;
         }
     }
@@ -125,13 +125,13 @@ class AssocArrayImpl<Key, Value> extends MutableThing implements MutableMap<Key,
         const i = this.find(key);
         if (i < 0) {
             this.copyIfNeeded();
-            this.content.value.push([key, value]);
+            this.#content.value.push([key, value]);
             return undefined;
         } else {
-            const old = this.content.value[i][1];
+            const old = this.#content.value[i][1];
             if (old === undefined) {
                 this.copyIfNeeded();
-                this.content.value[i][1] = value;    
+                this.#content.value[i][1] = value;    
             }
             return old;
         }
@@ -141,7 +141,7 @@ class AssocArrayImpl<Key, Value> extends MutableThing implements MutableMap<Key,
         const i = this.find(key);
         if (i < 0) return false;
         this.copyIfNeeded();
-        this.content.value.splice(i, 1);
+        this.#content.value.splice(i, 1);
         return true;
     }
 
@@ -149,46 +149,46 @@ class AssocArrayImpl<Key, Value> extends MutableThing implements MutableMap<Key,
         const i = this.find(key);
         if (i < 0) return undefined;
         this.copyIfNeeded();
-        const old = this.content.value[i][1];
-        this.content.value.splice(i, 1);
+        const old = this.#content.value[i][1];
+        this.#content.value.splice(i, 1);
         return old;
     }
 
     clear() {
-        this.content = this.content.set([]);
+        this.#content = this.#content.set([]);
     }
 
     assign(it : Iterable<[Key, Value]>) : void {
         if (it instanceof AssocArrayImpl && this.Keys() === it.Keys() && this.Values() === it.Values()) {
-            it.content.acquire();
-            this.content.release();
-            this.content = it.content;
+            it.#content.acquire();
+            this.#content.release();
+            this.#content = it.#content;
         } else {
             const temp = new AssocArrayImpl(this.Keys(), this.Values());
             for (let [k, v] of it) {
                 temp.put(k, v);
             }
-            this.content = this.content.set(temp.content.value);
+            this.#content = this.#content.set(temp.#content.value);
         }
     }
 
     get size(): nat {
-        return this.content.value.length;
+        return this.#content.value.length;
     }
 
     forEach(callbackfn: (value: Value, key: Key, map: Map<Key, Value>) => void, thisArg?: any): void {
         const that = this;
-        this.content.value.forEach((kv : [Key, Value], index: number, arr : [Key, Value][]) => {
+        this.#content.value.forEach((kv : [Key, Value], index: number, arr : [Key, Value][]) => {
             callbackfn(kv[1], kv[0], that);
         }, thisArg);
     }
 
     entries(): IterableIterator<[Key, Value]> {
-        return this.content.value.values();
+        return this.#content.value.values();
     }
 
     keys(): IterableIterator<Key> {
-        const content = this.content.value;
+        const content = this.#content.value;
         function* run() {
             for (let [k, v] of content) {
                 yield k;
@@ -198,7 +198,7 @@ class AssocArrayImpl<Key, Value> extends MutableThing implements MutableMap<Key,
     }
 
     values(): IterableIterator<Value> {
-        const content = this.content.value;
+        const content = this.#content.value;
         function* run() {
             for (let [k, v] of content) {
                 yield v;
@@ -208,24 +208,24 @@ class AssocArrayImpl<Key, Value> extends MutableThing implements MutableMap<Key,
     }
 
     clone(): this {
-        this.content.acquire();
+        this.#content.acquire();
         return this;
     }
 
     release(): void {
-        this.content.release();
+        this.#content.release();
     }
 
     isEqualTo(other: any): boolean {
         if (this === other) return true;
-        if (other instanceof AssocArrayImpl && this.content === other.content) return true;
+        if (other instanceof AssocArrayImpl && this.#content === other.#content) return true;
         if (!isMapThing(other)) return false;
         return MapCompare(this, other, this.Values()) === EQUAL;
     }
 
     compareTo(other: any): ComparisonResult {
         if (this === other) return EQUAL;
-        if (other instanceof AssocArrayImpl && this.content === other.content) return EQUAL;
+        if (other instanceof AssocArrayImpl && this.#content === other.#content) return EQUAL;
         if (!isMapThing(other)) return UNRELATED;
         return MapCompare(this, other, this.Values());
     }

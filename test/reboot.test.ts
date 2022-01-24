@@ -1,4 +1,6 @@
 import { Num } from "../src/implementations/numberthing";
+import { AssocArray } from "../src/implementations/assoc_array";
+import { int } from "../src/interfaces/primitives";
 
 test("JavaScript Behaviour: reboot", () => {
     let a : number = 2;
@@ -49,6 +51,23 @@ test("JavaScript Behaviour: bigint", () => {
     expect(x < c).toBe(true);
     expect(x < C).toBe(true);
     expect(B instanceof BigInt).toBe(true);
+});
+
+test("AssocArray", () => {
+    let arr = AssocArray<int, int>([[1, 7], [3, 2], [3, 1]]);
+    expect(arr.size).toBe(2);
+    expect(arr.get(1)).toBe(7);
+    expect(arr.get(3)).toBe(1);
+    expect(arr.get(2)).toBeUndefined();
+    let brr = arr.clone();
+    expect(brr.size).toBe(2);
+    expect(brr.get(1)).toBe(7);
+    expect(brr.get(3)).toBe(1);
+    expect(brr.get(2)).toBeUndefined();
+    expect(arr.delete(2)).toBe(false);
+    expect(arr.delete(1)).toBe(true);
+    expect(arr.size).toBe(1);
+    expect(brr.size).toBe(2);
 });
 
 /*test("SpeedDemon number", () => {
