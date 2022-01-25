@@ -6,13 +6,17 @@ import { combineHashes, freeze, isFunction, isNumber } from "./utils";
 import { MapThing } from "../interfaces/map";
 
 /** 
- * Compares two maps based on the given partial order on values. 
+ * Compares two maps based on the given partial order on values. One map is less than another map iff
+ * * both maps have the same keys
+ * * for each key the associated value is less than or equal to the other associated value 
+ * * for at least one key the associated value is 
+ * 
  * This operation is only well-defined under the assumption that the two equalities on keys are compatible with each other.
  */
 export function MapCompare<K, V>(F : MapThing<K, V>, G : MapThing<K, V>, Values : PartialOrder<V>) : ComparisonResult {
-    if (F === G) { return 0; }
-    let c = ints.compare(F.size, G.size);
-    if (c != EQUAL) { return c; }
+    if (F === G) { return EQUAL; }
+    if (F.size != G.size) return UNRELATED;
+    let c = EQUAL;
     for (let [k, f] of F) {
         let g = G.get(k);
         if (g === undefined) {
@@ -20,8 +24,10 @@ export function MapCompare<K, V>(F : MapThing<K, V>, G : MapThing<K, V>, Values 
             if (f !== undefined) return UNRELATED;
         } else {
             const d = Values.compare(f, g);
-            if (d != EQUAL && d != c) return UNRELATED;
-            c = d;
+            if (d != EQUAL) {
+                if (c != EQUAL && d != c) return UNRELATED;
+                c = d;
+            }
         }
     }
     return c;

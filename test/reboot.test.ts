@@ -1,6 +1,7 @@
 import { Num } from "../src/implementations/numberthing";
 import { AssocArray } from "../src/implementations/assoc_array";
 import { int } from "../src/interfaces/primitives";
+import { LESS, UNRELATED } from "../src/interfaces/comparable";
 
 test("JavaScript Behaviour: reboot", () => {
     let a : number = 2;
@@ -72,6 +73,12 @@ test("AssocArray", () => {
     expect(arr.isEqualTo(brr)).toBe(false);
     arr.put(1, 7);
     expect(arr.isEqualTo(brr)).toBe(true);
+    brr.put(1, 8);
+    console.log(`arr = ${arr}, brr = ${brr}`);
+    expect(arr.compareTo(brr)).toBe(LESS);
+    arr.put(3, 2);
+    console.log(`arr = ${arr}, brr = ${brr}`);
+    expect(arr.compareTo(brr)).toBe(UNRELATED);
 });
 
 /*test("SpeedDemon number", () => {
