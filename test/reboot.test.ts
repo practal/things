@@ -66,8 +66,12 @@ test("AssocArray", () => {
     expect(brr.get(2)).toBeUndefined();
     expect(arr.delete(2)).toBe(false);
     expect(arr.delete(1)).toBe(true);
+    console.log(`arr = ${arr}, brr = ${brr}`);
     expect(arr.size).toBe(1);
     expect(brr.size).toBe(2);
+    expect(arr.isEqualTo(brr)).toBe(false);
+    arr.put(1, 7);
+    expect(arr.isEqualTo(brr)).toBe(true);
 });
 
 /*test("SpeedDemon number", () => {

@@ -15,7 +15,7 @@ export function AssocArray<Key, Value>(keyValues : Iterable<[Key, Value]> = []) 
 freeze(AssocArray);
 
 export function AssocArrayFor<Key, Value>(Keys : Things<Key>, Values : Things<Value>, keyValues : Iterable<[Key, Value]> = []) : MutableMap<Key, Value> {
-    let m = new AssocArrayImpl<Key, Value>(Keys, Values);
+    let m = AssocArrayImpl.create(Keys, Values);
     for (let [k, v] of keyValues) {
         m.set(k, v);
     }
@@ -36,12 +36,16 @@ class AssocArrayImpl<Key, Value> extends MutableThing implements MutableMap<Key,
     /// Should be made # so that it doesn't freeze
     #content : CopyOnWrite<[Key, Value][]>;
 
-    constructor(Keys : Things<Key>, Values : Things<Value>) {
+    private constructor(Keys : Things<Key>, Values : Things<Value>, content : CopyOnWrite<[Key, Value][]>) {
         super();
         this._Keys = Keys;
         this._Values = Values;
-        this.#content = new CopyOnWrite([]);
+        this.#content = content;
         Object.freeze(this);
+    }
+
+    static create<Key, Value>(Keys : Things<Key>, Values : Things<Value>) : AssocArrayImpl<Key, Value> {
+        return new AssocArrayImpl(Keys, Values, new CopyOnWrite([]));
     }
 
     public Keys() { return this._Keys; }
@@ -164,7 +168,7 @@ class AssocArrayImpl<Key, Value> extends MutableThing implements MutableMap<Key,
             this.#content.release();
             this.#content = it.#content;
         } else {
-            const temp = new AssocArrayImpl(this.Keys(), this.Values());
+            const temp = AssocArrayImpl.create(this.Keys(), this.Values());
             for (let [k, v] of it) {
                 temp.put(k, v);
             }
@@ -209,7 +213,7 @@ class AssocArrayImpl<Key, Value> extends MutableThing implements MutableMap<Key,
 
     clone(): this {
         this.#content.acquire();
-        return this;
+        return new AssocArrayImpl(this._Keys, this._Values, this.#content) as this;
     }
 
     release(): void {
