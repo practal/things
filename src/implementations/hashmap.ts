@@ -2,9 +2,27 @@ import { int, nat } from "../interfaces/primitives";
 import { MutableMap } from "../interfaces/map";
 import { MutableThing } from "./thing";
 import { MutableInt } from "./numberthing";
-import { finalClass, freeze } from "./utils";
+import { finalClass, freeze, joinStrings } from "./utils";
 import { Things } from "../interfaces/things";
 import { CopyOnWrite } from "./copyonwrite";
+import { AssocArrayFor } from "./assoc_array";
+import { Anything } from "./anything";
+
+export function HashMap<Key, Value>(keyValues : Iterable<[Key, Value]> = []) : MutableMap<Key, Value> {
+    return HashMapFor(Anything, Anything, keyValues);
+}
+
+freeze(HashMap);
+
+export function HashMapFor<Key, Value>(Keys : Things<Key>, Values : Things<Value>, keyValues : Iterable<[Key, Value]> = []) : MutableMap<Key, Value> {
+    let m = HashMapImpl.create(Keys, Values);
+    for (let [k, v] of keyValues) {
+        m.set(k, v);
+    }
+    return m;
+}
+
+freeze(HashMapFor);
 
 class HashMapImpl<Key, Value> extends MutableThing implements MutableMap<Key, Value> {
 
@@ -12,98 +30,212 @@ class HashMapImpl<Key, Value> extends MutableThing implements MutableMap<Key, Va
         freeze(HashMapImpl);
     }
 
-    private map : CopyOnWrite<Map<int, MutableMap<Key, Value>>>;
+    private _Keys : Things<Key>
+    private _Values : Things<Value>
 
-    private counter : MutableInt
+    #map : CopyOnWrite<Map<int, MutableMap<Key, Value>>>;
 
-    constructor(private _Keys : Things<Key>, private _Values : Things<Value>) {
+    #counter : nat
+
+    private constructor(Keys : Things<Key>, Values : Things<Value>, map : CopyOnWrite<Map<int, MutableMap<Key, Value>>>, counter : nat) {
         super();
         if (new.target !== HashMapImpl) finalClass("HashMapImpl");
-        this.map = new CopyOnWrite(new Map());
-        this.counter = new MutableInt();
+        this._Keys = Keys;
+        this._Values = Values;
+        this.#counter = counter;
+        this.#map = map;
+        this.#counter = counter;
         Object.freeze(this);
     }
 
-    Keys() { return this._Keys; }
+    static create<K, V>(Keys : Things<K>, Values : Things<V>) : HashMapImpl<K, V> {
+        return new HashMapImpl(Keys, Values, new CopyOnWrite(new Map()), 0);
+    }
 
-    Values() { return this._Values; }
+    Keys() : Things<Key> { return this._Keys; }
+
+    Values() : Things<Value> { return this._Values; }
 
     private copyIfNeeded() {
-        throw new Error("Not implemented");
+        function* it(m : Map<int, MutableMap<Key, Value>>) : Generator<[int, MutableMap<Key, Value>], void, unknown> {
+            for (let [k, v] of m) {
+                yield [k, v.clone()];
+            }
+        }
+        this.#map = this.#map.copyIfShared(m => new Map(it(m)));
     }
 
     put(key: Key, value: Value): Value | undefined {
-        throw new Error("Method not implemented.");
+        const code = this._Keys.hashOf(key);
+        const keyValues = this.#map.value.get(code);
+        if (keyValues === undefined) {
+            let keyValues = AssocArrayFor(this._Keys, this._Values);
+            keyValues.set(key, value);
+            this.copyIfNeeded();
+            this.#map.value.set(code, keyValues);
+            this.#counter++;
+            return undefined;
+        } else {
+            let oldSize = keyValues.size;
+            let old = keyValues.put(key, value);
+            if (oldSize < keyValues.size) this.#counter++;
+            return old;
+        }        
     }
 
     putIfUndefined(key: Key, value: Value): Value | undefined {
-        throw new Error("Method not implemented.");
+        const code = this._Keys.hashOf(key);
+        const keyValues = this.#map.value.get(code);
+        if (keyValues === undefined) {
+            let keyValues = AssocArrayFor(this._Keys, this._Values);
+            keyValues.set(key, value);
+            this.copyIfNeeded();
+            this.#map.value.set(code, keyValues);
+            this.#counter++;
+            return undefined;
+        } else {
+            let oldSize = keyValues.size;
+            let old = keyValues.putIfUndefined(key, value);
+            if (oldSize < keyValues.size) this.#counter++;
+            return old;
+        }            
     }
 
     remove(key: Key): Value | undefined {
-        throw new Error("Method not implemented.");
+        const code = this._Keys.hashOf(key);
+        const keyValues = this.#map.value.get(code);
+        if (keyValues === undefined) return undefined;
+        const oldSize = keyValues.size;
+        const oldValue = keyValues.remove(key);
+        const newSize = keyValues.size;
+        if (newSize < oldSize) {
+            this.#counter--;
+            if (newSize === 0) {
+                this.copyIfNeeded();
+                this.#map.value.delete(code);
+            }
+        } 
+        return oldValue;
     }
 
     clear(): void {
-        throw new Error("Method not implemented.");
+        if (this.#counter == 0) return;
+        this.#map = this.#map.set(new Map());
+        this.#counter = 0;
     }
 
     delete(key: Key): boolean {
-        throw new Error("Method not implemented.");
+        const old_counter = this.#counter;
+        this.remove(key);
+        return this.#counter < old_counter;
     }
 
     forEach(callbackfn: (value: Value, key: Key, map: Map<Key, Value>) => void, thisArg?: any): void {
-        throw new Error("Method not implemented.");
+        for (let keyValues of this.#map.value.values()) {
+            for (let [k, v] of keyValues) {
+                callbackfn.call(thisArg, v, k, this);
+            }
+        }    
     }
 
     get(key: Key): Value | undefined {
-        throw new Error("Method not implemented.");
+        const code = this._Keys.hashOf(key);
+        const keyValues = this.#map.value.get(code);
+        if (keyValues === undefined) return undefined;
+        return keyValues.get(key);
     }
 
     has(key: Key): boolean {
-        throw new Error("Method not implemented.");
+        const code = this._Keys.hashOf(key);
+        const keyValues = this.#map.value.get(code);
+        if (keyValues === undefined) return false;
+        return keyValues.has(key);
     }
 
     set(key: Key, value: Value): this {
-        throw new Error("Method not implemented.");
+        this.put(key, value);
+        return this;
     }
 
     get size(): nat {
-        throw new Error("Not implemented");
+        return this.#counter;
     }
 
-    entries(): IterableIterator<[Key, Value]> {
-        throw new Error("Method not implemented.");
+    entries(): IterableIterator<[Key, Value]> 
+    {
+        const maps = this.#map.value.values();
+        function* it() : Generator<[Key, Value], void, unknown> {
+            for (let keyValues of maps) {
+                for (let [k, v] of keyValues) {
+                    yield [k, v];
+                }
+            }      
+        }
+        return it();
     }
 
     keys(): IterableIterator<Key> {
-        throw new Error("Method not implemented.");
+        const maps = this.#map.value.values();
+        function* it() : Generator<Key, void, unknown> {
+            for (let keyValues of maps) {
+                for (let [k, v] of keyValues) {
+                    yield k;
+                }
+            }      
+        }
+        return it();
     }
 
     values(): IterableIterator<Value> {
-        throw new Error("Method not implemented.");
-    }
-
-    assign(value: this): void {
-        throw new Error("Method not implemented.");
-    }
-
-    toString(): string {
-        throw new Error("Method not implemented.");
+        const maps = this.#map.value.values();
+        function* it() : Generator<Value, void, unknown> {
+            for (let keyValues of maps) {
+                for (let [k, v] of keyValues) {
+                    yield v;
+                }
+            }      
+        }
+        return it();
     }
 
     clone(): this {
-        throw new Error("Method not implemented.");
+        this.#map.acquire();
+        return new HashMapImpl(this._Keys, this._Values, this.#map, this.#counter) as this;       
     }
 
+    assign(it : Iterable<[Key, Value]>) : void {
+        if (it instanceof HashMapImpl && this._Keys === it._Keys && this._Values === it._Values) {
+            it.#map.acquire();
+            this.#map.release();
+            this.#map = it.#map;
+            this.#counter = it.#counter;
+        } else {
+            const temp = HashMapImpl.create(this._Keys, this._Values);
+            for (let [k, v] of it) {
+                temp.put(k, v);
+            }
+            this.#map = this.#map.set(temp.#map.value);
+            this.#counter = temp.#counter;
+        }
+    }
+
+    toString(): string {
+        return `HashMap(${joinStrings(", ", [...this.entries()].map(kv => `${kv[0]} -> ${kv[1]}`))})`;       
+    }    
+
     release(): void {
-        throw new Error("Method not implemented.");
+        for (let [k, m] of this.#map.value) {
+            m.release();
+        }
+        this.#map.release();
     }    
 
     [Symbol.iterator](): IterableIterator<[Key, Value]> {
-        throw new Error("Method not implemented.");
+        return this.entries();
     }
 
-    [Symbol.toStringTag]: string;
+    get [Symbol.toStringTag](): string {
+        return this.toString();
+    }
 
 }

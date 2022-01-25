@@ -22,7 +22,7 @@ export function AssocArrayFor<Key, Value>(Keys : Things<Key>, Values : Things<Va
     return m;
 }
 
-freeze(AssocArray);
+freeze(AssocArrayFor);
 
 class AssocArrayImpl<Key, Value> extends MutableThing implements MutableMap<Key, Value> {
     
