@@ -138,7 +138,7 @@ export class CopyOnWrite<V>  {
  * 
  * @internal
  */
-export class Vector<E> implements Cloneable, Mutable {
+class Vector<E> implements Cloneable, Mutable {
 
     #elements : CopyOnWrite<E[]>;
     
