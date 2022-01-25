@@ -19,17 +19,19 @@ import { freeze } from "./utils";
  *
  *     #elements : CopyOnWrite<E[]>;
  *  
- *     constructor(length : number, elem : E) {
- *         let elements : E[] = [];
- *         for (let i=0; i<length; i++) {
- *             elements.push(elem);
- *         }
- *         this.#elements = new CopyOnWrite(elements);
+ *     private constructor(elements : CopyOnWrite<E[]>) {
+ *         this.#elements = elements;
+ *     }
+ *
+ *     static create<E>(length : number, elem : E) : Vector<E> {
+ *         let elements : E[] = []
+ *         for (let i = 0; i < length; i++) elements.push(elem);
+ *         return new Vector(new CopyOnWrite(elements));
  *     }
  *
  *     clone(): this {
  *         this.#elements.acquire();
- *         return this;
+ *         return new Vector(this.#elements) as this;
  *     }
  *
  *     release(): void {
@@ -131,22 +133,28 @@ export class CopyOnWrite<V>  {
     
 }
 
-/** Example, for documentation purposes only. */
-class Vector<E> implements Cloneable, Mutable {
+/** 
+ * Example, for documentation purposes only. 
+ * 
+ * @internal
+ */
+export class Vector<E> implements Cloneable, Mutable {
 
     #elements : CopyOnWrite<E[]>;
     
-    constructor(length : number, elem : E) {
-        let elements : E[] = [];
-        for (let i=0; i<length; i++) {
-            elements.push(elem);
-        }
-        this.#elements = new CopyOnWrite(elements);
+    private constructor(elements : CopyOnWrite<E[]>) {
+        this.#elements = elements;
+    }
+
+    static create<E>(length : number, elem : E) : Vector<E> {
+        let elements : E[] = []
+        for (let i = 0; i< length; i++) elements.push(elem);
+        return new Vector(new CopyOnWrite(elements));
     }
 
     clone(): this {
         this.#elements.acquire();
-        return this;
+        return new Vector(this.#elements) as this;
     }
 
     release(): void {
