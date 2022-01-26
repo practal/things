@@ -40,7 +40,7 @@
  * 
  * ## Features
  * * Data structure package specifically designed for TypeScript.
- * * Provides a robust, tamper-proof API surface with the help of excessive use of `Object.freeze`.
+ * * Provides a robust, tamper-proof API surface through the excessive use of [Object.freeze](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/freeze).
  * * Supports mutable and immutable data structures equally well. 
  * * Specifies [[Something | basic functionality]] that any data structure should support, e.g. cloning with [[CopyOnWrite | copy-on-write]] semantics.
  * * All implemented data structures derive from [[Thing]]. Mutable data structures derive from [[MutableThing]]. 
