@@ -16,6 +16,8 @@
         "out": "docs",
         "excludeInternal": true,
         "excludePrivate": true,
-        "intentionallyNotExported": []
+        "intentionallyNotExported": [],
+        "includeVersion": true,
+        "readme": "none"
     }    
 }
