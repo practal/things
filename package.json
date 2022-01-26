@@ -25,7 +25,7 @@
     "bugs": {
         "url": "https://github.com/practal/things/issues"
     },
-    "homepage": "https://github.com/practal/things#readme",
+    "homepage": "https://practal.github.io/things",
     "devDependencies": {
         "@types/jest": "^27.0.3",
         "jest": "^27.4.5",
