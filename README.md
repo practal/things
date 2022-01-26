@@ -1,3 +1,3 @@
 # things
-Data structures and algorithms for TypeScript.
+[Data structures and algorithms](docs/index.html) for TypeScript.
 
