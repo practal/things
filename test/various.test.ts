@@ -1,11 +1,6 @@
-import { Int, MutableInt, Nat, Num } from "../src/implementations/numberthing";
-import { AssocArray, AssocArrayFor } from "../src/implementations/assoc_array";
-import { HashMap, HashMapFor } from "../src/implementations/hashmap";
-import { int, nat } from "../src/interfaces/primitives";
-import { LESS, UNRELATED } from "../src/interfaces/comparable";
-import { MutableMap } from "../src/interfaces/map";
-import { numbers } from "../src/implementations/primitives";
-import { Anything } from "../src/implementations/anything";
+import { Int, MutableInt, Nat, Num, AssocArray, AssocArrayFor, HashMap, HashMapFor, 
+    int, nat, LESS, UNRELATED, MutableMap, numbers, Anything } from "../src/index";
+
 
 function randomNat(max : nat = Number.MAX_SAFE_INTEGER) : number {
     return Math.round(Math.random() * max);
