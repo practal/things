@@ -9,7 +9,7 @@ import { MapThing } from "../interfaces/map";
  * Compares two maps based on the given partial order on values. One map is less than another map iff
  * * both maps have the same keys
  * * for each key the associated value is less than or equal to the other associated value 
- * * for at least one key the associated value is 
+ * * for at least one key the associated value is less than the other associated value
  * 
  * This operation is only well-defined under the assumption that the two equalities on keys are compatible with each other.
  */

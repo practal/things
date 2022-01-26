@@ -20,7 +20,8 @@ export interface Something extends Equatable, Cloneable, Comparable, Hashable {
 } 
 
 /** 
- * The Things interface implements for type T the functionality of [[Something]] minus cloning without T actually needing to extend Something.
- * It also allows to let type T which might already be Something, to be a different Something. 
+ * The Things interface implements for type T the functionality of [[Something]] minus cloning, without T actually needing to extend Something.
+ * 
+ * It also lets type T, which might already be Something, be a different Something. 
  */
 export interface Things<T> extends Hash<T>, PartialOrder<T> {}

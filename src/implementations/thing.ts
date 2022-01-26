@@ -4,7 +4,7 @@ import { Something } from "../interfaces/things";
 import { int } from "../interfaces/primitives";
 import { Mutable } from "../interfaces/cloneable";
 
-/** The abstract base class used for all implementations of the [[Something]] interface in the [[things]] package. */
+/** The abstract base class used for all implementations of the [[Something]] interface in the *things* package. */
 export abstract class Thing implements Something {
 
     static {
@@ -50,7 +50,7 @@ export abstract class Thing implements Something {
 
 }
 
-/** The abstract base class used for all *mutable* implementations of the [[Something]] interface in the [[things]] package. */
+/** The abstract base class used for all *mutable* implementations of the [[Something]] interface in the *things* package. */
 export abstract class MutableThing extends Thing implements Mutable {
 
     static {

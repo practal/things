@@ -18,7 +18,9 @@ export interface Cloneable {
     clone() : this;
 
     /**
-     * Call this method on a clone after you are done with it. This optimizes resource usage and avoids unnecessary copying.
+     * Optionally, call this method on a clone after you are done with it. This optimizes resource usage and avoids unnecessary copying, but can lead to non-constant runtime overhead.
+     * 
+     * Calling this method is not necessary, as normal garbage collection will take care of things. 
      */
     release() : void;
 

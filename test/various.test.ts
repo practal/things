@@ -31,6 +31,8 @@ test("equals Nat MutableInt number", () => {
     expect(() => (x as any).equals(n)).toThrow();
 });
 
+
+
 function testMutableMap(arr : MutableMap<int, int>) {
     arr.assign([[1, 7], [3, 2], [3, 1]]);
     console.log(`testMutableMap: ${arr}`);

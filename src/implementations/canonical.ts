@@ -13,7 +13,7 @@ import { Anything } from "./anything";
  * * Equality is [same-value-zero equality](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Equality_comparisons_and_sameness#same-value-zero_equality),
  *   i.e. it works like strict equality (===) except that NaN is equal to itself.
  * * Comparison is the same as for [[Anything]], except that if lhs and rhs are equal according to [[Anything]], but not equal according to same-value-zero, then lhs and rhs are deemed to be [[UNRELATED]].
- * * Cloning and hashing are the same as for [[Anything]].
+ * * Hashing is the same as for [[Anything]].
  * 
  */
 export const SameValueZero : Things<any> = {

@@ -41,7 +41,7 @@ export interface MapThing<Key, Value> {
  * The base interface for all mutable maps. 
  * 
  * Despite its name, it is not necessarily a [[Something]], so that JavaScript's built-in Map also has this interface. 
- * All MutableMapThings implemented by the [[things]] package are [[MutableMap | MutableMaps]].
+ * All MutableMapThings implemented by the *things* package are [[MutableMap | MutableMaps]].
  */
 export interface MutableMapThing<Key, Value> extends MapThing<Key, Value> {
 
@@ -55,7 +55,7 @@ export interface MutableMapThing<Key, Value> extends MapThing<Key, Value> {
     set(key : Key, value : Value) : this
 }
 
-/** The base interface for all mutable maps implemented in the [[things]] package. */
+/** The base interface for all mutable maps implemented in the *things* package. */
 export interface MutableMap<Key, Value> extends Map<Key, Value>, MutableMapThing<Key, Value>, Something, Mutable {
 
     Keys() : Things<Key>
@@ -74,7 +74,7 @@ export interface MutableMap<Key, Value> extends Map<Key, Value>, MutableMapThing
 
 }
 
-/** The base interface for all immutable maps implemented in the [[things]] package. */
+/** The base interface for all immutable maps implemented in the *things* package. */
 export interface ImmutableMap<Key, Value> extends ReadonlyMap<Key, Value>, MapThing<Key, Value>, Something {
 
     Keys() : Things<Key>
