@@ -1,7 +1,7 @@
 {
     "name": "things",
-    "version": "0.0.17",
-    "description": "Data structures and algorithms for TypeScript",
+    "version": "0.0.18",
+    "description": "Data Structures for TypeScript",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "files": [
