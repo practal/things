@@ -14,7 +14,7 @@
  * 
  * Try out the following code example to get started:
  * ```typescript
- * import { HashMap, LESS } from "../src";
+ * import { HashMap, LESS } from "things";
  * 
  * const h = HashMap([[1, 7], [3, 2], [3, 1]]);
  * console.log(`h = ${h}`);
