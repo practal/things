@@ -222,7 +222,7 @@ class HashMapImpl<Key, Value> extends MutableThing implements MutableMap<Key, Va
     }
 
     toString(): string {
-        return `HashMap[size=${this.size}](${joinStrings(", ", [...this.entries()].map(kv => `${kv[0]} -> ${kv[1]}`))})`;       
+        return `HashMap(${joinStrings(", ", [...this.entries()].map(kv => `${kv[0]} -> ${kv[1]}`))})`;       
     }    
 
     release(): void {
