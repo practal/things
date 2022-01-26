@@ -7,6 +7,8 @@ import { Things } from "../interfaces/things";
 import { CopyOnWrite } from "./copyonwrite";
 import { AssocArrayFor } from "./assoc_array";
 import { Anything } from "./anything";
+import { isMapThing, MapCompare, MapHash } from "./map";
+import { ComparisonResult, EQUAL, UNRELATED } from "../interfaces/comparable";
 
 export function HashMap<Key, Value>(keyValues : Iterable<[Key, Value]> = []) : MutableMap<Key, Value> {
     return HashMapFor(Anything, Anything, keyValues);
@@ -66,12 +68,12 @@ class HashMapImpl<Key, Value> extends MutableThing implements MutableMap<Key, Va
     }
 
     put(key: Key, value: Value): Value | undefined {
+        this.copyIfNeeded();
         const code = this._Keys.hashOf(key);
         const keyValues = this.#map.value.get(code);
         if (keyValues === undefined) {
             let keyValues = AssocArrayFor(this._Keys, this._Values);
             keyValues.set(key, value);
-            this.copyIfNeeded();
             this.#map.value.set(code, keyValues);
             this.#counter++;
             return undefined;
@@ -84,12 +86,12 @@ class HashMapImpl<Key, Value> extends MutableThing implements MutableMap<Key, Va
     }
 
     putIfUndefined(key: Key, value: Value): Value | undefined {
+        this.copyIfNeeded();
         const code = this._Keys.hashOf(key);
         const keyValues = this.#map.value.get(code);
         if (keyValues === undefined) {
             let keyValues = AssocArrayFor(this._Keys, this._Values);
             keyValues.set(key, value);
-            this.copyIfNeeded();
             this.#map.value.set(code, keyValues);
             this.#counter++;
             return undefined;
@@ -102,6 +104,7 @@ class HashMapImpl<Key, Value> extends MutableThing implements MutableMap<Key, Va
     }
 
     remove(key: Key): Value | undefined {
+        this.copyIfNeeded();
         const code = this._Keys.hashOf(key);
         const keyValues = this.#map.value.get(code);
         if (keyValues === undefined) return undefined;
@@ -111,7 +114,6 @@ class HashMapImpl<Key, Value> extends MutableThing implements MutableMap<Key, Va
         if (newSize < oldSize) {
             this.#counter--;
             if (newSize === 0) {
-                this.copyIfNeeded();
                 this.#map.value.delete(code);
             }
         } 
@@ -220,7 +222,7 @@ class HashMapImpl<Key, Value> extends MutableThing implements MutableMap<Key, Va
     }
 
     toString(): string {
-        return `HashMap(${joinStrings(", ", [...this.entries()].map(kv => `${kv[0]} -> ${kv[1]}`))})`;       
+        return `HashMap[size=${this.size}](${joinStrings(", ", [...this.entries()].map(kv => `${kv[0]} -> ${kv[1]}`))})`;       
     }    
 
     release(): void {
@@ -237,5 +239,23 @@ class HashMapImpl<Key, Value> extends MutableThing implements MutableMap<Key, Va
     get [Symbol.toStringTag](): string {
         return this.toString();
     }
+
+    isEqualTo(other: any): boolean {
+        if (this === other) return true;
+        if (other instanceof HashMapImpl && this.#map === other.#map) return true;
+        if (!isMapThing(other)) return false;
+        return MapCompare(this, other, this.Values()) === EQUAL;
+    }
+
+    compareTo(other: any): ComparisonResult {
+        if (this === other) return EQUAL;
+        if (other instanceof HashMapImpl && this.#map === other.#map) return EQUAL;
+        if (!isMapThing(other)) return UNRELATED;
+        return MapCompare(this, other, this.Values());
+    }
+ 
+    get hash(): int {
+        return MapHash(this, this.Keys(), this.Values());
+    }    
 
 }

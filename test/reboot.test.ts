@@ -1,7 +1,9 @@
 import { Num } from "../src/implementations/numberthing";
 import { AssocArray } from "../src/implementations/assoc_array";
+import { HashMap } from "../src/implementations/hashmap";
 import { int } from "../src/interfaces/primitives";
 import { LESS, UNRELATED } from "../src/interfaces/comparable";
+import { MutableMap } from "../src/interfaces/map";
 
 test("JavaScript Behaviour: reboot", () => {
     let a : number = 2;
@@ -54,8 +56,9 @@ test("JavaScript Behaviour: bigint", () => {
     expect(B instanceof BigInt).toBe(true);
 });
 
-test("AssocArray", () => {
-    let arr = AssocArray<int, int>([[1, 7], [3, 2], [3, 1]]);
+function testMutableMap(arr : MutableMap<int, int>) {
+    arr.assign([[1, 7], [3, 2], [3, 1]]);
+    console.log(`testMutableMap: ${arr}`);
     expect(arr.size).toBe(2);
     expect(arr.get(1)).toBe(7);
     expect(arr.get(3)).toBe(1);
@@ -79,6 +82,14 @@ test("AssocArray", () => {
     arr.put(3, 2);
     console.log(`arr = ${arr}, brr = ${brr}`);
     expect(arr.compareTo(brr)).toBe(UNRELATED);
+}
+
+test("AssocArray", () => {
+    testMutableMap(AssocArray());
+});
+
+test("HashMap", () => {
+    testMutableMap(HashMap());
 });
 
 /*test("SpeedDemon number", () => {
