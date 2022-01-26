@@ -1,9 +1,18 @@
 import { Num } from "../src/implementations/numberthing";
 import { AssocArray } from "../src/implementations/assoc_array";
-import { HashMap } from "../src/implementations/hashmap";
-import { int } from "../src/interfaces/primitives";
+import { HashMap, HashMapFor } from "../src/implementations/hashmap";
+import { int, nat } from "../src/interfaces/primitives";
 import { LESS, UNRELATED } from "../src/interfaces/comparable";
 import { MutableMap } from "../src/interfaces/map";
+import { numbers } from "../src/implementations/primitives";
+
+function randomNat(max : nat = Number.MAX_SAFE_INTEGER) : number {
+    return Math.round(Math.random() * max);
+}
+
+function coinflip() : boolean {
+    return Math.random() >= 0.5;
+}
 
 test("JavaScript Behaviour: reboot", () => {
     let a : number = 2;
@@ -92,9 +101,50 @@ test("HashMap", () => {
     testMutableMap(HashMap());
 });
 
-/*test("SpeedDemon number", () => {
-    let a : Map<number, number> = HashMapFor(numbers);
-    let N = 100000;
+test("HashMap<number, number>", () => {
+    let a : Map<number, number> = HashMapFor(numbers, numbers);
+    let b : Map<number, number> = new Map();
+    let N = 1000;
+    for (let i = 0; i < N/2; i ++) {
+        let key = randomNat(N);
+        if (coinflip()) {
+            let value = randomNat();
+            a.set(key, value);
+            b.set(key, value);
+            expect(a.size).toBe(b.size);
+        } else {
+            let da = a.delete(key);
+            let db = b.delete(key);
+            expect(da).toBe(db);
+            expect(a.size).toBe(b.size);
+        }
+    }
+    for (let i = 0; i <= N; i ++) {
+        expect(a.get(i)).toBe(b.get(i));
+    }
+    //(a as any).get = 3;
+    console.log(`size of a = ${a.size}, size of b = ${b.size}`);
+});
+
+test("SpeedDemon native Map: number", () => {
+    let a : Map<number, number> = new Map();
+    let N = 1000000;
+    for (let i = 0; i < N/2; i ++) {
+        let key = randomNat(N);
+        if (coinflip()) {
+            let value = randomNat();
+            a.set(key, value);
+        } else {
+            let da = a.delete(key);
+        }
+    }
+    console.log(`size of a = ${a.size}`);
+});
+
+
+test("SpeedDemon number", () => {
+    let a : Map<number, number> = HashMapFor(numbers, numbers);
+    let N = 1000000;
     for (let i = 0; i < N/2; i ++) {
         let key = randomNat(N);
         if (coinflip()) {
@@ -109,7 +159,7 @@ test("HashMap", () => {
 
 test("SpeedDemon Num", () => {
     let a : Map<Num, Num> = HashMap();
-    let N = 100000;
+    let N = 1000000;
     for (let i = 0; i < N/2; i ++) {
         let key = new Num(randomNat(N));
         if (coinflip()) {
@@ -120,5 +170,5 @@ test("SpeedDemon Num", () => {
         }
     }
     console.log(`size of a = ${a.size}`);
-});*/
+});
    
