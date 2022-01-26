@@ -1,10 +1,11 @@
-import { Num } from "../src/implementations/numberthing";
-import { AssocArray } from "../src/implementations/assoc_array";
+import { Int, MutableInt, Num } from "../src/implementations/numberthing";
+import { AssocArray, AssocArrayFor } from "../src/implementations/assoc_array";
 import { HashMap, HashMapFor } from "../src/implementations/hashmap";
 import { int, nat } from "../src/interfaces/primitives";
 import { LESS, UNRELATED } from "../src/interfaces/comparable";
 import { MutableMap } from "../src/interfaces/map";
 import { numbers } from "../src/implementations/primitives";
+import { Anything } from "../src/implementations/anything";
 
 function randomNat(max : nat = Number.MAX_SAFE_INTEGER) : number {
     return Math.round(Math.random() * max);
@@ -101,6 +102,17 @@ test("HashMap", () => {
     testMutableMap(HashMap());
 });
 
+test("AssocArray", () => {
+    let a : Map<int, string | null> = AssocArrayFor(numbers, Anything);
+    a.set(1, "one");
+    a.set(2, null);
+    expect(a.get(1)).toBe("one");
+    expect(a.get(2)).toBe(null);
+    expect(a.get(3)).toBe(undefined);
+    console.log(`${a}`);
+});
+
+
 test("HashMap<number, number>", () => {
     let a : Map<number, number> = HashMapFor(numbers, numbers);
     let b : Map<number, number> = new Map();
@@ -164,6 +176,36 @@ test("SpeedDemon Num", () => {
         let key = new Num(randomNat(N));
         if (coinflip()) {
             let value = new Num(randomNat());
+            a.set(key, value);
+        } else {
+            let da = a.delete(key);
+        }
+    }
+    console.log(`size of a = ${a.size}`);
+});
+
+test("SpeedDemon Int", () => {
+    let a : Map<Int, Int> = HashMap();
+    let N = 1000000;
+    for (let i = 0; i < N/2; i ++) {
+        let key = new Int(randomNat(N));
+        if (coinflip()) {
+            let value = new Int(randomNat());
+            a.set(key, value);
+        } else {
+            let da = a.delete(key);
+        }
+    }
+    console.log(`size of a = ${a.size}`);
+});
+
+test("SpeedDemon MutableInt", () => {
+    let a : Map<MutableInt, MutableInt> = HashMap();
+    let N = 1000000;
+    for (let i = 0; i < N/2; i ++) {
+        let key = new MutableInt(randomNat(N));
+        if (coinflip()) {
+            let value = new MutableInt(randomNat());
             a.set(key, value);
         } else {
             let da = a.delete(key);
