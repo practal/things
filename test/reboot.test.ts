@@ -1,4 +1,4 @@
-import { Int, MutableInt, Num } from "../src/implementations/numberthing";
+import { Int, MutableInt, Nat, Num } from "../src/implementations/numberthing";
 import { AssocArray, AssocArrayFor } from "../src/implementations/assoc_array";
 import { HashMap, HashMapFor } from "../src/implementations/hashmap";
 import { int, nat } from "../src/interfaces/primitives";
@@ -15,55 +15,25 @@ function coinflip() : boolean {
     return Math.random() >= 0.5;
 }
 
-test("JavaScript Behaviour: reboot", () => {
-    let a : number = 2;
-    let b : Number = new Number(2);
-    let c : number = 3;
-    let d : BigInt = BigInt(2);
-    let e : bigint = BigInt(2).valueOf();
-    console.log("a", typeof a, "b", typeof b, "c", typeof c, "d", typeof d);
-    let n = new Num(2);
-    console.log("n.equals(a)", n.equals(a));
-    console.log("n.equals(b)", n.equals(b));
-    console.log("n.equals(c)", n.equals(c));
-    console.log("n.equals(d)", n.equals(d));
-    console.log("n.equals(e)", n.equals(e));
-    expect((1 as any) == "1").toBe(true);
-    expect((false as any) < "5").toBe(true);
-
-    let M = new Map();
- 
-    expect(M instanceof Map).toBe(true);
+test("immutable Nat", () => {
+    let n = new Nat(1);
+    expect(() => (n as any).value = 5).toThrow();
 });
 
-test("JavaScript Behaviour: bigint", () => {
-    let i = BigInt(Number.MAX_SAFE_INTEGER);
-    i = i * i;
-    let x : number = 2;
-    let X : Number = new Number(2);
-    expect(x < i).toBe(true);
-    expect(x == X).toBe(true);
-    expect(typeof(x as any) === "number").toBe(true);
-    expect(typeof(X) === "object").toBe(true);
-    let b : bigint = BigInt(2);
-    let B = Object(BigInt(2));
-    let c : bigint = BigInt(3);
-    let C = Object(BigInt(3));
-    expect(typeof(b)).toBe("bigint");    
-    expect(typeof(B)).toBe("object");   
-    expect(b == B).toBe(true); 
-    expect(b === B).toBe(false); 
-    expect((x as any) == b).toBe(true);
-    expect((x as any) === b).toBe(false);
-    expect((x as any) == B).toBe(true);
-    expect((x as any) === B).toBe(false);
-    expect(b < C).toBe(true);
-    expect(B < C).toBe(true);
-    expect(B < c).toBe(true);
-    expect(b < c).toBe(true);
-    expect(x < c).toBe(true);
-    expect(x < C).toBe(true);
-    expect(B instanceof BigInt).toBe(true);
+test("equals Nat MutableInt number", () => {
+    let n = new Nat(7);
+    let m = new MutableInt(7);
+    let o = new MutableInt(8);
+    let x = 7;
+    expect(n.equals(o)).toBe(false);
+    expect(o.equals(n)).toBe(false);
+    expect(m.equals(o)).toBe(false);
+    expect(n.equals(m)).toBe(true);
+    expect(m.equals(n)).toBe(true);
+    expect(m.equals(x as any)).toBe(true);
+    expect(n.equals(new Nat(7))).toBe(true);
+    expect(n.equals(new Nat(8))).toBe(false);
+    expect(() => (x as any).equals(n)).toThrow();
 });
 
 function testMutableMap(arr : MutableMap<int, int>) {

@@ -1,27 +1,6 @@
-import { primitives } from "../src/implementations/primitives";
+import {primitives} from "../src/index";
 
-import {MutableInt, Nat} from "../src/index";
 
-test("immutable Nat", () => {
-    let n = new Nat(1);
-    expect(() => (n as any).value = 5).toThrow();
-});
-
-test("equals Nat MutableInt number", () => {
-    let n = new Nat(7);
-    let m = new MutableInt(7);
-    let o = new MutableInt(8);
-    let x = 7;
-    expect(n.equals(o)).toBe(false);
-    expect(o.equals(n)).toBe(false);
-    expect(m.equals(o)).toBe(false);
-    expect(n.equals(m)).toBe(true);
-    expect(m.equals(n)).toBe(true);
-    expect(() => m.equals(x as any)).toThrow();
-    expect(n.equals(new Nat(7))).toBe(true);
-    expect(n.equals(new Nat(8))).toBe(false);
-    expect(() => (x as any).equals(n)).toThrow();
-});
 
 enum R {
     LESS = -1,
