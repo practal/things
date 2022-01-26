@@ -1,5 +1,8 @@
 /**
- * Some documentation about the things package.
+ * # *things* — Data Structures for TypeScript
+ * 
+ * *This is an experimental package. It is subject to rapid change, experimentation, and bugs.*
+ * 
  * 
  * @module
  */ 

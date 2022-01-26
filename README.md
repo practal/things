@@ -1,3 +1,3 @@
 # things
-Data structures and algorithms for TypeScript.
+[Data Structures for TypeScript](https://practal.github.io/things)
 
