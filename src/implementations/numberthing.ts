@@ -4,7 +4,7 @@ import { numbers } from "./primitives";
 import { MutableThing, Thing } from "./thing";
 import { asNumber, finalClass, freeze, numberOf } from "./utils";
 
-/** Numerical [[Things]]s */
+/** Numerical [[Thing]]s */
 export type NumberThing = Num | MutableNum | Int | MutableInt | Nat | MutableNat
 
 export function isNumberThing(x : any) : x is NumberThing {

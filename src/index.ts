@@ -59,7 +59,7 @@
  * So far, the following data structures are available:
  * * **Hash Maps**: [[HashMap]], [[HashMapFor]]
  * * **Associative Arrays**: [[AssocArray]], [[AssocArrayFor]]
- * * **Numbers**: [[Num]], [[MutableNum]], [[Int]], [[MutableInt]], [[Nat]], [[MutableNat]]
+ * * **Numbers** ([[NumberThing]]): [[Num]], [[MutableNum]], [[Int]], [[MutableInt]], [[Nat]], [[MutableNat]]
  * @module
  */ 
 
