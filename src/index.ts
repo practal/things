@@ -27,7 +27,7 @@
  * console.log(`h = ${h}`);
  * console.log(`h.isEqualTo(g) = ${h.isEqualTo(g)}`);
  * ```
- * This will generate the following output
+ * This will generate the following output:
  * ```text
  * h = HashMap(1 -> 7, 3 -> 1)
  * h.size = 2
