@@ -21,6 +21,8 @@ export interface Cloneable {
      * Optionally, call this method on a clone after you are done with it. This optimizes resource usage and avoids unnecessary copying, but can lead to non-constant runtime overhead.
      * 
      * Calling this method is not necessary, as normal garbage collection will take care of things. 
+     * 
+     * This should execute in constant time, and incur almost no runtime cost. 
      */
     release() : void;
 

@@ -226,9 +226,6 @@ class HashMapImpl<Key, Value> extends MutableThing implements MutableMap<Key, Va
     }    
 
     release(): void {
-        for (let [k, m] of this.#map.value) {
-            m.release();
-        }
         this.#map.release();
     }    
 
