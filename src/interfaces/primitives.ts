@@ -6,14 +6,16 @@ export type primitive = number | string | boolean | symbol | bigint | null | und
  * 
  * Use of int is just for documentation purposes: 
  * As it is just an alias for number, the difference to number is not enforced by the type or runtime system. 
+ * If you are looking for such guarantees, use [[Int]] instead.
  */
 export type int = number 
 
 /** 
  * The type of natural numbers starting from 0. 
  * 
- * Use of int is just for documentation purposes: 
+ * Use of nat is just for documentation purposes: 
  * As it is just an alias for number, the difference to number is not enforced by the type or runtime system. 
+ * If you are looking for such guarantees, use [[Nat]] instead.
  */
 export type nat = number
 
