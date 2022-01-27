@@ -6,7 +6,7 @@ import { Something, Things } from "./things";
  * The base interface for all maps. 
  * 
  * Despite its name, it is not necessarily a [[Something]], so that JavaScript's built-in Map also has this interface. 
- * All MapThings implemented by the [[things]] package are either [[MutableMap | MutableMaps]] or [[ImmutableMap | ImmutableMaps]].
+ * All MapThings implemented by the *things* package are either [[MutableMap | MutableMaps]] or [[ImmutableMap | ImmutableMaps]].
  */
 export interface MapThing<Key, Value> {
 
