@@ -1,5 +1,5 @@
 /**
- * A Cloneable object can be cloned, i.e. it can be copied with [[clone | copy-on-write semantics]].
+ * A Cloneable object can be cloned, i.e. it can be copied.
  * 
  * Subsequent changes of the copy/clone do not affect the original object.
  * Note that cloning is *shallow*: 
@@ -9,11 +9,11 @@
 export interface Cloneable {
 
     /**
-     * Makes a clone of this object, instantaneously. 
+     * Makes a shallow clone of this object. 
      * 
-     * This should execute in constant time, and incur almost no runtime cost. 
+     * Most things execute this in constant time with almost no runtime cost. 
      * For immutable things, this is easily achieved by just returning `this`. 
-     * For mutable things, this can be achieved using [[CopyOnWrite | copy-on-write]].
+     * For mutable things, this can be achieved by deferring the cost of copying until actual mutation using [[CopyOnWrite | copy-on-write]].
      */
     clone() : this;
 
@@ -34,7 +34,7 @@ export interface Mutable extends Cloneable {
     /**
      * Overwrites the current value of this object with the value passed as the argument. 
      * 
-     * Just like [[clone]], this operation is supposed to perform in constant time, and incur almost no runtime cost. 
+     * Just like [[clone]], most things perform this in constant time. 
      */
      assign(value : this) : void;
 
