@@ -33,7 +33,6 @@ class AssocArrayImpl<Key, Value> extends MutableThing implements MutableMap<Key,
     private _Keys : Things<Key>;
     private _Values : Things<Value>;
     
-    /// Should be made # so that it doesn't freeze
     #content : CopyOnWrite<[Key, Value][]>;
 
     private constructor(Keys : Things<Key>, Values : Things<Value>, content : CopyOnWrite<[Key, Value][]>) {
