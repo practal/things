@@ -2,8 +2,12 @@ import { ComparisonResult, EQUAL, GREATER, LESS, UNRELATED } from "../interfaces
 import { int, nat } from "../interfaces/primitives";
 
 export function freeze(x : any) {
-    Object.freeze(x.prototype);
-    Object.freeze(x);
+    if (typeof x === "function") {
+        Object.freeze(x.prototype);
+        Object.freeze(x);    
+    } else {
+        Object.freeze(x);
+    }
 }
 
 export function finalClass(finalClass : string) : never {
