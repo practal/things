@@ -5,7 +5,7 @@ import { MutableInt } from "./numberthing";
 import { finalClass, freeze, joinStrings } from "./utils";
 import { Things } from "../interfaces/things";
 import { CopyOnWrite } from "./copyonwrite";
-import { RawAssocArrayFor } from "./raw_assoc_array";
+import { PlainAssocArrayFor } from "./plain_assoc_array";
 import { Anything } from "./anything";
 import { isMap, MapCompare, MapHash } from "./map";
 import { ComparisonResult, EQUAL, UNRELATED } from "../interfaces/comparable";
@@ -72,7 +72,7 @@ class HashMapImpl<Key, Value> extends MutableThing implements MutableMap<Key, Va
         const code = this._Keys.hashOf(key);
         const keyValues = this.#map.value.get(code);
         if (keyValues === undefined) {
-            let keyValues = RawAssocArrayFor(this._Keys, this._Values);
+            let keyValues = PlainAssocArrayFor(this._Keys, this._Values);
             keyValues.set(key, value);
             this.#map.value.set(code, keyValues);
             this.#counter++;
@@ -90,7 +90,7 @@ class HashMapImpl<Key, Value> extends MutableThing implements MutableMap<Key, Va
         const code = this._Keys.hashOf(key);
         const keyValues = this.#map.value.get(code);
         if (keyValues === undefined) {
-            let keyValues = RawAssocArrayFor(this._Keys, this._Values);
+            let keyValues = PlainAssocArrayFor(this._Keys, this._Values);
             keyValues.set(key, value);
             this.#map.value.set(code, keyValues);
             this.#counter++;

@@ -7,26 +7,34 @@ import { ComparisonResult, EQUAL, UNRELATED } from "../interfaces/comparable";
 import { Anything } from "./anything";
 import { isMap, MapCompare, MapHash } from "./map";
 
-export function RawAssocArray<Key, Value>(keyValues : Iterable<[Key, Value]> = []) : MutableMap<Key, Value> {
-    return RawAssocArrayFor(Anything, Anything, keyValues);
+/**
+ * Creates a mutable associative array without [[CopyOnWrite | COW]] cloning. 
+ * 
+ * This is equivalent to [[PlainAssocArrayFor]]([[Anything]], [[Anything]], keyValues).
+ **/
+export function PlainAssocArray<Key, Value>(keyValues : Iterable<[Key, Value]> = []) : MutableMap<Key, Value> {
+    return PlainAssocArrayFor(Anything, Anything, keyValues);
 }
 
-freeze(RawAssocArray);
+freeze(PlainAssocArray);
 
-export function RawAssocArrayFor<Key, Value>(Keys : Things<Key>, Values : Things<Value>, keyValues : Iterable<[Key, Value]> = []) : MutableMap<Key, Value> {
-    let m = RawAssocArrayImpl.create(Keys, Values);
+/**
+ * Creates a mutable associative array without [[CopyOnWrite | COW]] cloning. 
+ **/
+export function PlainAssocArrayFor<Key, Value>(Keys : Things<Key>, Values : Things<Value>, keyValues : Iterable<[Key, Value]> = []) : MutableMap<Key, Value> {
+    let m = PlainAssocArrayImpl.create(Keys, Values);
     for (let [k, v] of keyValues) {
         m.set(k, v);
     }
     return m;
 }
 
-freeze(RawAssocArrayFor);
+freeze(PlainAssocArrayFor);
 
-class RawAssocArrayImpl<Key, Value> extends MutableThing implements MutableMap<Key, Value> {
+class PlainAssocArrayImpl<Key, Value> extends MutableThing implements MutableMap<Key, Value> {
     
     static {
-        freeze(RawAssocArrayImpl);
+        freeze(PlainAssocArrayImpl);
     }
 
     private _Keys : Things<Key>;
@@ -42,8 +50,8 @@ class RawAssocArrayImpl<Key, Value> extends MutableThing implements MutableMap<K
         Object.freeze(this);
     }
 
-    static create<Key, Value>(Keys : Things<Key>, Values : Things<Value>) : RawAssocArrayImpl<Key, Value> {
-        return new RawAssocArrayImpl(Keys, Values, []);
+    static create<Key, Value>(Keys : Things<Key>, Values : Things<Value>) : PlainAssocArrayImpl<Key, Value> {
+        return new PlainAssocArrayImpl(Keys, Values, []);
     }
 
     public Keys() { return this._Keys; }
@@ -152,7 +160,7 @@ class RawAssocArrayImpl<Key, Value> extends MutableThing implements MutableMap<K
     }
 
     assign(it : Iterable<[Key, Value]>) : void {
-        const temp = RawAssocArrayImpl.create(this.Keys(), this.Values());
+        const temp = PlainAssocArrayImpl.create(this.Keys(), this.Values());
         for (let [k, v] of it) {
             temp.put(k, v);
         }
@@ -195,7 +203,7 @@ class RawAssocArrayImpl<Key, Value> extends MutableThing implements MutableMap<K
     }
 
     clone(): this {
-        const temp = RawAssocArrayImpl.create(this.Keys(), this.Values());
+        const temp = PlainAssocArrayImpl.create(this.Keys(), this.Values());
         for (let [k, v] of this) {
             temp.put(k, v);
         }
