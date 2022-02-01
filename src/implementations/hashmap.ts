@@ -10,12 +10,18 @@ import { Anything } from "./anything";
 import { isMap, MapCompare, MapHash } from "./map";
 import { ComparisonResult, EQUAL, UNRELATED } from "../interfaces/comparable";
 
+/** 
+ * Creates a new hash map. 
+ * 
+ * This is equivalent to [[HashMapFor]]([[Anything]], [[Anything]], keyValues).
+ */
 export function HashMap<Key, Value>(keyValues : Iterable<[Key, Value]> = []) : MutableMap<Key, Value> {
     return HashMapFor(Anything, Anything, keyValues);
 }
 
 freeze(HashMap);
 
+/// Creates a new hash map.
 export function HashMapFor<Key, Value>(Keys : Things<Key>, Values : Things<Value>, keyValues : Iterable<[Key, Value]> = []) : MutableMap<Key, Value> {
     let m = HashMapImpl.create(Keys, Values);
     for (let [k, v] of keyValues) {

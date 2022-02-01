@@ -8,7 +8,7 @@ import { Anything } from "./anything";
 import { isMap, MapCompare, MapHash } from "./map";
 
 /**
- * Creates a mutable associative array without [[CopyOnWrite | COW]] cloning. 
+ * Creates a mutable associative array without copy-on-write [[Cloneable.clone | cloning]]. 
  * 
  * This is equivalent to [[PlainAssocArrayFor]]([[Anything]], [[Anything]], keyValues).
  **/
@@ -19,7 +19,7 @@ export function PlainAssocArray<Key, Value>(keyValues : Iterable<[Key, Value]> =
 freeze(PlainAssocArray);
 
 /**
- * Creates a mutable associative array without [[CopyOnWrite | COW]] cloning. 
+ * Creates a mutable associative array without copy-on-write [[Cloneable.clone | cloning]]. 
  **/
 export function PlainAssocArrayFor<Key, Value>(Keys : Things<Key>, Values : Things<Value>, keyValues : Iterable<[Key, Value]> = []) : MutableMap<Key, Value> {
     let m = PlainAssocArrayImpl.create(Keys, Values);

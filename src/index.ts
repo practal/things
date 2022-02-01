@@ -57,8 +57,8 @@
  * ## Data Structures
  * The list of implemented data structures is short, as the main focus has been on the conceptual design of the package. More data structures will follow.
  * So far, the following data structures are available:
- * * **Hash Maps**: [[HashMap]], [[HashMapFor]]
- * * **Associative Arrays**: [[AssocArray]], [[AssocArrayFor]]
+ * * **Hash Maps**: [[HashMap]]
+ * * **Associative Arrays**: [[AssocArray]], [[PlainAssocArray]]
  * * **Numbers** ([[NumberThing]]): [[Num]], [[MutableNum]], [[Int]], [[MutableInt]], [[Nat]], [[MutableNat]]
  * @module
  */ 
