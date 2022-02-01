@@ -14,8 +14,6 @@ export interface Cloneable {
      * Most things execute this in constant time with almost no runtime cost. 
      * For immutable things, this is easily achieved by just returning `this`. 
      * For mutable things, this can be achieved by deferring the cost of copying until actual mutation using [[CopyOnWrite | copy-on-write]].
-     * 
-     * Those Cloneables that do not execute this is in constant time should use `Raw` as name prefix.
      */
     clone() : this;
 
@@ -36,9 +34,7 @@ export interface Mutable extends Cloneable {
     /**
      * Overwrites the current value of this object with the value passed as the argument. 
      * 
-     * Just like [[clone]], most things perform this in constant time. 
-     *
-     * Those Cloneables that do not execute this is in constant time should use `Raw` as name prefix.
+     * Just like [[clone]], most things perform this in constant time by deferring the cost of copying until actual mutation using [[CopyOnWrite | copy-on-write]].
      */
      assign(value : this) : void;
 
