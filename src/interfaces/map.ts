@@ -5,10 +5,10 @@ import { Something, Things } from "./things";
 /** 
  * The base interface for all maps. 
  * 
- * Despite its name, it is not necessarily a [[Something]], so that JavaScript's built-in Map also has this interface. 
- * All MapThings implemented by the *things* package are either [[MutableMap | MutableMaps]] or [[ImmutableMap | ImmutableMaps]].
+ * An object implementing MapBase is not necessarily a [[Something]], in particular JavaScript's built-in Map also implements this interface. 
+ * All implementations of MapBase by the *things* package are either [[MutableMap | MutableMaps]] or [[ImmutableMap | ImmutableMaps]].
  */
-export interface MapThing<Key, Value> {
+export interface MapBase<Key, Value> {
 
     /** The [[Things]] interface used for handling the keys of this map. If not present, this is assumed to be [[SameValueZero]]. */
     Keys?() : Things<Key>
@@ -40,10 +40,10 @@ export interface MapThing<Key, Value> {
 /** 
  * The base interface for all mutable maps. 
  * 
- * Despite its name, it is not necessarily a [[Something]], so that JavaScript's built-in Map also has this interface. 
- * All MutableMapThings implemented by the *things* package are [[MutableMap | MutableMaps]].
+ * An object implementing MutableMapBase is not necessarily a [[Something]] [[Something]], in particular JavaScript's built-in Map also implements this interface. 
+ * All implementations of MutableMapBase by the *things* package are [[MutableMap | MutableMaps]].
  */
-export interface MutableMapThing<Key, Value> extends MapThing<Key, Value> {
+export interface MutableMapBase<Key, Value> extends MapBase<Key, Value> {
 
     /** Removes all key-value entries from the map. After clear(), this map is empty. */
     clear() : void
@@ -56,7 +56,7 @@ export interface MutableMapThing<Key, Value> extends MapThing<Key, Value> {
 }
 
 /** The base interface for all mutable maps implemented in the *things* package. */
-export interface MutableMap<Key, Value> extends Map<Key, Value>, MutableMapThing<Key, Value>, Something, Mutable {
+export interface MutableMap<Key, Value> extends Map<Key, Value>, MutableMapBase<Key, Value>, Something, Mutable {
 
     Keys() : Things<Key>
 
@@ -75,7 +75,7 @@ export interface MutableMap<Key, Value> extends Map<Key, Value>, MutableMapThing
 }
 
 /** The base interface for all immutable maps implemented in the *things* package. */
-export interface ImmutableMap<Key, Value> extends ReadonlyMap<Key, Value>, MapThing<Key, Value>, Something {
+export interface ImmutableMap<Key, Value> extends ReadonlyMap<Key, Value>, MapBase<Key, Value>, Something {
 
     Keys() : Things<Key>
 

@@ -5,7 +5,7 @@ import { MutableThing } from "./thing";
 import { freeze, joinStrings } from "./utils";
 import { ComparisonResult, EQUAL, UNRELATED } from "../interfaces/comparable";
 import { Anything } from "./anything";
-import { isMapThing, MapCompare, MapHash } from "./map";
+import { isMap, MapCompare, MapHash } from "./map";
 import { CopyOnWrite } from "./copyonwrite";
 
 export function AssocArray<Key, Value>(keyValues : Iterable<[Key, Value]> = []) : MutableMap<Key, Value> {
@@ -222,14 +222,14 @@ class AssocArrayImpl<Key, Value> extends MutableThing implements MutableMap<Key,
     isEqualTo(other: any): boolean {
         if (this === other) return true;
         if (other instanceof AssocArrayImpl && this.#content === other.#content) return true;
-        if (!isMapThing(other)) return false;
+        if (!isMap(other)) return false;
         return MapCompare(this, other, this.Values()) === EQUAL;
     }
 
     compareTo(other: any): ComparisonResult {
         if (this === other) return EQUAL;
         if (other instanceof AssocArrayImpl && this.#content === other.#content) return EQUAL;
-        if (!isMapThing(other)) return UNRELATED;
+        if (!isMap(other)) return UNRELATED;
         return MapCompare(this, other, this.Values());
     }
  

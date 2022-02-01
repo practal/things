@@ -7,7 +7,7 @@ import { Things } from "../interfaces/things";
 import { CopyOnWrite } from "./copyonwrite";
 import { RawAssocArrayFor } from "./raw_assoc_array";
 import { Anything } from "./anything";
-import { isMapThing, MapCompare, MapHash } from "./map";
+import { isMap, MapCompare, MapHash } from "./map";
 import { ComparisonResult, EQUAL, UNRELATED } from "../interfaces/comparable";
 
 export function HashMap<Key, Value>(keyValues : Iterable<[Key, Value]> = []) : MutableMap<Key, Value> {
@@ -240,14 +240,14 @@ class HashMapImpl<Key, Value> extends MutableThing implements MutableMap<Key, Va
     isEqualTo(other: any): boolean {
         if (this === other) return true;
         if (other instanceof HashMapImpl && this.#map === other.#map) return true;
-        if (!isMapThing(other)) return false;
+        if (!isMap(other)) return false;
         return MapCompare(this, other, this.Values()) === EQUAL;
     }
 
     compareTo(other: any): ComparisonResult {
         if (this === other) return EQUAL;
         if (other instanceof HashMapImpl && this.#map === other.#map) return EQUAL;
-        if (!isMapThing(other)) return UNRELATED;
+        if (!isMap(other)) return UNRELATED;
         return MapCompare(this, other, this.Values());
     }
  

@@ -5,7 +5,7 @@ import { MutableThing } from "./thing";
 import { freeze, joinStrings } from "./utils";
 import { ComparisonResult, EQUAL, UNRELATED } from "../interfaces/comparable";
 import { Anything } from "./anything";
-import { isMapThing, MapCompare, MapHash } from "./map";
+import { isMap, MapCompare, MapHash } from "./map";
 
 export function RawAssocArray<Key, Value>(keyValues : Iterable<[Key, Value]> = []) : MutableMap<Key, Value> {
     return RawAssocArrayFor(Anything, Anything, keyValues);
@@ -208,13 +208,13 @@ class RawAssocArrayImpl<Key, Value> extends MutableThing implements MutableMap<K
 
     isEqualTo(other: any): boolean {
         if (this === other) return true;
-        if (!isMapThing(other)) return false;
+        if (!isMap(other)) return false;
         return MapCompare(this, other, this.Values()) === EQUAL;
     }
 
     compareTo(other: any): ComparisonResult {
         if (this === other) return EQUAL;
-        if (!isMapThing(other)) return UNRELATED;
+        if (!isMap(other)) return UNRELATED;
         return MapCompare(this, other, this.Values());
     }
  
