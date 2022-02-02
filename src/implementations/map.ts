@@ -1,7 +1,7 @@
 import { int } from "../interfaces/primitives";
 import { Hash } from "../interfaces/hashable";
 import { ints } from "./primitives";
-import { ComparisonResult, EQUAL, PartialOrder, UNRELATED } from "../interfaces/comparable";
+import { ComparisonResult, EQUAL, GREATER, LESS, PartialOrder, UNRELATED } from "../interfaces/comparable";
 import { combineHashes, freeze, isFunction, isNumber } from "./utils";
 import { MapBase } from "../interfaces/map";
 
@@ -10,6 +10,10 @@ import { MapBase } from "../interfaces/map";
  * * both maps have the same keys
  * * for each key the associated value is less than or equal to the other associated value 
  * * for at least one key the associated value is less than the other associated value
+ * 
+ * One map is equal to another map iff
+ * * both maps have the same keys
+ * * for each key the associated value is equal to the other associated value
  * 
  * This operation is only well-defined under the assumption that the two equalities on keys are compatible with each other.
  */
@@ -51,6 +55,24 @@ export function MapHash<K, V>(M : MapBase<K, V>, Keys : Hash<K>, Values : Hash<V
 
 freeze(MapHash);
 
+/** Heuristic test whether an object implements MapBase. */
 export function isMap<K, V>(m : any) : m is MapBase<K, V> {
     return isNumber(m.size) && isFunction(m.get) && isFunction(m.has) && m.entries !== undefined;
+}
+
+freeze(isMap);
+
+/** Lexicographic comparison of two iterables. */
+export function IterableCompare<K>(Elems : PartialOrder<K>, I : Iterable<K>, J : Iterable<K>) : ComparisonResult {
+    const i = I[Symbol.iterator]();
+    const j = J[Symbol.iterator]();
+    while (true) {
+        const ri = i.next();
+        const rj = j.next();
+        if (ri.done && rj.done) return EQUAL;
+        if (ri.done) return LESS;
+        if (rj.done) return GREATER;
+        const c = Elems.compare(ri.value, rj.value);
+        if (c !== EQUAL) return c;
+    }
 }
