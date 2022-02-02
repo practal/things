@@ -106,3 +106,12 @@ export function asNumber(x : any) : number {
     else return v;
 }
 
+export function assert_nat(x : any) : asserts x is nat {
+    if (!(Number.isInteger(x) && x >= 0)) 
+        throw new Error(`Natural number expected, found: ${x}`);
+}
+
+export function assert_int(x : any) : asserts x is nat {
+    if (!Number.isInteger(x)) 
+        throw new Error(`Integer expected, found: ${x}`);
+}
