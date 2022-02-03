@@ -10,20 +10,29 @@ function isJSNumeric(x : any) : x is number | Number | bigint | BigInt {
     return typeof x === "number" || x instanceof Number || typeof x === "bigint" || x instanceof BigInt;
 }
 
+/** Heuristic test if x is [[Comparable]]. */
 export function isComparable(x : any) : x is Comparable {
     if (x instanceof Thing) return true;
     return typeof((x as Comparable).compareTo) === "function";
 }
 
+freeze(isComparable);
+
+/** Heuristic test if x is [[Hashable]]. */
 export function isHashable(x : any) : x is Hashable {
     if (x instanceof Thing) return true;
     return typeof((x as Hashable).hash) === "function";
 }
 
+freeze(isHashable);
+
+/** Heuristic test if x is [[Equatable]]. */
 export function isEquatable(x : any) : x is Equatable {
     if (x instanceof Thing) return true;
     return typeof((x as Equatable).isEqualTo) === "function";    
 }
+
+freeze(isEquatable);
 
 /** 
  * Implements the [[Things]] interface for any value. 
