@@ -1,4 +1,4 @@
-import { ComparisonResult, EQUAL, GREATER, LESS, UNRELATED } from "../interfaces/comparable";
+import { Comparable, ComparisonResult, EQUAL, GREATER, LESS, UNRELATED } from "../interfaces/comparable";
 import { int, nat } from "../interfaces/primitives";
 
 export function freeze(x : any) {
@@ -111,7 +111,8 @@ export function assert_nat(x : any) : asserts x is nat {
         throw new Error(`Natural number expected, found: ${x}`);
 }
 
-export function assert_int(x : any) : asserts x is nat {
+export function assert_int(x : any) : asserts x is int {
     if (!Number.isInteger(x)) 
         throw new Error(`Integer expected, found: ${x}`);
 }
+
