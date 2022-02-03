@@ -1,5 +1,7 @@
+import { Hashable } from "../interfaces/hashable";
+import { Equatable } from "../interfaces/equatable";
 import { bigints, booleans, numbers, strings } from "../implementations/primitives";
-import { ComparisonResult, EQUAL, GREATER, LESS, UNRELATED } from "../interfaces/comparable";
+import { Comparable, ComparisonResult, EQUAL, GREATER, LESS, UNRELATED } from "../interfaces/comparable";
 import { Things } from "../interfaces/things";
 import { Thing } from "./thing";
 import { freeze, mirrorComparisonResult } from "./utils";
@@ -8,13 +10,28 @@ function isJSNumeric(x : any) : x is number | Number | bigint | BigInt {
     return typeof x === "number" || x instanceof Number || typeof x === "bigint" || x instanceof BigInt;
 }
 
+export function isComparable(x : any) : x is Comparable {
+    if (x instanceof Thing) return true;
+    return typeof((x as Comparable).compareTo) === "function";
+}
+
+export function isHashable(x : any) : x is Hashable {
+    if (x instanceof Thing) return true;
+    return typeof((x as Hashable).hash) === "function";
+}
+
+export function isEquatable(x : any) : x is Equatable {
+    if (x instanceof Thing) return true;
+    return typeof((x as Equatable).isEqualTo) === "function";    
+}
+
 /** 
  * Implements the [[Things]] interface for any value. 
  */
 export const Anything : Things<any> = {
 
     hashOf(t: any): number {
-        if (t instanceof Thing) {
+        if (isHashable(t)) {
             return t.hash;
         } else {
             switch (typeof t) {
@@ -28,9 +45,9 @@ export const Anything : Things<any> = {
     },
 
     equals(lhs: any, rhs: any): boolean {
-        if (lhs instanceof Thing) {
+        if (isEquatable(lhs)) {
             return lhs.isEqualTo(rhs);
-        } else if (rhs instanceof Thing) {
+        } else if (isEquatable(rhs)) {
             return rhs.isEqualTo(lhs);
         } else {
             const lnumeric = isJSNumeric(lhs);
@@ -46,9 +63,9 @@ export const Anything : Things<any> = {
     },
 
     compare(lhs: any, rhs: any): ComparisonResult {
-        if (lhs instanceof Thing) {
+        if (isComparable(lhs)) {
             return lhs.compareTo(rhs);
-        } else if (rhs instanceof Thing) {
+        } else if (isComparable(rhs)) {
             return mirrorComparisonResult(rhs.compareTo(lhs));
         } else {
             const lnumeric = isJSNumeric(lhs);
