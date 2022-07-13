@@ -29,13 +29,13 @@ export class Primitives<P extends primitive> implements Things<P> {
 
     compare(lhs: P, rhs: P): ComparisonResult {
         if (lhs === rhs) return EQUAL;
-        else if (typeof lhs === "symbol") return UNRELATED;
-        else {
-            if (lhs < rhs) return LESS;
-            else if (lhs > rhs) return GREATER;
-            else if (Number.isNaN(lhs) && Number.isNaN(rhs)) return EQUAL;
-            else return UNRELATED;
-        }
+        if (typeof lhs === "symbol" || typeof rhs === "symbol") return UNRELATED;
+        // @ts-ignore
+        if (lhs < rhs) return LESS;
+        // @ts-ignore
+        else if (lhs > rhs) return GREATER;
+        else if (Number.isNaN(lhs) && Number.isNaN(rhs)) return EQUAL;
+        else return UNRELATED;
     }
 
 }
