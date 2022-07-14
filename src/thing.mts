@@ -1,28 +1,14 @@
-/** The union of all [primitive types](https://developer.mozilla.org/en-US/docs/Glossary/Primitive) of JavaScript. */
-export type primitive = number | string | boolean | symbol | bigint | null | undefined 
-
-/** 
- * The type of integers. 
- * 
- * Use of int is just for documentation purposes: 
- * As it is just an alias for number, the difference to number is not enforced by the type or runtime system. 
- */
-export type int = number 
-
-/** 
- * The type of natural numbers starting from 0. 
- * 
- * Use of nat is just for documentation purposes: 
- * As it is just an alias for number, the difference to number is not enforced by the type or runtime system. 
- */
-export type nat = number
+import {nat, int} from "./primitives.mjs";
 
 export interface Thing<T>  {
 
+    /** Specifies the elements of type T that form the domain of things. */
+    inDomain(x : T) : Boolean
+
     /**
-     * Tests if x is equivalent to y for a subset D of T. 
-     * D consists of those elements x of T for which equals(x, x) holds. 
-     * Equivalence testing must be *symmetric* and *transitive*:
+     * Tests if x is equivalent to y where both x and y are assumed to be [[inDomain | in the domain]]. 
+     * Equivalence testing must be *reflexive*, *symmetric* and *transitive* on the domain:
+     * * *Reflexivity*: The condition equals(x, x) holds.
      * * *Symmetry*: If equals(x, y) is true, then so is equals(y, x). 
      * * *Transitivity*: If equals(x, y) and equals(y, z) are both true, then so is equals(x, z). 
      */ 
@@ -34,7 +20,7 @@ export interface Thing<T>  {
      * It is possible to represent partial orders by returning NaN 
      * if x and y are not related.
      * 
-     * Comparison must have the following properties for all a, b, c and d of type T:
+     * Comparison must have the following properties for all a, b, c and d [[inDomain | in the domain]]: 
      * * *Compatibility with Equality*: 
      *   * If equals(a, b) and equals(c, d) are both true, then a relates to c in the same way as b relates to d. 
      *   * We have that equals(a, b) is true iff compare(a, b) === 0 is true.
@@ -73,7 +59,7 @@ export interface Thing<T>  {
     /** 
      * Returns true if it is known that elements of type T are immutable, otherwise returns false.
      */
-    immutable : boolean
+    readonly immutable : boolean
 
 }
 

@@ -1,4 +1,5 @@
-import {nat, Thing} from "./thing.mjs";
+import {Thing} from "./thing.mjs";
+import {nat} from "./primitives.mjs";
 
 /** General interface for working with maps. The interface works for both mutable and immutable maps. */
 export interface MapThing<M, Key, Value> extends Thing<M> {

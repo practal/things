@@ -1,4 +1,4 @@
-import { int, nat } from "./thing.mjs";
+import { int, nat } from "./primitives.mjs";
 
 export function freeze(x : any) {
     if (typeof x === "function") {
