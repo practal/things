@@ -1,5 +1,5 @@
 import {Thing} from "./thing.mjs";
-import {freeze} from "./utils.mjs";
+import {freeze, hashOfString} from "./utils.mjs";
 
 /** The union of all [primitive types](https://developer.mozilla.org/en-US/docs/Glossary/Primitive) of JavaScript. */
 export type primitive = number | string | boolean | symbol | bigint | null | undefined 
@@ -98,5 +98,31 @@ export const NatThing : Thing<nat> = {
     immutable: true
 };
 freeze(NatThing);
+
+export const StringThing : Thing<string> = {
+
+    inDomain(x: string): boolean {
+        return typeof(x) === "string";
+    },
+
+    equals(x: string, y: string): boolean {
+        return x === y;
+    },
+
+    compare(x: string, y: string): number {
+        return x === y ? 0 : (x < y ? -1 : (x > y ? 1 : Number.NaN));
+    },
+
+    hashOf(t: string): int {
+        return hashOfString(t);
+    },
+
+    clone(x: string): string {
+        return x;
+    },
+
+    immutable: true
+};
+freeze(StringThing);
 
 
