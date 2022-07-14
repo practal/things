@@ -71,9 +71,9 @@ export interface Thing<T>  {
     clone(x : T) : T 
 
     /** 
-      * Returns true if it is known that elements of type T are immutable, otherwise returns false.
-      */
-    get immutable() : boolean
+     * Returns true if it is known that elements of type T are immutable, otherwise returns false.
+     */
+    immutable : boolean
 
 }
 
