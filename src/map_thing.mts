@@ -6,6 +6,12 @@ export interface MapThing<M, Key, Value> extends Thing<M> {
 
     readonly keyT : Thing<Key>
     readonly valueT : Thing<Value>
+
+    /** Creates an empty map. */
+    empty() : M
+
+    /** Creates a map from the given sequence of key/value pairs. */
+    from(keyValues : Iterable<[Key, Value]>) : M
     
     /** The number of keys associated with some value in map. */
     size(map : M) : nat
