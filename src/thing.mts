@@ -17,12 +17,6 @@ export type int = number
  */
 export type nat = number
 
-
-/** 
- * Combines Order, Hash and Clone into one interface. Clone is required to be
- * compatible with Order and Hash, i.e. cloned things must be indistiguishable 
- * from each other with respect to order and hashing.
- */
 export interface Thing<T>  {
 
     /**
