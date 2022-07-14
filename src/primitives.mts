@@ -34,7 +34,7 @@ export const NumberThing : Thing<number> = {
     },
 
     compare(x: number, y: number): number {
-        return x === y ? 0 : (x < y ? -1 : (x > y ? 1 : Number.NaN));
+        return NumberThing.equals(x, y) ? 0 : (x < y ? -1 : (x > y ? 1 : Number.NaN));
     },
 
     hashOf(t: number): int {

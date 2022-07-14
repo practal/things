@@ -64,3 +64,11 @@ export function assert_int(x : any) : asserts x is int {
 }
 freeze(assert_int);
 
+export function is_nat(x : any) : x is nat {
+    return Number.isSafeInteger(x) && x >= 0;
+}
+
+export function is_int(x : any) : x is int {
+    return Number.isSafeInteger(x);
+}
+

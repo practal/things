@@ -39,15 +39,16 @@ export interface Thing<T>  {
     compare(x : T, y : T) : number
 
     /** 
-     * Returns the hash of t. 
+     * Returns the hash of x. 
      * 
-     * The following must be true for all x, y of type T: 
+     * The following must be true for all x, y [[inDomain | in the domain]]: 
      * If equals(x, y) is true, then so is hashOf(x) === hashOf(y).
      */
-    hashOf(t : T) : int    
+    hashOf(x : T) : int    
     
     /** 
-     * Clones x, so that mutations of x do not affect the clone and vice versa. Cloning must be compatible with hashing and order:
+     * Clones x, so that mutations of x do not affect the clone and vice versa. 
+     * Cloning must be compatible with hashing and order for all x and y [[inDomain | in the domain]]:
      * 
      * * hashOf(x) = hashOf(clone(x))
      * * compare(x, y) = compare(x, clone(y))
