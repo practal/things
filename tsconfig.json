@@ -2,17 +2,19 @@
     "include": ["src/**/*"],
 
     "compilerOptions": {
-        "target": "es2015", 
+        "module": "ESNext",
+        "target": "ESNext",
+        "allowJs": true,
+        "checkJs": true,
         "declaration": true,
-        "outDir": "./dist", 
-        "rootDir": "./src",
-        "module": "commonjs",
-        "baseUrl": ".",
-        "strict": true
-    },
+        "declarationMap": true,
+        "strict": true, 
+        "outDir": "dist",
+        "moduleResolution": "nodenext"
+      },
 
     "typedocOptions": {
-        "entryPoints": ["src/index.ts"],
+        "entryPoints": ["src/index.mts"],
         "out": "docs",
         "excludeInternal": true,
         "excludePrivate": true,
