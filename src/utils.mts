@@ -1,5 +1,4 @@
-import { Order, ComparisonResult, EQUAL, GREATER, LESS, UNRELATED } from "./order.mjs";
-import { int, nat } from "./primitives.mjs";
+import { int, nat } from "./thing.mjs";
 
 export function freeze(x : any) {
     if (typeof x === "function") {
@@ -52,17 +51,6 @@ export function hashOfString(s : string) : int {
     return combineHashes(iterateCodepoints(s));
 }
 freeze(hashOfString);
-
-export function mirrorComparisonResult(c : ComparisonResult) : ComparisonResult {
-    switch (c) {
-        case LESS: return GREATER;
-        case GREATER: return LESS;
-        case EQUAL: return EQUAL;
-        case UNRELATED: return UNRELATED;
-        default: throw new Error(`ComparisonResult expected, found: ${c}`);
-    }
-}
-freeze(mirrorComparisonResult);
 
 export function assert_nat(x : any) : asserts x is nat {
     if (!(Number.isSafeInteger(x) && x >= 0)) 

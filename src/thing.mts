@@ -1,0 +1,85 @@
+/** The union of all [primitive types](https://developer.mozilla.org/en-US/docs/Glossary/Primitive) of JavaScript. */
+export type primitive = number | string | boolean | symbol | bigint | null | undefined 
+
+/** 
+ * The type of integers. 
+ * 
+ * Use of int is just for documentation purposes: 
+ * As it is just an alias for number, the difference to number is not enforced by the type or runtime system. 
+ */
+export type int = number 
+
+/** 
+ * The type of natural numbers starting from 0. 
+ * 
+ * Use of nat is just for documentation purposes: 
+ * As it is just an alias for number, the difference to number is not enforced by the type or runtime system. 
+ */
+export type nat = number
+
+
+/** 
+ * Combines Order, Hash and Clone into one interface. Clone is required to be
+ * compatible with Order and Hash, i.e. cloned things must be indistiguishable 
+ * from each other with respect to order and hashing.
+ */
+export interface Thing<T>  {
+
+    /**
+     * Tests if x is equivalent to y for a subset D of T. 
+     * D consists of those elements x of T for which equals(x, x) holds. 
+     * Equivalence testing must be *symmetric* and *transitive*:
+     * * *Symmetry*: If equals(x, y) is true, then so is equals(y, x). 
+     * * *Transitivity*: If equals(x, y) and equals(y, z) are both true, then so is equals(x, z). 
+     */ 
+    equals(x : T, y : T) : boolean
+
+    /**
+     * Compares x with y and returns how they relate to each other.
+     * 
+     * It is possible to represent partial orders by returning NaN 
+     * if x and y are not related.
+     * 
+     * Comparison must have the following properties for all a, b, c and d of type T:
+     * * *Compatibility with Equality*: 
+     *   * If equals(a, b) and equals(c, d) are both true, then a relates to c in the same way as b relates to d. 
+     *   * We have that equals(a, b) is true iff compare(a, b) === 0 is true.
+     *   * If a and b are related, then both equals(a, a) and equals(b, b) are both true. 
+     * * *Antisymmetry*: 
+     *   * compare(a, b) < 0 implies compare(b, a) > 0
+     *   * compare(a, b) > 0 implies compare(b, a) < 0
+     * * *Transitivity*: 
+     *   * If compare(a, b) < 0 and compare(b, c) < 0, then compare(a, c) < 0.
+     * @returns 
+     *   * 0 if x and y are equal
+     *   * a negative value if x < y, 
+     *   * a positive value if x > y
+     *   * NaN if x and y are unrelated 
+     */
+    compare(x : T, y : T) : number
+
+    /** 
+     * Returns the hash of t. 
+     * 
+     * The following must be true for all x, y of type T: 
+     * If equals(x, y) is true, then so is hashOf(x) === hashOf(y).
+     */
+    hashOf(t : T) : int    
+    
+    /** 
+     * Clones x, so that mutations of x do not affect the clone and vice versa. Cloning must be compatible with hashing and order:
+     * 
+     * * hashOf(x) = hashOf(clone(x))
+     * * compare(x, y) = compare(x, clone(y))
+     * 
+     * If T [[isImmutable | is immutable]], then this will just return x.
+     */
+    clone(x : T) : T 
+
+    /** 
+      * Returns true if it is known that elements of type T are immutable, otherwise returns false.
+      */
+    get immutable() : boolean
+
+}
+
