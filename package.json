@@ -10,6 +10,8 @@
     ],
     "scripts": {
         "build": "tsc",
+        "pretest": "tsc",
+        "test": "instatest dist",
         "docs": "typedoc"
     },
     "repository": {
@@ -28,5 +30,8 @@
     "homepage": "https://practal.github.io/things",
     "devDependencies": {
         "typedoc": "^0.22.11"
+    },
+    "dependencies": {
+        "instatest": "^0.2.7"
     }
 }

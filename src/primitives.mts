@@ -1,5 +1,8 @@
 import {Thing} from "./thing.mjs";
 import {freeze, hashOfString} from "./utils.mjs";
+import * as insta from "instatest";
+
+insta.beginUnit("things", "primitives");
 
 /** The union of all [primitive types](https://developer.mozilla.org/en-US/docs/Glossary/Primitive) of JavaScript. */
 export type primitive = number | string | boolean | symbol | bigint | null | undefined 
@@ -124,5 +127,17 @@ export const StringThing : Thing<string> = {
     immutable: true
 };
 freeze(StringThing);
+
+insta.test("compare numbers", () => {
+    insta.assert(NumberThing.compare(2, 3) < 0);
+    insta.assert(NumberThing.compare(-4, Number.NEGATIVE_INFINITY) > 0);
+    insta.assert(NumberThing.compare(-4, Number.POSITIVE_INFINITY) < 0);
+    insta.assertEq(NumberThing.compare(-4, -4), 0);
+    insta.assert(NumberThing.inDomain(3));
+    // @ts-ignore
+    insta.assertFalse(NumberThing.inDomain("2"));
+});
+
+insta.endUnit("things", "primitives");
 
 

@@ -3,7 +3,7 @@ import {nat, int} from "./primitives.mjs";
 export interface Thing<T>  {
 
     /** Specifies the elements of type T that form the domain of things. */
-    inDomain(x : T) : Boolean
+    inDomain(x : T) : boolean
 
     /**
      * Tests if x is equivalent to y where both x and y are assumed to be [[inDomain | in the domain]]. 
