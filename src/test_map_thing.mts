@@ -1,4 +1,3 @@
-import { Thing } from "./thing.mjs";
 import { MapThing } from "./map_thing.mjs";
 import { freeze } from "./utils.mjs";
 import * as insta from "instatest";

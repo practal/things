@@ -1,6 +1,7 @@
 dist/
 .DS_store
 node_modules/
+instatest-browser/
 *.test.js
 *.test.d.ts
 docs/

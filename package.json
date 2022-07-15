@@ -12,6 +12,8 @@
         "build": "tsc",
         "pretest": "tsc",
         "test": "instatest dist",
+        "pretest-browser": "npm run test -- --browser && npx webpack --config=instatest-browser/webpack.config.js",
+        "test-browser": "npx http-server -c-1 -o instatest-browser",
         "docs": "typedoc"
     },
     "repository": {
