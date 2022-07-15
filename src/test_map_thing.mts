@@ -2,6 +2,7 @@ import { Thing } from "./thing.mjs";
 import { MapThing } from "./map_thing.mjs";
 import { freeze } from "./utils.mjs";
 import * as insta from "instatest";
+import { pickRandomKey } from "./map_thing_utils.mjs";
 
 export function testMapThing<M>(thing : MapThing<M, number, number>) {
     insta.test(`testMapThing(ordered: ${thing.ordered})`, () => {
@@ -69,6 +70,15 @@ export function testMapThing<M>(thing : MapThing<M, number, number>) {
                 last = k;
             }
         }
+        map2 = thing.clone(map);
+        insta.assert(thing.equals(map, map2));
+        const k = pickRandomKey(thing, map2)!;
+        map2 = thing.put(map2, k, thing.get(map2, k)! + 1).result;
+        insta.assert(thing.compare(map, map2) < 0);
+        insta.assert(thing.compare(map2, map) > 0);
+        map2 = thing.remove(map2, k).result;
+        insta.assertEq(thing.compare(map, map2), Number.NaN);
+        insta.assertEq(thing.compare(map2, map), Number.NaN);
     });
 }
 freeze(testMapThing);

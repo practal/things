@@ -102,3 +102,14 @@ function MapCompareOrdered<M, K, V>(thing : MapThingBase<M, K, V>, map1 : M, map
 }
 freeze(MapHash);
 
+export function pickRandomKey<M, K, V>(thing : MapThingBase<M, K, V>, map : M) : K | undefined {
+    const size = thing.size(map);
+    let i = Math.floor(Math.random() * size);
+    if (i >= size) i = size - 1;
+    for (const [k, v] of thing.entries(map)) {
+        if (i === 0) return k;
+        i--;
+    }
+    return undefined;
+}
+
