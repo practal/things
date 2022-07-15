@@ -1,7 +1,11 @@
 import {Thing} from "./thing.mjs";
 import {combineHashes, freeze} from "./utils.mjs";
-import {int, IntThing} from "./primitives.mjs";
+import {int, IntThing, NumberThing} from "./primitives.mjs";
 import { MapThing } from "./map_thing.mjs";
+import * as insta from "instatest";
+import { testMapThing } from "./test_map_thing.mjs";
+
+insta.beginUnit("things", "assoc_array");
 
 /** A [[MapThing]] for ordered association arrays. */
 export function AssocArrayT<Key, Value>(keyT : Thing<Key>, valueT : Thing<Value>) : MapThing<[Key, Value][], Key, Value> {
@@ -131,3 +135,10 @@ export function AssocArrayT<Key, Value>(keyT : Thing<Key>, valueT : Thing<Value>
     return thing;   
 }
 freeze(AssocArrayT);
+
+insta.test("test map thing", () => {
+    const thing = AssocArrayT(NumberThing, NumberThing);
+    testMapThing(thing);
+});
+
+insta.endUnit("things", "assoc_array");
