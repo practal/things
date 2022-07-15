@@ -1,6 +1,6 @@
 import {Thing} from "./thing.mjs";
 import {combineHashes, freeze} from "./utils.mjs";
-import {int} from "./primitives.mjs";
+import {int, IntThing} from "./primitives.mjs";
 import { MapThing } from "./map_thing.mjs";
 
 /** A [[MapThing]] for ordered association arrays. */
@@ -29,18 +29,20 @@ export function AssocArrayT<Key, Value>(keyT : Thing<Key>, valueT : Thing<Value>
                 const c = keyT.compare(k, key);
                 if (c === 0) return v; 
                 else if (c > 0) return undefined; 
+                else if (!(c < 0)) throw new Error(`Incompatible key '${key}'.`); 
             }
             return undefined;
         },
-        has: function (map: [Key, Value][], key: Key): boolean {
+        has(map: [Key, Value][], key: Key): boolean {
             for (const [k, v] of map) {
                 const c = keyT.compare(k, key);
                 if (c === 0) return true; 
                 else if (c > 0) return false; 
+                else if (!(c < 0)) throw new Error(`Incompatible key '${key}'.`); 
             }
             return false;
         },
-        put: function (map: [Key, Value][], key: Key, value: Value): { old: Value | undefined; result: [Key, Value][]; } {
+        put(map: [Key, Value][], key: Key, value: Value): { old: Value | undefined; result: [Key, Value][]; } {
             for (const [i, [k, v]] of map.entries()) {
                 const c = keyT.compare(k, key);
                 if (c === 0) {
@@ -54,7 +56,7 @@ export function AssocArrayT<Key, Value>(keyT : Thing<Key>, valueT : Thing<Value>
             map.push([key, value]);
             return {old: undefined, result: map};
         },
-        putIfUndefined: function (map: [Key, Value][], key: Key, value: Value): { old: Value | undefined; result: [Key, Value][]; } {
+        putIfUndefined(map: [Key, Value][], key: Key, value: Value): { old: Value | undefined; result: [Key, Value][]; } {
             for (const [i, [k, v]] of map.entries()) {
                 const c = keyT.compare(k, key);
                 if (c === 0) {
@@ -67,24 +69,62 @@ export function AssocArrayT<Key, Value>(keyT : Thing<Key>, valueT : Thing<Value>
             map.push([key, value]);
             return {old: undefined, result: map};
         },
-        remove: function (map: [Key, Value][], key: Key): { old: Value | undefined; result: [Key, Value][]; } {
-            throw new Error("Function not implemented.");
+        remove(map: [Key, Value][], key: Key): { old: Value | undefined; result: [Key, Value][]; } {
+            for (const [i, [k, v]] of map.entries()) {
+                const c = keyT.compare(k, key);
+                if (c === 0) {
+                    map.splice(i, 1);
+                    return {old: v, result: map};                    
+                } else if (c > 0) {
+                    return {old: undefined, result: map};
+                } else if (!(c < 0)) throw new Error(`Incompatible key '${key}'.`); 
+            }            
+            return {old: undefined, result: map};            
         },
         immutable: false,
-        inDomain: function (x: [Key, Value][]): boolean {
-            throw new Error("Function not implemented.");
+        inDomain(arr: [Key, Value][]): boolean {
+            if (!(arr instanceof Array)) return false;
+            try {
+                for (const [k, v] of arr) {
+                    if (!(keyT.inDomain(k) && valueT.inDomain(v))) return false;
+                }
+                return true;
+            } catch {
+                return false;
+            } 
         },
-        equals: function (x: [Key, Value][], y: [Key, Value][]): boolean {
-            throw new Error("Function not implemented.");
+        equals(arr1: [Key, Value][], arr2: [Key, Value][]): boolean {
+            return thing.compare(arr1, arr2) === 0;
         },
-        compare: function (x: [Key, Value][], y: [Key, Value][]): number {
-            throw new Error("Function not implemented.");
+        compare(arr1: [Key, Value][], arr2: [Key, Value][]): number {
+            const len = arr1.length;
+            let c = IntThing.compare(len, arr2.length);
+            if (c !== 0) return c;
+            for (let i = 0; i < len; i++) {
+                const [k1, v1] = arr1[i];
+                const [k2, v2] = arr2[i];
+                c = keyT.compare(k1, k2);
+                if (c !== 0) return c;
+                c = valueT.compare(v1, v2);
+                if (c !== 0) return c;          
+            }
+            return 0;
         },
-        hashOf: function (x: [Key, Value][]): number {
-            throw new Error("Function not implemented.");
+        hashOf(arr: [Key, Value][]): number {
+            return combineHashes(function*() {
+                for (const [k, v] of arr) {
+                    yield keyT.hashOf(k);
+                    yield valueT.hashOf(v);
+                }
+            }());
         },
-        clone: function (x: [Key, Value][]): [Key, Value][] {
-            throw new Error("Function not implemented.");
+        clone(arr: [Key, Value][]): [Key, Value][] {
+            if (keyT.immutable && valueT.immutable) return [...arr];
+            let brr = thing.empty();
+            for (const [k, v] of arr) {
+                brr.push([keyT.clone(k), valueT.clone(v)]);
+            }
+            return brr;
         }
     };
     freeze(thing);
