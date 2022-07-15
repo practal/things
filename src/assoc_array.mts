@@ -1,6 +1,6 @@
-import {Thing} from "./thing.mjs";
-import {combineHashes, freeze} from "./utils.mjs";
-import {int, IntThing, NumberThing} from "./primitives.mjs";
+import { Thing } from "./thing.mjs";
+import { combineHashes, freeze } from "./utils.mjs";
+import { IntThing, NumberThing } from "./primitives.mjs";
 import { MapThing } from "./map_thing.mjs";
 import * as insta from "instatest";
 import { testMapThing } from "./test_map_thing.mjs";
@@ -136,9 +136,6 @@ export function AssocArrayT<Key, Value>(keyT : Thing<Key>, valueT : Thing<Value>
 }
 freeze(AssocArrayT);
 
-insta.test("test map thing", () => {
-    const thing = AssocArrayT(NumberThing, NumberThing);
-    testMapThing(thing);
-});
+testMapThing(AssocArrayT(NumberThing, NumberThing), true);
 
 insta.endUnit("things", "assoc_array");
