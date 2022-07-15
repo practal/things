@@ -49,6 +49,7 @@ function NativeMapT<Key, Value>() : MapThing<Map<Key, Value>, Key, Value> {
             return { old: old, result: map };
         },
         immutable: false,
+        ordered: false,
         inDomain(map: Map<Key, Value>): boolean {
             return (map instanceof Map);
         },

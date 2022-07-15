@@ -86,6 +86,7 @@ export function AssocArrayT<Key, Value>(keyT : Thing<Key>, valueT : Thing<Value>
             return {old: undefined, result: map};            
         },
         immutable: false,
+        ordered: true,
         inDomain(arr: [Key, Value][]): boolean {
             if (!(arr instanceof Array)) return false;
             try {
@@ -136,6 +137,6 @@ export function AssocArrayT<Key, Value>(keyT : Thing<Key>, valueT : Thing<Value>
 }
 freeze(AssocArrayT);
 
-testMapThing(AssocArrayT(NumberThing, NumberThing), true);
+testMapThing(AssocArrayT(NumberThing, NumberThing));
 
 insta.endUnit("things", "assoc_array");

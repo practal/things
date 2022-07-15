@@ -61,4 +61,10 @@ export interface MapThing<M, Key, Value> extends Thing<M> {
      */ 
     immutable : boolean
 
+    /**
+     * Returns whether maps of type M are always ordered or not. A map is ordered if its [[entries]] 
+     * are ordered by key.
+     */
+    ordered : boolean
+
 }

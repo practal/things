@@ -3,8 +3,8 @@ import { MapThing } from "./map_thing.mjs";
 import { freeze } from "./utils.mjs";
 import * as insta from "instatest";
 
-export function testMapThing<M>(thing : MapThing<M, number, number>, ordered : boolean = false) {
-    insta.test(`testMapThing(ordered: ${ordered})`, () => {
+export function testMapThing<M>(thing : MapThing<M, number, number>) {
+    insta.test(`testMapThing(ordered: ${thing.ordered})`, () => {
         let nums = new Map<number, number>();
         let map = thing.empty();
         const N = 1000;
@@ -53,11 +53,11 @@ export function testMapThing<M>(thing : MapThing<M, number, number>, ordered : b
             if (has) removed += 1;
         }
         insta.assertEq(thing.size(map), N+1 - removed);
-        if (!ordered) {
+        if (!thing.ordered) {
             thing.put(map, Number.NaN, 42);
             insta.assertEq(thing.get(map, Number.NaN), 42);
         }
-        if (ordered) {
+        if (thing.ordered) {
             let last = 0;
             let first = true;
             for (const [k, v] of thing.entries(map)) {

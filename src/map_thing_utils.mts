@@ -1,6 +1,6 @@
 import {Thing} from "./thing.mjs";
 import {nat, int} from "./primitives.mjs";
-import { combineHashes } from "./utils.mjs";
+import { combineHashes, freeze } from "./utils.mjs";
 
 /** A basic subset of [[MapThing]] used by the utility functions. */
 export interface MapThingBase<M, Key, Value> {
@@ -15,6 +15,8 @@ export interface MapThingBase<M, Key, Value> {
     get(map : M, key : Key) : Value | undefined
 
     has(map : M, key : Key) : boolean   
+
+    ordered : boolean
     
 }
 
@@ -30,6 +32,14 @@ export interface MapThingBase<M, Key, Value> {
  * 
  */
 export function MapCompare<M, K, V>(thing : MapThingBase<M, K, V>, map1 : M, map2 : M) : number {
+    if (thing.ordered)
+        return MapCompareOrdered(thing, map1, map2);
+    else 
+        return MapCompareUnordered(thing, map1, map2);
+}
+freeze(MapCompare);
+
+function MapCompareUnordered<M, K, V>(thing : MapThingBase<M, K, V>, map1 : M, map2 : M) : number {
     if (thing.size(map1) !== thing.size(map2)) return Number.NaN; 
     let c = 0;
     const valueT = thing.valueT;
@@ -50,6 +60,30 @@ export function MapCompare<M, K, V>(thing : MapThingBase<M, K, V>, map1 : M, map
     return c;
 }
 
+function MapCompareOrdered<M, K, V>(thing : MapThingBase<M, K, V>, map1 : M, map2 : M) : number {
+    if (thing.size(map1) !== thing.size(map2)) return Number.NaN; 
+    let entries1 = thing.entries(map1);
+    let entries2 = thing.entries(map2);
+    let c = 0;
+    const keyT = thing.keyT;
+    const valueT = thing.valueT;
+    do {
+        const next1 = entries1.next();
+        const next2 = entries2.next();
+        if (next1.done && next2.done) return c;
+        if (next1.done || next2.done) return Number.NaN;
+        const [k1, v1] = next1.value;
+        const [k2, v2] = next2.value;
+        if (!keyT.equals(k1, k2)) return Number.NaN;
+        const d = valueT.compare(v1, v2);
+        if (Number.isNaN(d)) return Number.NaN;
+        if (d !== 0) {
+            if ((d > 0 && c < 0) || (d < 0 && c > 0)) return Number.NaN;
+            c = d;
+        }
+    } while (true)
+}
+
 /**
  * Computes the hash of a map based on the size of the map and the 
  * given hash functions for keys and values.
@@ -66,5 +100,5 @@ export function MapCompare<M, K, V>(thing : MapThingBase<M, K, V>, map1 : M, map
     }
     return combineHashes(run());
 }
-
+freeze(MapHash);
 
