@@ -1,12 +1,14 @@
 import { Thing } from "./thing.mjs";
-import { combineHashes, freeze } from "./utils.mjs";
-import { IntThing, NumberThing } from "./primitives.mjs";
+import { freeze } from "./utils.mjs";
+import { NumberThing } from "./primitives.mjs";
 import { MapThing } from "./map_thing.mjs";
 import * as insta from "instatest";
 import { testMapThing } from "./test_map_thing.mjs";
 import { MapCompare, MapHash } from "./map_thing_utils.mjs";
 
 insta.beginUnit("things", "assoc_array");
+
+export type AssocArray<Key, Value> = [Key, Value][]
 
 /** A [[MapThing]] for ordered association arrays. */
 export function AssocArrayT<Key, Value>(keyT : Thing<Key>, valueT : Thing<Value>, ordered : boolean) : MapThing<[Key, Value][], Key, Value> {
