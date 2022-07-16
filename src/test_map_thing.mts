@@ -89,6 +89,12 @@ export function testMapThing<M>(thing : MapThing<M, number, number>, descr? : st
             insta.assertEq(thing.compare(map, map2), Number.NaN);
             insta.assertEq(thing.compare(map2, map), Number.NaN);
         });
+        insta.test("hashing", () => {
+            const map1 = thing.from([[10, 7], [20, 49]]);
+            const map2 = thing.from([[20, 49], [10, 7]]);
+            insta.assert(thing.equals(map1, map2));
+            insta.assertEq(thing.hashOf(map1), thing.hashOf(map2));
+        });
     });
 }
 freeze(testMapThing);
