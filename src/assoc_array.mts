@@ -106,8 +106,21 @@ export function AssocArrayT<Key, Value>(keyT : Thing<Key>, valueT : Thing<Value>
         inDomain(arr: [Key, Value][]): boolean {
             if (!(arr instanceof Array)) return false;
             try {
-                for (const [k, v] of arr) {
-                    if (!(keyT.inDomain(k) && valueT.inDomain(v))) return false;
+                if (ordered) {
+                    let first = true;
+                    let last : Key 
+                    for (const [k, v] of arr) {
+                        if (!(keyT.inDomain(k) && valueT.inDomain(v))) return false;
+                        if (first) first = false;
+                        else {
+                            if (!(keyT.compare(last!, k) < 0)) return false;
+                        }
+                        last = k;
+                    }
+                } else {
+                    for (const [k, v] of arr) {
+                        if (!(keyT.inDomain(k) && valueT.inDomain(v))) return false;
+                    }
                 }
                 return true;
             } catch {
