@@ -54,6 +54,8 @@ function AssocArrayDataT<Key, Value>(keyT : Thing<Key>, valueT : Thing<Value>, o
             return false;
         },
         put(map: AssocArrayData<Key, Value>, key: Key, value: Value): { old: Value | undefined; result: AssocArrayData<Key, Value>; } {
+            if (!keyT.inDomain(key)) throw new Error("Key is not in domain.");
+            if (!valueT.inDomain(value)) throw new Error("Value is not in domain.");
             for (const [i, [k, v]] of map.array.entries()) {
                 const c = keyT.compare(k, key);
                 if (c === 0) {
@@ -74,6 +76,8 @@ function AssocArrayDataT<Key, Value>(keyT : Thing<Key>, valueT : Thing<Value>, o
             return {old: undefined, result: map};
         },
         putIfUndefined(map: AssocArrayData<Key, Value>, key: Key, value: Value): { old: Value | undefined; result: AssocArrayData<Key, Value>; } {
+            if (!keyT.inDomain(key)) throw new Error("Key is not in domain.");
+            if (!valueT.inDomain(value)) throw new Error("Value is not in domain.");
             for (const [i, [k, v]] of map.array.entries()) {
                 const c = keyT.compare(k, key);
                 if (c === 0) {
@@ -110,28 +114,8 @@ function AssocArrayDataT<Key, Value>(keyT : Thing<Key>, valueT : Thing<Value>, o
         immutable: false,
         ordered: ordered,
         inDomain(map: AssocArrayData<Key, Value>): boolean {
-            try {
-                if (!(map.array instanceof Array)) return false;
-                if (ordered) {
-                    let first = true;
-                    let last : Key 
-                    for (const [k, v] of map.array) {
-                        if (!(keyT.inDomain(k) && valueT.inDomain(v))) return false;
-                        if (first) first = false;
-                        else {
-                            if (!(keyT.compare(last!, k) < 0)) return false;
-                        }
-                        last = k;
-                    }
-                } else {
-                    for (const [k, v] of map.array) {
-                        if (!(keyT.inDomain(k) && valueT.inDomain(v))) return false;
-                    }
-                }
-                return map.hash === null || (map.hash === MapHash(thing, map));
-            } catch {
-                return false;
-            } 
+            // This will only ever be called with data that has already been checked at the time of creation.
+            return true;
         },
         equals(arr1: AssocArrayData<Key, Value>, arr2: AssocArrayData<Key, Value>): boolean {
             return thing.compare(arr1, arr2) === 0;
@@ -158,9 +142,6 @@ function AssocArrayDataT<Key, Value>(keyT : Thing<Key>, valueT : Thing<Value>, o
     return thing;   
 }
 freeze(AssocArrayDataT);
-
-testMapThing(AssocArrayDataT(NumberT, NumberT, true), "assoc array data");
-testMapThing(AssocArrayDataT(NumberT, NumberT, false), "assoc array data");
 
 export type AssocArray<Key, Value> = SealedMap
 
