@@ -151,7 +151,7 @@ export function AssocArrayT<Key, Value>(keyT : Thing<Key>, valueT : Thing<Value>
 }
 freeze(AssocArrayT);
 
-testMapThing(AssocArrayT(NumberT, NumberT, true), "sealed assoc array");
-testMapThing(AssocArrayT(NumberT, NumberT, false), "sealed assoc array");
+testMapThing(AssocArrayT(NumberT, NumberT, true));
+testMapThing(AssocArrayT(NumberT, NumberT, false));
 
 insta.endUnit("things", "assoc_array");
