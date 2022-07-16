@@ -12,6 +12,7 @@ type AssocArrayData<Key, Value> = {hash : int | null, array: [Key, Value][]};
 
 /** A [[MapThing]] for (possibly ordered) association arrays. */
 function AssocArrayDataT<Key, Value>(keyT : Thing<Key>, valueT : Thing<Value>, ordered : boolean) : MapThing<AssocArrayData<Key, Value>, Key, Value> {
+    if (!keyT.immutable) throw new Error("Keys must be immutable.");
     const thing : MapThing<AssocArrayData<Key, Value>, Key, Value> = {
         keyT: keyT,
         valueT: valueT,

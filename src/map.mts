@@ -16,6 +16,7 @@ insta.beginUnit("things", "map");
  * If you cannot guarantee for this to be the case, use [[HashMapT]] instead.
  */ 
 export function MapT<Key, Value>(keyT : Thing<Key>, valueT : Thing<Value>) : MapThing<Map<Key, Value>, Key, Value> {
+    if (!keyT.immutable) throw new Error("Keys must be immutable.");
     const thing : MapThing<Map<Key, Value>, Key, Value> = {
         keyT: keyT,
         valueT: valueT,

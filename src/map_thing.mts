@@ -1,7 +1,7 @@
 import {Thing} from "./thing.mjs";
 import {nat} from "./primitives.mjs";
 
-/** General interface for working with maps. The interface works for both mutable and immutable maps. */
+/** General interface for working with maps. The interface works for both mutable and immutable maps. Keys must be immutable. */
 export interface MapThing<M, Key, Value> extends Thing<M> {
 
     readonly keyT : Thing<Key>
