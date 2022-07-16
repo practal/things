@@ -1,16 +1,21 @@
 {
     "name": "things",
-    "version": "0.1.7",
+    "version": "2.0.0",
     "description": "Data Structures for TypeScript",
-    "main": "dist/index.js",
-    "types": "dist/index.d.ts",
+    "main": "dist/index.mjs",
+    "types": "dist/index.d.mts",
+    "type": "module",
     "files": [
         "/dist"
     ],
     "scripts": {
         "build": "tsc",
-        "test": "jest",
-        "docs": "typedoc"
+        "pretest": "rm -rf dist && tsc",
+        "test": "instatest dist",
+        "pretest-browser": "npm run test -- --browser && npx webpack --config=instatest-browser/webpack.config.js",
+        "test-browser": "npx http-server -c-1 -o instatest-browser",
+        "docs": "typedoc",
+        "example": "tsc && node dist/example.mjs"
     },
     "repository": {
         "type": "git",
@@ -27,13 +32,9 @@
     },
     "homepage": "https://practal.github.io/things",
     "devDependencies": {
-        "@types/jest": "^27.0.3",
-        "jest": "^27.4.5",
-        "ts-jest": "^27.1.2",
         "typedoc": "^0.22.11"
     },
-    "jest": {
-        "preset": "ts-jest",
-        "testEnvironment": "node"
+    "dependencies": {
+        "instatest": "^0.2.7"
     }
 }
