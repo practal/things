@@ -122,7 +122,7 @@ function HashMapDataT<K, V>(keyT : Thing<K>, valueT : Thing<V>) : MapThing<HashM
         immutable: false,
         ordered: false,
         inDomain: function (map: HashMapData<K, V>): boolean {
-            return true; // todo?
+            return true; 
         },
         equals: function (map1: HashMapData<K, V>, map2: HashMapData<K, V>): boolean {
             return thing.compare(map1, map2) === 0;
