@@ -2,11 +2,11 @@ import { freeze } from "./utils.mjs";
 import { int } from "./primitives.mjs";
 import { MapThing } from "./map_thing.mjs";
 import { Anything } from "./anything.mjs";
-import { MapCompare, MapHash } from "./map_thing_utils.mjs";
+import { MapCompare, MapHash } from "./map_utils.mjs";
 import * as insta from "instatest";
 import { testMapThing } from "./test_map_thing.mjs";
 
-insta.beginUnit("things", "native_map_thing");
+insta.beginUnit("things", "native_map");
 
 function NativeMapT<Key, Value>() : MapThing<Map<Key, Value>, Key, Value> {
     const thing : MapThing<Map<Key, Value>, Key, Value> = {
@@ -71,8 +71,8 @@ function NativeMapT<Key, Value>() : MapThing<Map<Key, Value>, Key, Value> {
 }
 freeze(NativeMapT);
 
-export const NativeMapThing = NativeMapT<any, any>();
+export const MapT : MapThing<Map<any, any>, any, any> = NativeMapT<any, any>();
 
-testMapThing(NativeMapThing);
+testMapThing(MapT);
 
-insta.endUnit("things", "native_map_thing");
+insta.endUnit("things", "native_map");

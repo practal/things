@@ -1,7 +1,7 @@
 import { AssocArray, AssocArrayT } from "./assoc_array.mjs";
 import { MapThing } from "./map_thing.mjs";
-import { MapCompare, MapHash, SealedMapT } from "./map_thing_utils.mjs";
-import { int, nat, NumberThing } from "./primitives.mjs";
+import { MapCompare, MapHash, SealedMapT } from "./map_utils.mjs";
+import { int, nat, NumberT } from "./primitives.mjs";
 import { Thing } from "./thing.mjs";
 import { freeze } from "./utils.mjs";
 import * as insta from "instatest";
@@ -152,8 +152,8 @@ export function HashMapT<K, V>(keyT : Thing<K>, valueT : Thing<V>) : MapThing<Ha
     return thing;
 }
 
-testMapThing(HashMapT(NumberThing, NumberThing), "HashMap");
-testMapThing(SealedMapT(HashMapT(NumberThing, NumberThing)), "Sealed HashMap");
+testMapThing(HashMapT(NumberT, NumberT), "HashMap");
+testMapThing(SealedMapT(HashMapT(NumberT, NumberT)), "Sealed HashMap");
 
 insta.endUnit("things", "hash_map");
 

@@ -1,5 +1,5 @@
 /**
- * # *things* — Data Structures for JavaScript and TypeScript
+ * # *things* — Data Structures for modern JavaScript and TypeScript
  * 
  * *This is an experimental package. It is subject to rapid change, experimentation, and bugs.*
  * 
@@ -63,7 +63,15 @@
  * @module
  */ 
 
-export {int, nat, primitive, NumberThing, NatThing, IntThing} from "./primitives.mjs";
 export {Thing} from "./thing.mjs";
 export {MapThing} from "./map_thing.mjs";
+export {Anything} from "./anything.mjs";
+export {ArrayT} from "./array.mjs";
+export {AssocArray, AssocArrayT} from "./assoc_array.mjs";
+export {HashMap, HashMapT} from "./hash_map.mjs";
+export {MapT} from "./map.mjs";
 export * as utils from "./utils.mjs";
+export * as map_utils from "./map_utils.mjs";
+export {Sealed, Seal} from "./seal.mjs";
+export {testMapThing} from "./test_map_thing.mjs";
+export {int, nat, primitive, NumberT, NatT, IntT, StringT} from "./primitives.mjs";

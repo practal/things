@@ -1,7 +1,7 @@
 import { MapThing } from "./map_thing.mjs";
 import { freeze } from "./utils.mjs";
 import * as insta from "instatest";
-import { pickRandomKey } from "./map_thing_utils.mjs";
+import { pickRandomKey } from "./map_utils.mjs";
 
 export function testMapThing<M>(thing : MapThing<M, number, number>, descr? : string) {
     if (!descr) descr = `testMapThing(ordered: ${thing.ordered})`;

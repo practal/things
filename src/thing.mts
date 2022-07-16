@@ -1,8 +1,15 @@
-import {nat, int} from "./primitives.mjs";
+import {int} from "./primitives.mjs";
 
+/** 
+ * The purpose of `Thing<T>` is to provide standard functionality for the type T:
+ * [[equals | *equality*]], [[compare | *order*]], [[hashOf | *hashing*]] and [[clone | *cloning*]].
+ * 
+ * Often, this functionality is not provided for all elements of T, but just for a subset of it called the [[inDomain | *domain*]] of this Thing.
+ * Furthermore, it is possible to announce to clients of this interface that all elements of the domain are [[immutable | *immutable*]].
+ */
 export interface Thing<T>  {
 
-    /** Specifies the elements of type T that form the domain of things. */
+    /** Specifies the elements of type T that form the *domain*. */
     inDomain(x : T) : boolean
 
     /**
@@ -58,7 +65,7 @@ export interface Thing<T>  {
     clone(x : T) : T 
 
     /** 
-     * Returns true if it is known that elements of type T are immutable, otherwise returns false.
+     * Returns true if it is known that all elements of the [[inDomain | domain]] are immutable, otherwise returns false.
      */
     readonly immutable : boolean
 

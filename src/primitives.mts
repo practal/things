@@ -23,7 +23,7 @@ export type int = number
  */
 export type nat = number
 
-export const NumberThing : Thing<number> = {
+export const NumberT : Thing<number> = {
 
     inDomain(x: number): boolean {
         return typeof(x) === "number";
@@ -34,7 +34,7 @@ export const NumberThing : Thing<number> = {
     },
 
     compare(x: number, y: number): number {
-        return NumberThing.equals(x, y) ? 0 : (x < y ? -1 : (x > y ? 1 : Number.NaN));
+        return NumberT.equals(x, y) ? 0 : (x < y ? -1 : (x > y ? 1 : Number.NaN));
     },
 
     hashOf(t: number): int {
@@ -48,9 +48,9 @@ export const NumberThing : Thing<number> = {
 
     immutable: true
 };
-freeze(NumberThing);
+freeze(NumberT);
 
-export const IntThing : Thing<int> = {
+export const IntT : Thing<int> = {
 
     inDomain(x: int): boolean {
         return Number.isSafeInteger(x);
@@ -74,9 +74,9 @@ export const IntThing : Thing<int> = {
 
     immutable: true
 };
-freeze(IntThing);
+freeze(IntT);
 
-export const NatThing : Thing<nat> = {
+export const NatT : Thing<nat> = {
 
     inDomain(x: nat): boolean {
         return Number.isSafeInteger(x) && x >= 0;
@@ -100,9 +100,9 @@ export const NatThing : Thing<nat> = {
 
     immutable: true
 };
-freeze(NatThing);
+freeze(NatT);
 
-export const StringThing : Thing<string> = {
+export const StringT : Thing<string> = {
 
     inDomain(x: string): boolean {
         return typeof(x) === "string";
@@ -126,16 +126,16 @@ export const StringThing : Thing<string> = {
 
     immutable: true
 };
-freeze(StringThing);
+freeze(StringT);
 
 insta.test("compare numbers", () => {
-    insta.assert(NumberThing.compare(2, 3) < 0);
-    insta.assert(NumberThing.compare(-4, Number.NEGATIVE_INFINITY) > 0);
-    insta.assert(NumberThing.compare(-4, Number.POSITIVE_INFINITY) < 0);
-    insta.assertEq(NumberThing.compare(-4, -4), 0);
-    insta.assert(NumberThing.inDomain(3));
+    insta.assert(NumberT.compare(2, 3) < 0);
+    insta.assert(NumberT.compare(-4, Number.NEGATIVE_INFINITY) > 0);
+    insta.assert(NumberT.compare(-4, Number.POSITIVE_INFINITY) < 0);
+    insta.assertEq(NumberT.compare(-4, -4), 0);
+    insta.assert(NumberT.inDomain(3));
     // @ts-ignore
-    insta.assertFalse(NumberThing.inDomain("2"));
+    insta.assertFalse(NumberT.inDomain("2"));
 });
 
 insta.endUnit("things", "primitives");
