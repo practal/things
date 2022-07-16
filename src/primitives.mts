@@ -1,5 +1,5 @@
 import {Thing} from "./thing.mjs";
-import {freeze, hashOfString} from "./utils.mjs";
+import {combineHashes, freeze, hashOfString, intHashSeed, natHashSeed, numberHashSeed} from "./utils.mjs";
 import * as insta from "instatest";
 
 insta.beginUnit("things", "primitives");
@@ -39,7 +39,7 @@ export const NumberT : Thing<number> = {
 
     hashOf(t: number): int {
         const i = Math.round(t);
-        return (Number.isSafeInteger(i)) ? i : 0;
+        return combineHashes([numberHashSeed, (Number.isSafeInteger(i)) ? i : 0]);
     },
 
     clone(x: number): number {
@@ -65,7 +65,7 @@ export const IntT : Thing<int> = {
     },
 
     hashOf(t: int): int {
-        return t;
+        return combineHashes([intHashSeed, t]);
     },
 
     clone(x: int): int {
@@ -91,7 +91,7 @@ export const NatT : Thing<nat> = {
     },
 
     hashOf(t: nat): int {
-        return t;
+        return combineHashes([natHashSeed, t]);
     },
 
     clone(x: nat): nat {

@@ -1,6 +1,6 @@
 import { Thing } from "./thing.mjs";
 import { nat, int, StringT } from "./primitives.mjs";
-import { appendHash, combineHashes, combineHashesOrderInvariant, freeze } from "./utils.mjs";
+import { combineHashes, combineHashesOrderInvariant, freeze, mapHashSeed } from "./utils.mjs";
 import { MapThing } from "./map_thing.mjs";
 import { Seal, Sealed } from "./seal.mjs";
 
@@ -85,8 +85,6 @@ function MapCompareOrdered<M, K, V>(thing : MapThingBase<M, K, V>, map1 : M, map
         }
     } while (true)
 }
-
-const mapHashSeed = StringT.hashOf("Map");
 
 /**
  * Computes the hash of a map based on the size of the map and the 

@@ -74,6 +74,21 @@ export function hashOfString(s : string) : int {
 }
 freeze(hashOfString);
 
+// Various hash seeds
+export const mapHashSeed = hashOfString("Map");
+export const arrayHashSeed = hashOfString("Array");
+export const trueHash = hashOfString("true");
+export const falseHash = hashOfString("false");
+export const undefinedHash = hashOfString("undefined");
+export const stringHashSeed = hashOfString("string");
+export const numberHashSeed = hashOfString("number");
+export const intHashSeed = hashOfString("int");
+export const natHashSeed = hashOfString("nat");
+export const objectHashSeed = hashOfString("object");
+export const functionHashSeed = hashOfString("function");
+export const bigintHashSeed = hashOfString("bigint");
+export const symbolHashSeed = hashOfString("symbol");
+
 export function assert_nat(x : any) : asserts x is nat {
     if (!(Number.isSafeInteger(x) && x >= 0)) 
         throw new Error(`Natural number expected, found: ${x}`);

@@ -1,5 +1,5 @@
 import {Thing} from "./thing.mjs";
-import {freeze} from "./utils.mjs";
+import {bigintHashSeed, combineHashes, falseHash, freeze, functionHashSeed, objectHashSeed, stringHashSeed, symbolHashSeed, trueHash, undefinedHash} from "./utils.mjs";
 import {int, NumberT, StringT} from "./primitives.mjs";
 
 /** Provides default [[Thing]] functionality for the type `any`. */
@@ -17,15 +17,18 @@ export const Anything : Thing<any> = {
         return Anything.equals(x, y) ? 0 : (x < y ? -1 : (x > y ? 1 : Number.NaN));
     },
     hashOf(x: any): int {
+        function hash(seed : int) : int {
+            return combineHashes([seed, StringT.hashOf(String(x))]);
+        }
         switch (typeof(x)) {
-            case "undefined": return 42;
+            case "undefined": return undefinedHash;
             case "number": return NumberT.hashOf(x);
-            case "boolean": return x ? 43 : 44;
-            case "string": 
-            case "object": 
-            case "symbol": 
-            case "function": 
-            case "bigint": return StringT.hashOf(String(x));
+            case "boolean": return x ? trueHash : falseHash;
+            case "string": return hash(stringHashSeed)
+            case "object": return hash(objectHashSeed);
+            case "symbol": return hash(symbolHashSeed);
+            case "function": return hash(functionHashSeed);
+            case "bigint": return hash(bigintHashSeed);
         }
     },
     /** This is just the identity. */
