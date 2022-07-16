@@ -1,6 +1,6 @@
 {
     "name": "things",
-    "version": "0.1.8",
+    "version": "0.2.0",
     "description": "Data Structures for TypeScript",
     "main": "dist/index.mjs",
     "types": "dist/index.d.mts",
@@ -14,7 +14,7 @@
         "test": "instatest dist",
         "pretest-browser": "npm run test -- --browser && npx webpack --config=instatest-browser/webpack.config.js",
         "test-browser": "npx http-server -c-1 -o instatest-browser",
-        "docs": "typedoc", 
+        "docs": "typedoc",
         "example": "tsc && node dist/example.mjs"
     },
     "repository": {
