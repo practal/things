@@ -1,5 +1,5 @@
-import {Thing} from "./thing.mjs";
-import {nat, int} from "./primitives.mjs";
+import { Thing } from "./thing.mjs";
+import { nat, int } from "./primitives.mjs";
 import { combineHashes, freeze } from "./utils.mjs";
 import { MapThing } from "./map_thing.mjs";
 
@@ -117,7 +117,7 @@ freeze(pickRandomKey);
 
 const seal = Symbol("SealedMap");
 
-export class SealedMap<M> {
+class SealedMap<M> {
     #content : M
     constructor(secret : symbol, content : M) {
         if (secret !== seal) throw new Error("Cannot create SealedMap directly.");
@@ -129,7 +129,7 @@ export class SealedMap<M> {
     }
 }
 
-export function sealMapThing<M, K, V>(mapThing : MapThing<M, K, V>) : MapThing<SealedMap<M>, K, V> {
+export function SealedMapT<M, K, V>(mapThing : MapThing<M, K, V>) : MapThing<any, K, V> {
     const thing : MapThing<SealedMap<M>, K, V>  = {
         keyT: mapThing.keyT,
         valueT: mapThing.valueT,
@@ -154,21 +154,25 @@ export function sealMapThing<M, K, V>(mapThing : MapThing<M, K, V>) : MapThing<S
         put(map: SealedMap<M>, key: K, value: V): { old: V | undefined; result: SealedMap<M>; } {
             const content = map.content(seal);
             const r = mapThing.put(content, key, value);
-            return { old: r.old, result: new SealedMap(seal, r.result) };
+            if (r.result === content) return { old: r.old, result: map };
+            else return { old: r.old, result: new SealedMap(seal, r.result) };
         },
         putIfUndefined(map: SealedMap<M>, key: K, value: V): { old: V | undefined; result: SealedMap<M>; } {
             const content = map.content(seal);
             const r = mapThing.putIfUndefined(content, key, value);
-            return { old: r.old, result: new SealedMap(seal, r.result) };
+            if (r.result === content) return { old: r.old, result: map };
+            else return { old: r.old, result: new SealedMap(seal, r.result) };
         },
         remove(map: SealedMap<M>, key: K): { old: V | undefined; result: SealedMap<M>; } {
             const content = map.content(seal);
             const r = mapThing.remove(content, key);
-            return { old: r.old, result: new SealedMap(seal, r.result) };
+            if (r.result === content) return { old: r.old, result: map };
+            else return { old: r.old, result: new SealedMap(seal, r.result) };
         },
         immutable: false,
         ordered: false,
         inDomain(map: SealedMap<M>): boolean {
+            if (!(map instanceof SealedMap)) return false;
             return mapThing.inDomain(map.content(seal));
         },
         equals(map1: SealedMap<M>, map2: SealedMap<M>): boolean {
@@ -181,12 +185,14 @@ export function sealMapThing<M, K, V>(mapThing : MapThing<M, K, V>) : MapThing<S
             return mapThing.hashOf(map.content(seal));
         },
         clone(map: SealedMap<M>): SealedMap<M> {
+            const content = map.content(seal);
             const cloned = mapThing.clone(map.content(seal));
-            return new SealedMap(seal, cloned);
+            if (cloned === content) return map;
+            else return new SealedMap(seal, cloned);
         }
     };
     freeze(thing);
     return thing;
 }
-freeze(sealMapThing);
+freeze(SealedMapT);
 

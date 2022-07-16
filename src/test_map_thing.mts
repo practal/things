@@ -3,8 +3,10 @@ import { freeze } from "./utils.mjs";
 import * as insta from "instatest";
 import { pickRandomKey } from "./map_thing_utils.mjs";
 
-export function testMapThing<M>(thing : MapThing<M, number, number>) {
-    insta.test(`testMapThing(ordered: ${thing.ordered})`, () => {
+export function testMapThing<M>(thing : MapThing<M, number, number>, descr? : string) {
+    if (!descr) descr = `testMapThing(ordered: ${thing.ordered})`;
+    else descr = `${descr}/testMapThing(ordered: ${thing.ordered})`;
+    insta.test(descr, () => {
         let nums = new Map<number, number>();
         let map = thing.empty();
         const N = 1000;
