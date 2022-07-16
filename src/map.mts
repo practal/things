@@ -1,17 +1,24 @@
 import { freeze } from "./utils.mjs";
-import { int } from "./primitives.mjs";
+import { int, NumberT } from "./primitives.mjs";
+import { Thing } from "./thing.mjs";
 import { MapThing } from "./map_thing.mjs";
 import { Anything } from "./anything.mjs";
 import { MapCompare, MapHash } from "./map_utils.mjs";
 import * as insta from "instatest";
 import { testMapThing } from "./test_map_thing.mjs";
 
-insta.beginUnit("things", "native_map");
+insta.beginUnit("things", "map");
 
-function NativeMapT<Key, Value>() : MapThing<Map<Key, Value>, Key, Value> {
+/** 
+ * Views a Map as as [[MapThing | map thing]] as long as keys and values are viewed as things too.
+ * This only is well-defined if the equality of keys coincides with equality of [[Anything]] on the domain of keyT. 
+ * This is for example the case if keyT is [[Anything]], [[NumberT]], [[IntT]], [[NatT]] or [[StringT]]. 
+ * If you cannot guarantee for this to be the case, use [[HashMapT]] instead.
+ */ 
+export function MapT<Key, Value>(keyT : Thing<Key>, valueT : Thing<Value>) : MapThing<Map<Key, Value>, Key, Value> {
     const thing : MapThing<Map<Key, Value>, Key, Value> = {
-        keyT: Anything,
-        valueT: Anything,
+        keyT: keyT,
+        valueT: valueT,
         empty(): Map<Key, Value> {
             return new Map<Key, Value>();
         },
@@ -51,7 +58,11 @@ function NativeMapT<Key, Value>() : MapThing<Map<Key, Value>, Key, Value> {
         immutable: false,
         ordered: false,
         inDomain(map: Map<Key, Value>): boolean {
-            return (map instanceof Map);
+            if (!(map instanceof Map)) return false;
+            for (const [k, v] of map.entries()) {
+
+            }
+            return true;
         },
         equals(map1: Map<Key, Value>, map2: Map<Key, Value>): boolean {
             return thing.compare(map1, map2) === 0;
@@ -63,16 +74,19 @@ function NativeMapT<Key, Value>() : MapThing<Map<Key, Value>, Key, Value> {
             return MapHash(thing, map);
         },
         clone: function (map: Map<Key, Value>): Map<Key, Value> {
-            return new Map(map.entries());
+            if (keyT.immutable && valueT.immutable) return new Map(map.entries());
+            let result: Map<Key, Value> = new Map();
+            for (const [k, v] of map.entries()) {
+                result.set(keyT.clone(k), valueT.clone(v));
+            }
+            return result;
         }
     };
     freeze(thing);
     return thing;
 }
-freeze(NativeMapT);
+freeze(MapT);
 
-export const MapT : MapThing<Map<any, any>, any, any> = NativeMapT<any, any>();
+testMapThing(MapT(NumberT, NumberT));
 
-testMapThing(MapT);
-
-insta.endUnit("things", "native_map");
+insta.endUnit("things", "map");
