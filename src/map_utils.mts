@@ -1,6 +1,6 @@
 import { Thing } from "./thing.mjs";
 import { nat, int, StringT } from "./primitives.mjs";
-import { appendHash, combineHashes, freeze } from "./utils.mjs";
+import { appendHash, combineHashes, combineHashesOrderInvariant, freeze } from "./utils.mjs";
 import { MapThing } from "./map_thing.mjs";
 import { Seal, Sealed } from "./seal.mjs";
 
@@ -86,7 +86,6 @@ function MapCompareOrdered<M, K, V>(thing : MapThingBase<M, K, V>, map1 : M, map
     } while (true)
 }
 
-
 const MapHashTag = StringT.hashOf("Map");
 
 /**
@@ -97,24 +96,18 @@ const MapHashTag = StringT.hashOf("Map");
     const valueT = thing.valueT;
     const keyT = thing.keyT;
     function* run() {
-        yield MapHashTag;
         for (let [k, v] of thing.entries(map)) {
-            yield keyT.hashOf(k);
-            yield valueT.hashOf(v);
+            yield combineHashes([keyT.hashOf(k), valueT.hashOf(v)]);
         }
     }
-    return combineHashes(run());
+    return combineHashes([MapHashTag, thing.size(map), combineHashesOrderInvariant(run())]);
 }
 freeze(MapHash);
 
 /**
  * Computes the hash of an empty map.
  */
-export const EmptyMapHash: int = combineHashes([MapHashTag]);
-
-export function AppendMapHash<M, K, V>(thing : MapThingBase<M, K, V>, hash : int, key : K, value : V) : int {
-    return appendHash(appendHash(hash, thing.keyT.hashOf(key)), thing.valueT.hashOf(value));
-}
+export const EmptyMapHash: int = combineHashes([MapHashTag, 0, combineHashes([])]);
  
 export function pickRandomKey<M, K, V>(thing : MapThingBase<M, K, V>, map : M) : K | undefined {
     const size = thing.size(map);
@@ -159,9 +152,9 @@ export function SealedMapT<M, K, V>(mapThing : MapThing<M, K, V>) : MapThing<Sea
             if (r.result === content) return { old: r.old, result: map };
             else return { old: r.old, result: seal.make(r.result) };
         },
-        putIfUndefined(map: SealedMap, key: K, value: V): { old: V | undefined; result: SealedMap; } {
+        putIfNew(map: SealedMap, key: K, value: V): { old: V | undefined; result: SealedMap; } {
             const content = seal.content(map);
-            const r = mapThing.putIfUndefined(content, key, value);
+            const r = mapThing.putIfNew(content, key, value);
             if (r.result === content) return { old: r.old, result: map };
             else return { old: r.old, result: seal.make(r.result) };
         },

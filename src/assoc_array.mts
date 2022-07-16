@@ -4,7 +4,7 @@ import { int, NumberT } from "./primitives.mjs";
 import { MapThing } from "./map_thing.mjs";
 import * as insta from "instatest";
 import { testMapThing } from "./test_map_thing.mjs";
-import { AppendMapHash, EmptyMapHash, MapCompare, MapHash, SealedMap, SealedMapT } from "./map_utils.mjs";
+import { EmptyMapHash, MapCompare, MapHash, SealedMap, SealedMapT } from "./map_utils.mjs";
 
 insta.beginUnit("things", "assoc_array");
 
@@ -73,10 +73,10 @@ function AssocArrayDataT<Key, Value>(keyT : Thing<Key>, valueT : Thing<Value>, o
                 }
             }            
             map.array.push([key, value]);
-            if (map.hash !== null) map.hash = AppendMapHash(thing, map.hash, key, value);
+            map.hash = null;
             return {old: undefined, result: map};
         },
-        putIfUndefined(map: AssocArrayData<Key, Value>, key: Key, value: Value): { old: Value | undefined; result: AssocArrayData<Key, Value>; } {
+        putIfNew(map: AssocArrayData<Key, Value>, key: Key, value: Value): { old: Value | undefined; result: AssocArrayData<Key, Value>; } {
             if (!keyT.inDomain(key)) throw new Error("Key is not in domain.");
             if (!valueT.inDomain(value)) throw new Error("Value is not in domain.");
             for (const [i, [k, v]] of map.array.entries()) {
@@ -93,7 +93,7 @@ function AssocArrayDataT<Key, Value>(keyT : Thing<Key>, valueT : Thing<Value>, o
                 }
             }            
             map.array.push([key, value]);
-            if (map.hash !== null) map.hash = AppendMapHash(thing, map.hash, key, value);
+            map.hash = null;
             return {old: undefined, result: map};
         },
         remove(map: AssocArrayData<Key, Value>, key: Key): { old: Value | undefined; result: AssocArrayData<Key, Value>; } {

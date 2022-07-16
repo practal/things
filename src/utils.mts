@@ -46,6 +46,21 @@ export function combineHashes(hashes : Iterable<int>) : int {
 }
 freeze(combineHashes);
 
+/** 
+ * Combines a sequence of hashes into a single hash. 
+ * Looks what we really want here is the MurmurHash3 (https://github.com/scala/scala/blob/2.11.x/src/library/scala/util/hashing/MurmurHash3.scala).
+ * But for now we just use addition like Java does.
+ **/ 
+export function combineHashesOrderInvariant(hashes : Iterable<int>) : int {
+    let sum = 1;
+    for (const h of hashes) {
+        sum += (h | 0);
+        sum = sum & sum;
+    }
+    return sum;
+}
+freeze(combineHashesOrderInvariant);
+
 export function appendHash(hashOfSeq : int, hash : int) : int {
     let sum = hashOfSeq;
     sum = 31 * sum + hash;

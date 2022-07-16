@@ -27,7 +27,7 @@ export function testMapThing<M>(thing : MapThing<M, number, number>, descr? : st
                     insta.assertEq(thing.get(map, x), nums.get(x));
                     const size = thing.size(map);
                     const value = Math.random();
-                    const result = thing.putIfUndefined(map, x, value);
+                    const result = thing.putIfNew(map, x, value);
                     insta.assertEq(result.old, nums.get(x));
                     insta.assert(result.result === map);
                     insta.assertEq(size, thing.size(map));
@@ -37,7 +37,7 @@ export function testMapThing<M>(thing : MapThing<M, number, number>, descr? : st
                     insta.assertEq(thing.get(map, x), undefined);
                     const size = thing.size(map);
                     const value = Math.random();
-                    const result = thing.putIfUndefined(map, x, value);
+                    const result = thing.putIfNew(map, x, value);
                     insta.assertEq(result.old, undefined);
                     map = result.result;
                     insta.assertEq(size + 1, thing.size(map));

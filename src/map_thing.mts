@@ -45,7 +45,7 @@ export interface MapThing<M, Key, Value> extends Thing<M> {
      * The changed map is returned as result. Note that putIfUndefined works for both immutable and mutable maps: 
      * For mutable maps, the result will be just map, i.e. result === map will hold then.
      */    
-    putIfUndefined(map : M, key : Key, value : Value) : { old : Value | undefined, result : M }
+    putIfNew(map : M, key : Key, value : Value) : { old : Value | undefined, result : M }
 
     /**
      * Removes key and its association with a value from map, and returns the changed map as result. If key has previously been associated with a value v, v is returned as old. 

@@ -43,7 +43,7 @@ export function MapT<Key, Value>(keyT : Thing<Key>, valueT : Thing<Value>) : Map
             map.set(key, value);
             return {old: old, result: map};
         },
-        putIfUndefined(map: Map<Key, Value>, key: Key, value: Value): { old: Value | undefined; result: Map<Key, Value>; } {
+        putIfNew(map: Map<Key, Value>, key: Key, value: Value): { old: Value | undefined; result: Map<Key, Value>; } {
             if (map.has(key)) 
                 return { old: map.get(key), result: map };
             else {

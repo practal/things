@@ -67,6 +67,8 @@ function HashMapDataT<K, V>(keyT : Thing<K>, valueT : Thing<V>) : MapThing<HashM
             return arr ? assoc.has(arr, key) : false;
         },
         put(map: HashMapData<K, V>, key: K, value: V): { old: V | undefined; result: HashMapData<K, V>; } {
+            if (!keyT.inDomain(key)) throw new Error("Key is not in domain.");
+            if (!valueT.inDomain(value)) throw new Error("Value is not in domain.");
             const slot = keyT.hashOf(key);
             let arr = map.content.get(slot);
             if (arr) {
@@ -83,12 +85,14 @@ function HashMapDataT<K, V>(keyT : Thing<K>, valueT : Thing<V>) : MapThing<HashM
                 return { old: undefined, result: incSize(map) };
             }
         },
-        putIfUndefined(map: HashMapData<K, V>, key: K, value: V): { old: V | undefined; result: HashMapData<K, V>; } {
+        putIfNew(map: HashMapData<K, V>, key: K, value: V): { old: V | undefined; result: HashMapData<K, V>; } {
+            if (!keyT.inDomain(key)) throw new Error("Key is not in domain.");
+            if (!valueT.inDomain(value)) throw new Error("Value is not in domain.");
             const slot = keyT.hashOf(key);
             let arr = map.content.get(slot);
             if (arr) {
                 const arrSize = assoc.size(arr);
-                const old = assoc.putIfUndefined(arr, key, value).old;
+                const old = assoc.putIfNew(arr, key, value).old;
                 if (assoc.size(arr) > arrSize) {
                     return { old: old, result: incSize(map) };
                 } else {
