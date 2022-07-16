@@ -37,7 +37,7 @@ freeze(joinStrings);
 
 /** Combines a sequence of hashes into a single hash. */ 
 export function combineHashes(hashes : Iterable<int>) : int {
-    var sum = 1;
+    let sum = 1;
     for (const h of hashes) {
         sum = 31 * sum + h;
         sum = sum & sum;
@@ -45,6 +45,13 @@ export function combineHashes(hashes : Iterable<int>) : int {
     return sum;
 }
 freeze(combineHashes);
+
+export function appendHash(hashOfSeq : int, hash : int) : int {
+    let sum = hashOfSeq;
+    sum = 31 * sum + hash;
+    sum = sum & sum;
+    return sum;
+}
 
 /** Calculates the hash of a string. */
 export function hashOfString(s : string) : int {

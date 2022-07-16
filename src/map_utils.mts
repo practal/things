@@ -1,6 +1,6 @@
 import { Thing } from "./thing.mjs";
-import { nat, int } from "./primitives.mjs";
-import { combineHashes, freeze } from "./utils.mjs";
+import { nat, int, StringT } from "./primitives.mjs";
+import { appendHash, combineHashes, freeze } from "./utils.mjs";
 import { MapThing } from "./map_thing.mjs";
 import { Seal, Sealed } from "./seal.mjs";
 
@@ -86,6 +86,9 @@ function MapCompareOrdered<M, K, V>(thing : MapThingBase<M, K, V>, map1 : M, map
     } while (true)
 }
 
+
+const MapHashTag = StringT.hashOf("Map");
+
 /**
  * Computes the hash of a map based on the size of the map and the 
  * given hash functions for keys and values.
@@ -94,7 +97,7 @@ function MapCompareOrdered<M, K, V>(thing : MapThingBase<M, K, V>, map1 : M, map
     const valueT = thing.valueT;
     const keyT = thing.keyT;
     function* run() {
-        yield thing.size(map);
+        yield MapHashTag;
         for (let [k, v] of thing.entries(map)) {
             yield keyT.hashOf(k);
             yield valueT.hashOf(v);
@@ -104,6 +107,15 @@ function MapCompareOrdered<M, K, V>(thing : MapThingBase<M, K, V>, map1 : M, map
 }
 freeze(MapHash);
 
+/**
+ * Computes the hash of an empty map.
+ */
+export const EmptyMapHash: int = combineHashes([MapHashTag]);
+
+export function AppendMapHash<M, K, V>(thing : MapThingBase<M, K, V>, hash : int, key : K, value : V) : int {
+    return appendHash(appendHash(hash, thing.keyT.hashOf(key)), thing.valueT.hashOf(value));
+}
+ 
 export function pickRandomKey<M, K, V>(thing : MapThingBase<M, K, V>, map : M) : K | undefined {
     const size = thing.size(map);
     let i = Math.floor(Math.random() * size);
@@ -159,8 +171,8 @@ export function SealedMapT<M, K, V>(mapThing : MapThing<M, K, V>) : MapThing<Sea
             if (r.result === content) return { old: r.old, result: map };
             else return { old: r.old, result: seal.make(r.result) };
         },
-        immutable: false,
-        ordered: false,
+        immutable: mapThing.immutable,
+        ordered: mapThing.ordered,
         inDomain(map: SealedMap): boolean {
             let m : M
             try {

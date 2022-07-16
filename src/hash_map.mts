@@ -42,7 +42,7 @@ export function HashMapT<K, V>(keyT : Thing<K>, valueT : Thing<V>) : MapThing<Ha
         entries(map: HashMap<K, V>): IterableIterator<[K, V]> {
             return function*() {
                 for (const [_, arr] of map.content) {
-                    for (const kv of arr) {
+                    for (const kv of assoc.entries(arr)) {
                         yield kv;
                     }
                 }
