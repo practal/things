@@ -1,9 +1,11 @@
 import {Thing} from "./thing.mjs";
 import {combineHashes, freeze} from "./utils.mjs";
-import {int, NatT} from "./primitives.mjs";
+import {int, NatT, StringT} from "./primitives.mjs";
 import * as insta from "instatest";
 
 insta.beginUnit("things", "array");
+
+const arrayHashSeed = StringT.hashOf("Array");
 
 /** Views any array as a thing, given its elements are viewed as things. */
 export function ArrayT<E>(elemT : Thing<E>) : Thing<Array<E>> {
@@ -30,6 +32,8 @@ export function ArrayT<E>(elemT : Thing<E>) : Thing<Array<E>> {
         },
         hashOf(arr: E[]): int {
             return combineHashes(function*() { 
+                yield arrayHashSeed;
+                yield arr.length;
                 for (const e of arr) yield elemT.hashOf(e);
             }()); 
         },

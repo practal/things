@@ -86,7 +86,7 @@ function MapCompareOrdered<M, K, V>(thing : MapThingBase<M, K, V>, map1 : M, map
     } while (true)
 }
 
-const MapHashTag = StringT.hashOf("Map");
+const mapHashSeed = StringT.hashOf("Map");
 
 /**
  * Computes the hash of a map based on the size of the map and the 
@@ -100,14 +100,14 @@ const MapHashTag = StringT.hashOf("Map");
             yield combineHashes([keyT.hashOf(k), valueT.hashOf(v)]);
         }
     }
-    return combineHashes([MapHashTag, thing.size(map), combineHashesOrderInvariant(run())]);
+    return combineHashes([mapHashSeed, thing.size(map), combineHashesOrderInvariant(run())]);
 }
 freeze(MapHash);
 
 /**
  * Computes the hash of an empty map.
  */
-export const EmptyMapHash: int = combineHashes([MapHashTag, 0, combineHashes([])]);
+export const EmptyMapHash: int = combineHashes([mapHashSeed, 0, combineHashes([])]);
  
 export function pickRandomKey<M, K, V>(thing : MapThingBase<M, K, V>, map : M) : K | undefined {
     const size = thing.size(map);
