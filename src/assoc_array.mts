@@ -4,11 +4,11 @@ import { int, NumberT } from "./primitives.mjs";
 import { MapThing } from "./map_thing.mjs";
 import * as insta from "instatest";
 import { testMapThing } from "./test_map_thing.mjs";
-import { EmptyMapHash, MapCompare, MapHash, SealedMap, SealedMapT } from "./map_utils.mjs";
+import { EmptyMapHash, MapCompare, MapHash, MapPrint, SealedMap, SealedMapT } from "./map_utils.mjs";
 
 insta.beginUnit("things", "assoc_array");
 
-type AssocArrayData<Key, Value> = {hash : int | null, array: [Key, Value][]};
+type AssocArrayData<Key, Value> = {hash : int | null, array: [Key, Value][] };
 
 /** A [[MapThing]] for (possibly ordered) association arrays. */
 function AssocArrayDataT<Key, Value>(keyT : Thing<Key>, valueT : Thing<Value>, ordered : boolean) : MapThing<AssocArrayData<Key, Value>, Key, Value> {
@@ -137,7 +137,9 @@ function AssocArrayDataT<Key, Value>(keyT : Thing<Key>, valueT : Thing<Value>, o
                 brr.push([keyT.clone(k), valueT.clone(v)]);
             }
             return {hash: map.hash, array: brr};
-        }
+        },
+        print(map: AssocArrayData<Key, Value>): string { return MapPrint(thing, map); }
+
     };
     freeze(thing);
     return thing;   

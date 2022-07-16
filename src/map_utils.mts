@@ -1,6 +1,6 @@
 import { Thing } from "./thing.mjs";
 import { nat, int, StringT } from "./primitives.mjs";
-import { combineHashes, combineHashesOrderInvariant, freeze, mapHashSeed } from "./utils.mjs";
+import { combineHashes, combineHashesOrderInvariant, freeze, joinStrings, mapHashSeed } from "./utils.mjs";
 import { MapThing } from "./map_thing.mjs";
 import { Seal, Sealed } from "./seal.mjs";
 
@@ -106,6 +106,16 @@ freeze(MapHash);
  * Computes the hash of an empty map.
  */
 export const EmptyMapHash: int = combineHashes([mapHashSeed, 0, combineHashes([])]);
+
+/** Prints a map. */
+export function MapPrint<M, K, V>(thing : MapThingBase<M, K, V>, map : M) : string {
+    const joined = joinStrings(", ", function*() { 
+        for (const [k, v] of thing.entries(map)) {
+            yield thing.keyT.print(k) + " ↦ " + thing.valueT.print(v);
+        }
+    }());
+    return "[" + joined + "]";
+}
  
 export function pickRandomKey<M, K, V>(thing : MapThingBase<M, K, V>, map : M) : K | undefined {
     const size = thing.size(map);
@@ -184,9 +194,13 @@ export function SealedMapT<M, K, V>(mapThing : MapThing<M, K, V>) : MapThing<Sea
         },
         clone(map: SealedMap): SealedMap {
             const content = seal.content(map);
-            const cloned = mapThing.clone(seal.content(map));
+            const cloned = mapThing.clone(content);
             if (cloned === content) return map;
             else return seal.make(cloned);
+        }, 
+        print(map: SealedMap): string {
+            const content = seal.content(map);
+            return mapThing.print(content);
         }
     };
     freeze(thing);

@@ -56,5 +56,6 @@ export const Anything : Thing<any> = {
     },
     /** Returns true. The reasoning here is that primitive values are immutable, and objects are also immutable if viewed as references. */
     immutable: true,
+    print(x: any): string { return String(x); }
 };
 freeze(Anything);

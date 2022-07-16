@@ -46,6 +46,8 @@ export const NumberT : Thing<number> = {
         return x;
     },
 
+    print(x: number): string { return `${x}`; },
+
     immutable: true
 };
 freeze(NumberT);
@@ -71,6 +73,8 @@ export const IntT : Thing<int> = {
     clone(x: int): int {
         return x;
     },
+
+    print(x: int): string { return `Int(${x})`; },
 
     immutable: true
 };
@@ -98,6 +102,8 @@ export const NatT : Thing<nat> = {
         return x;
     },
 
+    print(x: nat): string { return `Nat(${x})`; },
+
     immutable: true
 };
 freeze(NatT);
@@ -123,6 +129,8 @@ export const StringT : Thing<string> = {
     clone(x: string): string {
         return x;
     },
+
+    print(x: string): string { return `"${x}"`; },
 
     immutable: true
 };

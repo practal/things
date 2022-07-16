@@ -3,7 +3,7 @@ import { int, NumberT } from "./primitives.mjs";
 import { Thing } from "./thing.mjs";
 import { MapThing } from "./map_thing.mjs";
 import { Anything } from "./anything.mjs";
-import { MapCompare, MapHash } from "./map_utils.mjs";
+import { MapCompare, MapHash, MapPrint } from "./map_utils.mjs";
 import * as insta from "instatest";
 import { testMapThing } from "./test_map_thing.mjs";
 
@@ -74,13 +74,16 @@ export function MapT<Key, Value>(keyT : Thing<Key>, valueT : Thing<Value>) : Map
         hashOf(map: Map<Key, Value>): int {
             return MapHash(thing, map);
         },
-        clone: function (map: Map<Key, Value>): Map<Key, Value> {
+        clone(map: Map<Key, Value>): Map<Key, Value> {
             if (keyT.immutable && valueT.immutable) return new Map(map.entries());
             let result: Map<Key, Value> = new Map();
             for (const [k, v] of map.entries()) {
                 result.set(keyT.clone(k), valueT.clone(v));
             }
             return result;
+        },
+        print(map: Map<Key, Value>): string {
+            return MapPrint(thing, map);
         }
     };
     freeze(thing);

@@ -1,5 +1,5 @@
 import {Thing} from "./thing.mjs";
-import {arrayHashSeed, combineHashes, freeze} from "./utils.mjs";
+import {arrayHashSeed, combineHashes, freeze, joinStrings} from "./utils.mjs";
 import {int, NatT, StringT} from "./primitives.mjs";
 import * as insta from "instatest";
 
@@ -43,7 +43,9 @@ export function ArrayT<E>(elemT : Thing<E>) : Thing<Array<E>> {
             }
             return brr;
         },
-        immutable: false
+        immutable: false,
+        print(arr: E[]): string { return `[${ joinStrings(", ", arr.map(elemT.print)) }]` }
+
     };
     freeze(thing);
     return thing;

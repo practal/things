@@ -1,6 +1,6 @@
 import { AssocArray, AssocArrayT } from "./assoc_array.mjs";
 import { MapThing } from "./map_thing.mjs";
-import { EmptyMapHash, MapCompare, MapHash, SealedMap, SealedMapT } from "./map_utils.mjs";
+import { EmptyMapHash, MapCompare, MapHash, MapPrint, SealedMap, SealedMapT } from "./map_utils.mjs";
 import { int, nat, NumberT } from "./primitives.mjs";
 import { Thing } from "./thing.mjs";
 import { freeze } from "./utils.mjs";
@@ -121,28 +121,29 @@ function HashMapDataT<K, V>(keyT : Thing<K>, valueT : Thing<V>) : MapThing<HashM
         },
         immutable: false,
         ordered: false,
-        inDomain: function (map: HashMapData<K, V>): boolean {
+        inDomain(map: HashMapData<K, V>): boolean {
             return true; 
         },
-        equals: function (map1: HashMapData<K, V>, map2: HashMapData<K, V>): boolean {
+        equals(map1: HashMapData<K, V>, map2: HashMapData<K, V>): boolean {
             return thing.compare(map1, map2) === 0;
         },
-        compare: function (map1: HashMapData<K, V>, map2: HashMapData<K, V>): number {
+        compare(map1: HashMapData<K, V>, map2: HashMapData<K, V>): number {
             return MapCompare(thing, map1, map2);
         },
-        hashOf: function (map: HashMapData<K, V>): number {
+        hashOf(map: HashMapData<K, V>): number {
             if (map.hash === null) {
                 map.hash = MapHash(thing, map);
             }
             return map.hash;
         },
-        clone: function (map: HashMapData<K, V>): HashMapData<K, V> {
+        clone(map: HashMapData<K, V>): HashMapData<K, V> {
             let content : Map<int, AssocArray<K, V>> = new Map();
             for (const [slot, arr] of map.content) {
                 content.set(slot, assoc.clone(arr));
             }
             return { size : map.size, hash: map.hash, content : content };
-        }
+        },
+        print(map: HashMapData<K, V>): string { return MapPrint(thing, map); }
     };
     freeze(thing);
     return thing;

@@ -11,14 +11,15 @@ export function Seal<T, M>() : Seal<T, M> {
     class SealedC<M> {
         #content : M
         constructor(_secret : symbol, content : M) {
-            if (secret !== _secret) throw new Error("Cannot create sealed object directly.");
+            if (secret !== _secret) throw new Error("Cannot create object of sealed class.");
             this.#content = content;
             freeze(this);
         }
         content(_secret : symbol) : M {
-            if (secret !== _secret) throw new Error("Cannot access sealed content directly.");
+            if (secret !== _secret) throw new Error("Cannot access sealed content.");
             return this.#content;
         }
+        toString() : string { return "" + this.#content; }
     }    
     freeze(SealedC);
     return {

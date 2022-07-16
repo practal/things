@@ -69,5 +69,8 @@ export interface Thing<T>  {
      */
     readonly immutable : boolean
 
+    /** Returns a human-readable description of T */
+    print(x : T) : string
+
 }
 
