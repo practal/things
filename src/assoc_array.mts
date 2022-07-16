@@ -10,7 +10,7 @@ insta.beginUnit("things", "assoc_array");
 
 export type AssocArray<Key, Value> = [Key, Value][]
 
-/** A [[MapThing]] for ordered association arrays. */
+/** A [[MapThing]] for (possibly ordered) association arrays. */
 export function AssocArrayT<Key, Value>(keyT : Thing<Key>, valueT : Thing<Value>, ordered : boolean) : MapThing<[Key, Value][], Key, Value> {
     const thing : MapThing<[Key, Value][], Key, Value> = {
         keyT: keyT,
