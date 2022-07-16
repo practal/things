@@ -1,5 +1,5 @@
 import {Thing} from "./thing.mjs";
-import {bigintHashSeed, combineHashes, falseHash, freeze, functionHashSeed, objectHashSeed, stringHashSeed, symbolHashSeed, trueHash, undefinedHash} from "./utils.mjs";
+import {bigintHashSeed, combineHashes, falseHash, freeze, functionHashSeed, nullHash, objectHashSeed, stringHashSeed, symbolHashSeed, trueHash, undefinedHash} from "./utils.mjs";
 import {int, NumberT, StringT} from "./primitives.mjs";
 
 /** Provides default [[Thing]] functionality for the type `any`. */
@@ -12,14 +12,30 @@ export const Anything : Thing<any> = {
     equals(x: any, y: any): boolean {
         return x === y || (Number.isNaN(x) && Number.isNaN(y));
     },
-    /** Implemented as `Anything.equals(x, y) ? 0 : (x < y ? -1 : (x > y ? 1 : Number.NaN))`. */
+    /** 
+     * Returns 0 if equals(x, y) is true. Otherwise it compares based on < for each primitive type separately. 
+     * In particular, both `compare("3", 3)` and `compare("3", 4)` will return NaN. 
+     **/
     compare(x: any, y: any): number {
-        return Anything.equals(x, y) ? 0 : (x < y ? -1 : (x > y ? 1 : Number.NaN));
+        const ty = typeof x;
+        if (ty !== typeof y) return Number.NaN;
+        if (Anything.equals(x, y)) return 0;
+        switch (ty) {
+            case "number": 
+            case "boolean": 
+            case "string": 
+            case "bigint": return x < y ? -1 : (x > y ? 1 : Number.NaN);
+            case "undefined": 
+            case "object":
+            case "symbol": 
+            case "function": return Number.NaN;
+        }
     },
     hashOf(x: any): int {
         function hash(seed : int) : int {
             return combineHashes([seed, StringT.hashOf(String(x))]);
         }
+        if (x === null) return nullHash;
         switch (typeof(x)) {
             case "undefined": return undefinedHash;
             case "number": return NumberT.hashOf(x);

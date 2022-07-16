@@ -80,6 +80,7 @@ export const arrayHashSeed = hashOfString("Array");
 export const trueHash = hashOfString("true");
 export const falseHash = hashOfString("false");
 export const undefinedHash = hashOfString("undefined");
+export const nullHash = hashOfString("null");
 export const stringHashSeed = hashOfString("string");
 export const numberHashSeed = hashOfString("number");
 export const intHashSeed = hashOfString("int");
