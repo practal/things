@@ -9,26 +9,7 @@ import { testMapThing } from "./test_map_thing.mjs";
 
 insta.beginUnit("things", "hash_map");
 
-const _secret = Symbol("HashMap secret");
-
 export type HashMap<K, V> = {size : nat, content: Map<int, AssocArray<K, V>>};
-
-/*export class HashMap<Key, Value> {
-
-    #content : Content<Key, Value>
-
-    constructor(secret : symbol) {
-        if (secret !== _secret) throw new Error("A HashMap cannot be directly created.");
-        this.#content = new Map();
-    }
-
-    content(secret : symbol) : Content<Key, Value> {
-        if (secret !== _secret) throw new Error("A HashMap's content cannot be directly accessed.");
-        return this.#content;
-    }
-
-}
-freeze(HashMap);*/
 
 function incSize<C>(map : { size : nat, content: C }) : { size : nat, content: C } {
     map.size++;
