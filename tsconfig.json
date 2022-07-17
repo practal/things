@@ -1,0 +1,25 @@
+{
+    "include": ["src/**/*"],
+
+    "compilerOptions": {
+        "module": "ESNext",
+        "target": "ESNext",
+        "allowJs": true,
+        "checkJs": true,
+        "declaration": true,
+        "declarationMap": true,
+        "strict": true, 
+        "outDir": "dist",
+        "moduleResolution": "nodenext"
+      },
+
+    "typedocOptions": {
+        "entryPoints": ["src/index.mts"],
+        "out": "docs",
+        "excludeInternal": true,
+        "excludePrivate": true,
+        "intentionallyNotExported": [],
+        "includeVersion": true,
+        "readme": "none"
+    }    
+}

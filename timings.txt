@@ -1,0 +1,118 @@
+Running tests ...
+---------------------------------------------------------------
+Successfully checked 46533 assertions (in 0.6 s).
+  The test has 9 subtests:
+  1) things/primitives/compare numbers: Successfully checked 6 assertions.
+  2) things/array_thing/compare: Successfully checked 4 assertions.
+  3) things/array_thing/clone: Successfully checked 3 assertions.
+  4) things/assoc_array/testMapThing(ordered: true): Successfully checked 8234 assertions (in 254 ms).
+    The test has 4 subtests:
+    1) things/assoc_array/putIfUndefined&size: Successfully checked 5626 assertions (in 112 ms).
+    2) things/assoc_array/remove: Successfully checked 2001 assertions (in 119 ms).
+    3) things/assoc_array/order: Successfully checked 599 assertions.
+    4) things/assoc_array/clone&compare: Successfully checked 5 assertions.
+  5) things/assoc_array/testMapThing(ordered: false): Successfully checked 7658 assertions (in 270 ms).
+    The test has 4 subtests:
+    1) things/assoc_array/putIfUndefined&size: Successfully checked 5648 assertions (in 94 ms).
+    2) things/assoc_array/remove: Successfully checked 2001 assertions (in 107 ms).
+    3) things/assoc_array/order: Successfully checked 1 assertion.
+    4) things/assoc_array/clone&compare: Successfully checked 5 assertions (in 26 ms).
+  6) things/hash_map/HashMap/testMapThing(ordered: false): Successfully checked 7648 assertions (in 10 ms).
+    The test has 4 subtests:
+    1) things/hash_map/putIfUndefined&size: Successfully checked 5638 assertions (in 2 ms).
+    2) things/hash_map/remove: Successfully checked 2001 assertions.
+    3) things/hash_map/order: Successfully checked 1 assertion.
+    4) things/hash_map/clone&compare: Successfully checked 5 assertions (in 3 ms).
+  7) things/hash_map/Sealed HashMap/testMapThing(ordered: false): Successfully checked 7666 assertions (in 11 ms).
+    The test has 4 subtests:
+    1) things/hash_map/putIfUndefined&size: Successfully checked 5656 assertions (in 4 ms).
+    2) things/hash_map/remove: Successfully checked 2001 assertions (in 2 ms).
+    3) things/hash_map/order: Successfully checked 1 assertion.
+    4) things/hash_map/clone&compare: Successfully checked 5 assertions (in 3 ms).
+  8) things/native_map_thing/testMapThing(ordered: false): Successfully checked 7660 assertions (in 3 ms).
+    The test has 4 subtests:
+    1) things/native_map_thing/putIfUndefined&size: Successfully checked 5650 assertions.
+    2) things/native_map_thing/remove: Successfully checked 2001 assertions.
+    3) things/native_map_thing/order: Successfully checked 1 assertion.
+    4) things/native_map_thing/clone&compare: Successfully checked 5 assertions (in 2 ms).
+  9) things/native_map_thing/testMapThing(ordered: false): Successfully checked 7654 assertions (in 3 ms).
+    The test has 4 subtests:
+    1) things/native_map_thing/putIfUndefined&size: Successfully checked 5644 assertions.
+    2) things/native_map_thing/remove: Successfully checked 2001 assertions.
+    3) things/native_map_thing/order: Successfully checked 1 assertion.
+    4) things/native_map_thing/clone&compare: Successfully checked 5 assertions.
+---------------------------------------------------------------
+Successfully checked 46533 assertions (in 0.6 s).
+
+
+
+
+Running tests ...
+---------------------------------------------------------------
+Successfully checked 78303 assertions (in 1.4 s).
+  The test has 13 subtests:
+  1) things/primitives/compare numbers: Successfully checked 6 assertions.
+  2) things/array/compare: Successfully checked 4 assertions.
+  3) things/array/clone: Successfully checked 3 assertions.
+  4) things/assoc_array/assoc array data/testMapThing(ordered: true): Successfully checked 8257 assertions (in 234 ms).
+    The test has 4 subtests:
+    1) things/assoc_array/putIfUndefined&size: Successfully checked 5646 assertions (in 97 ms).
+    2) things/assoc_array/remove: Successfully checked 2001 assertions (in 108 ms).
+    3) things/assoc_array/order: Successfully checked 602 assertions.
+    4) things/assoc_array/clone&compare: Successfully checked 5 assertions.
+  5) things/assoc_array/assoc array data/testMapThing(ordered: false): Successfully checked 7631 assertions (in 249 ms).
+    The test has 4 subtests:
+    1) things/assoc_array/putIfUndefined&size: Successfully checked 5621 assertions (in 84 ms).
+    2) things/assoc_array/remove: Successfully checked 2001 assertions (in 100 ms).
+    3) things/assoc_array/order: Successfully checked 1 assertion.
+    4) things/assoc_array/clone&compare: Successfully checked 5 assertions (in 25 ms).
+  6) things/assoc_array/sealed assoc array/testMapThing(ordered: true): Successfully checked 8256 assertions (in 219 ms).
+    The test has 4 subtests:
+    1) things/assoc_array/putIfUndefined&size: Successfully checked 5617 assertions (in 90 ms).
+    2) things/assoc_array/remove: Successfully checked 2001 assertions (in 105 ms).
+    3) things/assoc_array/order: Successfully checked 630 assertions.
+    4) things/assoc_array/clone&compare: Successfully checked 5 assertions (in 2 ms).
+  7) things/assoc_array/sealed assoc array/testMapThing(ordered: false): Successfully checked 7655 assertions (in 257 ms).
+    The test has 4 subtests:
+    1) things/assoc_array/putIfUndefined&size: Successfully checked 5645 assertions (in 90 ms).
+    2) things/assoc_array/remove: Successfully checked 2001 assertions (in 110 ms).
+    3) things/assoc_array/order: Successfully checked 1 assertion.
+    4) things/assoc_array/clone&compare: Successfully checked 5 assertions (in 25 ms).
+  8) things/hash_map/HashMap/testMapThing(ordered: false): Successfully checked 7659 assertions (in 14 ms).
+    The test has 4 subtests:
+    1) things/hash_map/putIfUndefined&size: Successfully checked 5649 assertions (in 3 ms).
+    2) things/hash_map/remove: Successfully checked 2001 assertions (in 2 ms).
+    3) things/hash_map/order: Successfully checked 1 assertion.
+    4) things/hash_map/clone&compare: Successfully checked 5 assertions (in 5 ms).
+  9) things/hash_map/Sealed HashMap/testMapThing(ordered: false): Successfully checked 7653 assertions (in 14 ms).
+    The test has 4 subtests:
+    1) things/hash_map/putIfUndefined&size: Successfully checked 5643 assertions (in 3 ms).
+    2) things/hash_map/remove: Successfully checked 2001 assertions (in 2 ms).
+    3) things/hash_map/order: Successfully checked 1 assertion.
+    4) things/hash_map/clone&compare: Successfully checked 5 assertions (in 4 ms).
+  10) things/map/testMapThing(ordered: false): Successfully checked 7644 assertions (in 4 ms).
+    The test has 4 subtests:
+    1) things/map/putIfUndefined&size: Successfully checked 5634 assertions.
+    2) things/map/remove: Successfully checked 2001 assertions.
+    3) things/map/order: Successfully checked 1 assertion.
+    4) things/map/clone&compare: Successfully checked 5 assertions.
+  11) things/native_map/testMapThing(ordered: false): Successfully checked 7654 assertions (in 3 ms).
+    The test has 4 subtests:
+    1) things/native_map/putIfUndefined&size: Successfully checked 5644 assertions.
+    2) things/native_map/remove: Successfully checked 2001 assertions.
+    3) things/native_map/order: Successfully checked 1 assertion.
+    4) things/native_map/clone&compare: Successfully checked 5 assertions.
+  12) things/open_assoc_array/testMapThing(ordered: true): Successfully checked 8238 assertions (in 213 ms).
+    The test has 4 subtests:
+    1) things/open_assoc_array/putIfUndefined&size: Successfully checked 5640 assertions (in 86 ms).
+    2) things/open_assoc_array/remove: Successfully checked 2001 assertions (in 108 ms).
+    3) things/open_assoc_array/order: Successfully checked 589 assertions.
+    4) things/open_assoc_array/clone&compare: Successfully checked 5 assertions (in 2 ms).
+  13) things/open_assoc_array/testMapThing(ordered: false): Successfully checked 7643 assertions (in 229 ms).
+    The test has 4 subtests:
+    1) things/open_assoc_array/putIfUndefined&size: Successfully checked 5633 assertions (in 79 ms).
+    2) things/open_assoc_array/remove: Successfully checked 2001 assertions (in 89 ms).
+    3) things/open_assoc_array/order: Successfully checked 1 assertion.
+    4) things/open_assoc_array/clone&compare: Successfully checked 5 assertions (in 23 ms).
+---------------------------------------------------------------
+Successfully checked 78303 assertions (in 1.4 s).

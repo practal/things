@@ -1,0 +1,40 @@
+{
+    "name": "things",
+    "version": "2.0.0",
+    "description": "Data Structures for TypeScript",
+    "main": "dist/index.mjs",
+    "types": "dist/index.d.mts",
+    "type": "module",
+    "files": [
+        "/dist"
+    ],
+    "scripts": {
+        "build": "tsc",
+        "pretest": "rm -rf dist && tsc",
+        "test": "instatest dist",
+        "pretest-browser": "npm run test -- --browser && npx webpack --config=instatest-browser/webpack.config.js",
+        "test-browser": "npx http-server -c-1 -o instatest-browser",
+        "docs": "typedoc",
+        "example": "tsc && node dist/example.mjs"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/practal/things.git"
+    },
+    "keywords": [
+        "Data Structures",
+        "Algorithms"
+    ],
+    "author": "Steven Obua",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/practal/things/issues"
+    },
+    "homepage": "https://practal.github.io/things",
+    "devDependencies": {
+        "typedoc": "^0.22.11"
+    },
+    "dependencies": {
+        "instatest": "^0.2.7"
+    }
+}
