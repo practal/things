@@ -7,7 +7,7 @@
  * 
  * To add *things* to your project:
  * ```shell
- * npm install --save things
+ * npm install things
  * ```
  * 
  * ## Example
