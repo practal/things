@@ -1,6 +1,6 @@
 import { AssocArray, AssocArrayT } from "./assoc_array.mjs";
 import { MapThing } from "./map_thing.mjs";
-import { EmptyMapHash, MapCompare, MapHash, MapPrint, SealedMap, SealedMapT } from "./map_utils.mjs";
+import { EmptyMapHash, MapCheckKeyValue, MapCompare, MapFrom, MapHash, MapPrint, SealedMap, SealedMapT } from "./map_utils.mjs";
 import { int, nat, NumberT } from "./primitives.mjs";
 import { Thing } from "./thing.mjs";
 import { freeze } from "./utils.mjs";
@@ -38,11 +38,7 @@ function HashMapDataT<K, V>(keyT : Thing<K>, valueT : Thing<V>) : MapThing<HashM
             return { size : 0, hash : EmptyMapHash, content : new Map() };
         },
         from(keyValues: Iterable<[K, V]>): HashMapData<K, V> {
-            let map = thing.empty();
-            for (const [k, v] of keyValues) {
-                thing.put(map, k, v).result;
-            }
-            return map;
+            return MapFrom(thing, keyValues);
         },
         size(map: HashMapData<K, V>): nat {
             return map.size;
@@ -67,6 +63,7 @@ function HashMapDataT<K, V>(keyT : Thing<K>, valueT : Thing<V>) : MapThing<HashM
             return arr ? assoc.has(arr, key) : false;
         },
         put(map: HashMapData<K, V>, key: K, value: V): { old: V | undefined; result: HashMapData<K, V>; } {
+            MapCheckKeyValue(thing, key, value);
             if (!keyT.inDomain(key)) throw new Error("Key is not in domain.");
             if (!valueT.inDomain(value)) throw new Error("Value is not in domain.");
             const slot = keyT.hashOf(key);
@@ -86,8 +83,7 @@ function HashMapDataT<K, V>(keyT : Thing<K>, valueT : Thing<V>) : MapThing<HashM
             }
         },
         putIfNew(map: HashMapData<K, V>, key: K, value: V): { old: V | undefined; result: HashMapData<K, V>; } {
-            if (!keyT.inDomain(key)) throw new Error("Key is not in domain.");
-            if (!valueT.inDomain(value)) throw new Error("Value is not in domain.");
+            MapCheckKeyValue(thing, key, value);
             const slot = keyT.hashOf(key);
             let arr = map.content.get(slot);
             if (arr) {

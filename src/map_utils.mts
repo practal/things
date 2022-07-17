@@ -18,6 +18,10 @@ export interface MapThingBase<M, Key, Value> {
 
     has(map : M, key : Key) : boolean   
 
+    empty() : M
+
+    put(map : M, key : Key, value : Value) : { old : Value | undefined, result : M }
+
     ordered : boolean
     
 }
@@ -102,6 +106,14 @@ function MapCompareOrdered<M, K, V>(thing : MapThingBase<M, K, V>, map1 : M, map
 }
 freeze(MapHash);
 
+export function MapFrom<M, K, V>(thing : MapThingBase<M, K, V>, keyValues : Iterable<[K, V]>) : M {
+    let map = thing.empty();
+    for (const [key, value] of keyValues) {
+        map = thing.put(map, key, value).result;
+    }
+    return map;
+}
+
 /**
  * Computes the hash of an empty map.
  */
@@ -116,6 +128,17 @@ export function MapPrint<M, K, V>(thing : MapThingBase<M, K, V>, map : M) : stri
     }());
     return "[" + joined + "]";
 }
+freeze(MapPrint);
+
+function forceToString(x : any) : string {
+    return String(x);
+}
+
+export function MapCheckKeyValue<M, K, V>(thing : MapThingBase<M, K, V>, key : K, value : V) {
+    if (!thing.keyT.inDomain(key)) { throw new Error(`Key '${forceToString(key)}' is not in domain.`); }
+    if (!thing.valueT.inDomain(value)) { throw new Error(`Value '${forceToString(value)}' is not in domain.`); }
+}
+freeze(MapCheckKeyValue);
  
 export function pickRandomKey<M, K, V>(thing : MapThingBase<M, K, V>, map : M) : K | undefined {
     const size = thing.size(map);

@@ -30,3 +30,9 @@ try {
     console.log("" + error);
 }
 console.log(M.print(M.from(N.entries(h))));
+try {
+    N.from([[1.1, 7]]);
+} catch (error) {
+    console.log("" + error);
+}
+
