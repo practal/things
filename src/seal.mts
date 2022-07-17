@@ -19,7 +19,6 @@ export function Seal<T, M>() : Seal<T, M> {
             if (secret !== _secret) throw new Error("Cannot access sealed content.");
             return this.#content;
         }
-        toString() : string { return "" + this.#content; }
     }    
     freeze(SealedC);
     return {

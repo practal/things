@@ -20,6 +20,6 @@
         "excludePrivate": true,
         "intentionallyNotExported": [],
         "includeVersion": true,
-        "readme": "none"
+        "readme": "README.md"
     }    
 }
