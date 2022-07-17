@@ -4,7 +4,7 @@ import { int, NumberT } from "./primitives.mjs";
 import { MapThing } from "./map_thing.mjs";
 import * as insta from "instatest";
 import { testMapThing } from "./test_map_thing.mjs";
-import { EmptyMapHash, MapCompare, MapHash, MapPrint, SealedMap, SealedMapT } from "./map_utils.mjs";
+import { EmptyMapHash, MapCheckKeyValue, MapCompare, MapFrom, MapHash, MapPrint, SealedMap, SealedMapT } from "./map_utils.mjs";
 
 insta.beginUnit("things", "assoc_array");
 
@@ -20,11 +20,7 @@ function AssocArrayDataT<Key, Value>(keyT : Thing<Key>, valueT : Thing<Value>, o
             return {hash : EmptyMapHash, array: []};
         },
         from(keyValues: Iterable<[Key, Value]>): AssocArrayData<Key, Value> {
-            let m = thing.empty();
-            for (const [k, v] of keyValues) {
-                thing.put(m, k, v);
-            }
-            return m;
+            return MapFrom(thing, keyValues);
         },
         size(map: AssocArrayData<Key, Value>): number {
             return map.array.length;
@@ -55,8 +51,7 @@ function AssocArrayDataT<Key, Value>(keyT : Thing<Key>, valueT : Thing<Value>, o
             return false;
         },
         put(map: AssocArrayData<Key, Value>, key: Key, value: Value): { old: Value | undefined; result: AssocArrayData<Key, Value>; } {
-            if (!keyT.inDomain(key)) throw new Error("Key is not in domain.");
-            if (!valueT.inDomain(value)) throw new Error("Value is not in domain.");
+            MapCheckKeyValue(thing, key, value);
             for (const [i, [k, v]] of map.array.entries()) {
                 const c = keyT.compare(k, key);
                 if (c === 0) {
@@ -77,8 +72,7 @@ function AssocArrayDataT<Key, Value>(keyT : Thing<Key>, valueT : Thing<Value>, o
             return {old: undefined, result: map};
         },
         putIfNew(map: AssocArrayData<Key, Value>, key: Key, value: Value): { old: Value | undefined; result: AssocArrayData<Key, Value>; } {
-            if (!keyT.inDomain(key)) throw new Error("Key is not in domain.");
-            if (!valueT.inDomain(value)) throw new Error("Value is not in domain.");
+            MapCheckKeyValue(thing, key, value);
             for (const [i, [k, v]] of map.array.entries()) {
                 const c = keyT.compare(k, key);
                 if (c === 0) {

@@ -46,6 +46,11 @@
  *     console.log("" + error);
  * }
  * console.log(M.print(M.from(N.entries(h))));
+ * try {
+ *     N.from([[1.1, 7]]);
+ * } catch (error) {
+ *     console.log("" + error);
+ * }
  * ```
  * This will generate the following output:
  * ```text
@@ -68,6 +73,7 @@
  * compare(g, h) = -1
  * Error: Cannot access sealed content. 
  * [1 ↦ 7, 3 ↦ 1]
+ * Error: Key '1.1' is not in domain.
  * ```
  * 
  * ## Features

@@ -3,7 +3,7 @@ import { int, NumberT } from "./primitives.mjs";
 import { Thing } from "./thing.mjs";
 import { MapThing } from "./map_thing.mjs";
 import { Anything } from "./anything.mjs";
-import { MapCompare, MapHash, MapPrint } from "./map_utils.mjs";
+import { MapCheckKeyValue, MapCompare, MapFrom, MapHash, MapPrint } from "./map_utils.mjs";
 import * as insta from "instatest";
 import { testMapThing } from "./test_map_thing.mjs";
 
@@ -24,7 +24,7 @@ export function MapT<Key, Value>(keyT : Thing<Key>, valueT : Thing<Value>) : Map
             return new Map<Key, Value>();
         },
         from(keyValues: Iterable<[Key, Value]>): Map<Key, Value> {
-            return new Map(keyValues);
+            return MapFrom(thing, keyValues);
         },
         size(map: Map<Key, Value>): number {
             return map.size;
@@ -39,11 +39,13 @@ export function MapT<Key, Value>(keyT : Thing<Key>, valueT : Thing<Value>) : Map
             return map.has(key);
         },
         put(map: Map<Key, Value>, key: Key, value: Value): { old: Value | undefined; result: Map<Key, Value>; } {
+            MapCheckKeyValue(thing, key, value);
             const old = map.get(key);
             map.set(key, value);
             return {old: old, result: map};
         },
         putIfNew(map: Map<Key, Value>, key: Key, value: Value): { old: Value | undefined; result: Map<Key, Value>; } {
+            MapCheckKeyValue(thing, key, value);
             if (map.has(key)) 
                 return { old: map.get(key), result: map };
             else {
@@ -61,7 +63,7 @@ export function MapT<Key, Value>(keyT : Thing<Key>, valueT : Thing<Value>) : Map
         inDomain(map: Map<Key, Value>): boolean {
             if (!(map instanceof Map)) return false;
             for (const [k, v] of map.entries()) {
-
+                if (!(keyT.inDomain(k) && valueT.inDomain(v))) return false;
             }
             return true;
         },
