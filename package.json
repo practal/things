@@ -1,7 +1,7 @@
 {
     "name": "things",
     "version": "2.0.1",
-    "description": "Data Structures for TypeScript",
+    "description": "Data Structures for modern JavaScript and TypeScript",
     "main": "dist/index.mjs",
     "types": "dist/index.d.mts",
     "type": "module",
