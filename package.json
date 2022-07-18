@@ -1,6 +1,6 @@
 {
     "name": "things",
-    "version": "2.0.4",
+    "version": "2.0.5",
     "description": "Data Structures for modern JavaScript and TypeScript",
     "main": "dist/index.mjs",
     "types": "dist/index.d.mts",
@@ -15,6 +15,7 @@
         "pretest-browser": "npm run test -- --browser && npx webpack --config=instatest-browser/webpack.config.js",
         "test-browser": "npx http-server -c-1 -o instatest-browser",
         "docs": "typedoc",
+        "publish-docs": "git checkout docs && git merge main -m docs && npm run docs && git add docs && git commit -m docs && git push && git checkout main",
         "example": "tsc && node dist/example.mjs"
     },
     "repository": {
