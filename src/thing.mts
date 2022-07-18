@@ -10,7 +10,7 @@ import {int} from "./primitives.mjs";
 export interface Thing<T>  {
 
     /** Specifies the elements of type T that form the *domain*. */
-    inDomain(x : T) : boolean
+    inDomain(x : Readonly<T>) : boolean
 
     /**
      * Tests if x is equivalent to y where both x and y are assumed to be [[inDomain | in the domain]]. 
@@ -19,7 +19,7 @@ export interface Thing<T>  {
      * * *Symmetry*: If equals(x, y) is true, then so is equals(y, x). 
      * * *Transitivity*: If equals(x, y) and equals(y, z) are both true, then so is equals(x, z). 
      */ 
-    equals(x : T, y : T) : boolean
+    equals(x : Readonly<T>, y : Readonly<T>) : boolean
 
     /**
      * Compares x with y and returns how they relate to each other.
@@ -43,7 +43,7 @@ export interface Thing<T>  {
      *   * a positive value if x > y
      *   * NaN if x and y are unrelated 
      */
-    compare(x : T, y : T) : number
+    compare(x : Readonly<T>, y : Readonly<T>) : number
 
     /** 
      * Returns the hash of x. 
@@ -51,7 +51,7 @@ export interface Thing<T>  {
      * The following must be true for all x, y [[inDomain | in the domain]]: 
      * If equals(x, y) is true, then so is hashOf(x) === hashOf(y).
      */
-    hashOf(x : T) : int    
+    hashOf(x : Readonly<T>) : int    
     
     /** 
      * Clones x, so that mutations of x do not affect the clone and vice versa. 
@@ -62,7 +62,7 @@ export interface Thing<T>  {
      * 
      * If T [[isImmutable | is immutable]], then this will just return x.
      */
-    clone(x : T) : T 
+    clone(x : Readonly<T>) : T 
 
     /** 
      * Returns true if it is known that all elements of the [[inDomain | domain]] are immutable, otherwise returns false.
@@ -70,7 +70,7 @@ export interface Thing<T>  {
     readonly immutable : boolean
 
     /** Returns a human-readable description of T */
-    print(x : T) : string
+    print(x : Readonly<T>) : string
 
 }
 

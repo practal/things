@@ -14,20 +14,20 @@ export interface MapThing<M, Key, Value> extends Thing<M> {
     from(keyValues : Iterable<[Key, Value]>) : M
     
     /** The number of keys associated with some value in map. */
-    size(map : M) : nat
+    size(map : Readonly<M>) : nat
  
     /** Iterates over all key-value pairs in map. No guarantees are made concerning the order of these pairs. */
-    entries(map : M): IterableIterator<[Key, Value]> 
+    entries(map : Readonly<M>): IterableIterator<[Key, Value]> 
 
     /** 
      * Returns the value associated with the key in the map. Returns undefined if there is no such associated value. 
      * 
      * Note that a return value of undefined does not necessarily mean that has(map, key) is false: it could also be that the key is associated with undefined. 
      */ 
-    get(map : M, key : Key) : Value | undefined
+    get(map : Readonly<M>, key : Key) : Value | undefined
 
     /** Checks if the key is associated with some value in map. */
-    has(map : M, key : Key) : boolean   
+    has(map : Readonly<M>, key : Key) : boolean   
     
     /** 
      * Assigns value to key in map. If the key was previously associated with some value v, v is returned as old, otherwise old is undefined. 
