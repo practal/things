@@ -52,6 +52,11 @@ export function ArrayT<E>(elemT : Thing<E>) : Thing<Array<E>> {
 }
 freeze(ArrayT);
 
+export function ReadonlyArrayT<E>(elemT : Thing<E>) : Thing<Readonly<Array<E>>> {
+    return ArrayT(elemT);
+}
+freeze(ReadonlyArrayT);
+
 insta.test("compare", () => {
     const a = [3, 4, 5];
     const b = [5, 4, 3];
@@ -65,7 +70,7 @@ insta.test("compare", () => {
 insta.test("clone", () => {
     const a = [14, 3, 25];
     const T = ArrayT(NatT);
-    const b =  T.clone(a);
+    const b = T.clone(a);
     insta.assert(T.equals(a, b));
     a[0] = 7;
     insta.assertFalse(T.equals(a, b));
