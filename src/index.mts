@@ -1,7 +1,7 @@
 export {Thing} from "./thing.mjs";
 export {MapThing} from "./map_thing.mjs";
 export {Anything} from "./anything.mjs";
-export {ArrayT} from "./array.mjs";
+export {ArrayT, ReadonlyArrayT} from "./array.mjs";
 export {AssocArray, AssocArrayT} from "./assoc_array.mjs";
 export {HashMap, HashMapT} from "./hash_map.mjs";
 export {MapT} from "./map.mjs";
