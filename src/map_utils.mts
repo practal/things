@@ -152,44 +152,44 @@ export function pickRandomKey<M, K, V>(things : MapThingsBase<M, K, V>, map : M)
 }
 freeze(pickRandomKey);
 
-export type SealedMap = Sealed<"Map">
+export type MapT<K, V> = Sealed<"Map">
 
-export function SealedMaps<M, K, V>(mapThings : MapThings<M, K, V>) : MapThings<SealedMap, K, V> {
+export function SealedMaps<M, K, V>(mapThings : MapThings<M, K, V>) : MapThings<MapT<K, V>, K, V> {
     const seal : Seal<"Map", M> = Seal();
     const things : MapThings<any, K, V>  = {
         keys: mapThings.keys,
         values: mapThings.values,
-        empty(): SealedMap {
+        empty(): MapT<K, V> {
             return seal.make(mapThings.empty());
         },
-        from(keyValues: Iterable<[K, V]>) : SealedMap {
+        from(keyValues: Iterable<[K, V]>) : MapT<K, V> {
             return seal.make(mapThings.from(keyValues));
         },
-        size(map: SealedMap): nat {
+        size(map: MapT<K, V>): nat {
             return mapThings.size(seal.content(map));
         },
-        entries: function (map: SealedMap): IterableIterator<[K, V]> {
+        entries: function (map: MapT<K, V>): IterableIterator<[K, V]> {
             return mapThings.entries(seal.content(map));
         },
-        get(map: SealedMap, key: K): V | undefined {
+        get(map: MapT<K, V>, key: K): V | undefined {
             return mapThings.get(seal.content(map), key);
         },
-        has(map: SealedMap, key: K): boolean {
+        has(map: MapT<K, V>, key: K): boolean {
             return mapThings.has(seal.content(map), key);
         },
-        put(map: SealedMap, key: K, value: V): { old: V | undefined; result: SealedMap; } {
+        put(map: MapT<K, V>, key: K, value: V): { old: V | undefined; result: MapT<K, V>; } {
             const content = seal.content(map);
             const r = mapThings.put(content, key, value);
             if (r.result === content) return { old: r.old, result: map };
             else return { old: r.old, result: seal.make(r.result) };
         },
-        putIfNew(map: SealedMap, key: K, value: V): { old: V | undefined; result: SealedMap; } {
+        putIfNew(map: MapT<K, V>, key: K, value: V): { old: V | undefined; result: MapT<K, V>; } {
             const content = seal.content(map);
             const r = mapThings.putIfNew(content, key, value);
             if (r.result === content) return { old: r.old, result: map };
             else return { old: r.old, result: seal.make(r.result) };
         },
-        remove(map: SealedMap, key: K): { old: V | undefined; result: SealedMap; } {
+        remove(map: MapT<K, V>, key: K): { old: V | undefined; result: MapT<K, V>; } {
             const content = seal.content(map);
             const r = mapThings.remove(content, key);
             if (r.result === content) return { old: r.old, result: map };
@@ -197,7 +197,7 @@ export function SealedMaps<M, K, V>(mapThings : MapThings<M, K, V>) : MapThings<
         },
         immutable: mapThings.immutable,
         ordered: mapThings.ordered,
-        inDomain(map: SealedMap): boolean {
+        inDomain(map: MapT<K, V>): boolean {
             let m : M
             try {
                 m = seal.content(map);
@@ -206,22 +206,22 @@ export function SealedMaps<M, K, V>(mapThings : MapThings<M, K, V>) : MapThings<
             }
             return mapThings.inDomain(m);
         },
-        equals(map1: SealedMap, map2: SealedMap): boolean {
+        equals(map1: MapT<K, V>, map2: MapT<K, V>): boolean {
             return mapThings.equals(seal.content(map1), seal.content(map2));
         },
-        compare(map1: SealedMap, map2: SealedMap): number {
+        compare(map1: MapT<K, V>, map2: MapT<K, V>): number {
             return mapThings.compare(seal.content(map1), seal.content(map2));
         },
-        hashOf(map: SealedMap): number {
+        hashOf(map: MapT<K, V>): number {
             return mapThings.hashOf(seal.content(map));
         },
-        clone(map: SealedMap): SealedMap {
+        clone(map: MapT<K, V>): MapT<K, V> {
             const content = seal.content(map);
             const cloned = mapThings.clone(content);
             if (cloned === content) return map;
             else return seal.make(cloned);
         }, 
-        print(map: SealedMap): string {
+        print(map: MapT<K, V>): string {
             const content = seal.content(map);
             return mapThings.print(content);
         }

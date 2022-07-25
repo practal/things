@@ -1,6 +1,6 @@
 import { AssocArray, AssocArrays } from "./assoc_arrays.mjs";
 import { MapThings } from "./map_things.mjs";
-import { EmptyMapHash, MapCheckKeyValue, MapCompare, MapFrom, MapHash, MapPrint, SealedMap, SealedMaps } from "./map_utils.mjs";
+import { EmptyMapHash, MapCheckKeyValue, MapCompare, MapFrom, MapHash, MapPrint, MapT, SealedMaps } from "./map_utils.mjs";
 import { int, nat, Numbers } from "./primitives.mjs";
 import { Things } from "./things.mjs";
 import { freeze } from "./utils.mjs";
@@ -145,7 +145,7 @@ function HashMapDataT<K, V>(keyT : Things<K>, valueT : Things<V>) : MapThings<Ha
 }
 freeze(HashMapDataT);
 
-export type HashMap<K, V> = SealedMap
+export type HashMap<K, V> = MapT<K, V>
 
 export function HashMaps<K, V>(keys : Things<K>, values : Things<V>) : MapThings<HashMap<K, V>, K, V> {
     return SealedMaps(HashMapDataT(keys, values));
