@@ -4,7 +4,7 @@ import { int, Numbers } from "./primitives.mjs";
 import { MapThings } from "./map_things.mjs";
 import * as insta from "instatest";
 import { testMapThings } from "./test_map_things.mjs";
-import { EmptyMapHash, MapCheckKeyValue, MapCompare, MapFrom, MapHash, MapPrint, SealedMap, SealedMaps } from "./map_utils.mjs";
+import { EmptyMapHash, MapCheckKeyValue, MapCompare, MapFrom, MapHash, MapPrint, MapT, SealedMaps } from "./map_utils.mjs";
 
 insta.beginUnit("things", "assoc_array");
 
@@ -140,7 +140,7 @@ function AssocArrayDataT<Key, Value>(keys : Things<Key>, values : Things<Value>,
 }
 freeze(AssocArrayDataT);
 
-export type AssocArray<Key, Value> = SealedMap
+export type AssocArray<Key, Value> = MapT<Key, Value>
 
 export function AssocArrays<Key, Value>(keys : Things<Key>, values : Things<Value>, ordered : boolean) : MapThings<AssocArray<Key, Value>, Key, Value> {
     return SealedMaps(AssocArrayDataT(keys, values, ordered));
