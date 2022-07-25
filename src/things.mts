@@ -1,13 +1,13 @@
 import {int} from "./primitives.mjs";
 
 /** 
- * The purpose of `Thing<T>` is to provide standard functionality for the type T:
+ * The purpose of `Things<T>` is to provide standard functionality for the type T:
  * [[equals | *equality*]], [[compare | *order*]], [[hashOf | *hashing*]] and [[clone | *cloning*]].
  * 
- * Often, this functionality is not provided for all elements of T, but just for a subset of it called the [[inDomain | *domain*]] of this Thing.
+ * Often, this functionality is not provided for all elements of T, but just for a subset of it called the [[inDomain | *domain*]] of Things.
  * Furthermore, it is possible to announce to clients of this interface that all elements of the domain are [[immutable | *immutable*]].
  */
-export interface Thing<T>  {
+export interface Things<T>  {
 
     /** Specifies the elements of type T that form the *domain*. */
     inDomain(x : Readonly<T>) : boolean

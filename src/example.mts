@@ -1,7 +1,7 @@
-import {HashMapT, NumberT, NumberDescendingT, NatT} from "./index.mjs";
+import {HashMaps, Numbers, NumbersDescending, Nats} from "./index.mjs";
 console.log("things Example");
 console.log("--------------");
-const M = HashMapT(NumberT, NumberT);
+const M = HashMaps(Numbers, Numbers);
 let h = M.from([[1, 7], [3, 2], [3, 1]]);
 console.log("h = " + M.print(h));
 console.log("get(h, 3) = " + M.get(h, 3));
@@ -17,7 +17,7 @@ M.remove(h, 3);
 console.log(`remove(h, 3): h = ${M.print(h)}`);
 console.log(`equals(h, g) = ${M.equals(h, g)}`);
 console.log(`compare(h, g) = ${M.compare(h, g)}`);
-const N = HashMapT(NatT, NumberDescendingT);
+const N = HashMaps(Nats, NumbersDescending);
 h = N.from([[1, 7], [3, 2], [3, 1]]);
 g = N.from([[3, 5], [1, 7]]);
 console.log("h = " + N.print(h));

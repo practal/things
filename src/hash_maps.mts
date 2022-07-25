@@ -1,21 +1,20 @@
-import { AssocArray, AssocArrayT } from "./assoc_array.mjs";
-import { MapThing } from "./map_thing.mjs";
-import { EmptyMapHash, MapCheckKeyValue, MapCompare, MapFrom, MapHash, MapPrint, SealedMap, SealedMapT } from "./map_utils.mjs";
-import { int, nat, NumberT } from "./primitives.mjs";
-import { Thing } from "./thing.mjs";
+import { AssocArray, AssocArrays } from "./assoc_arrays.mjs";
+import { MapThings } from "./map_things.mjs";
+import { EmptyMapHash, MapCheckKeyValue, MapCompare, MapFrom, MapHash, MapPrint, SealedMap, SealedMaps } from "./map_utils.mjs";
+import { int, nat, Numbers } from "./primitives.mjs";
+import { Things } from "./things.mjs";
 import { freeze } from "./utils.mjs";
 import * as insta from "instatest";
-import { testMapThing } from "./test_map_thing.mjs";
+import { testMapThings } from "./test_map_things.mjs";
 
 insta.beginUnit("things", "hash_map");
 
-export type HashMapData<K, V> = {size : nat, hash : int | null, content: Map<int, AssocArray<K, V>>};
+type HashMapData<K, V> = {size : nat, hash : int | null, content: Map<int, AssocArray<K, V>>};
 
 function keepSize<C>(map : { size : nat, hash : int | null, content: C }) : { size : nat, hash : int | null, content: C } {
     map.hash = null
     return map;
 }
-
 
 function incSize<C>(map : { size : nat, hash : int | null, content: C }) : { size : nat, hash : int | null, content: C } {
     map.size++;
@@ -29,11 +28,11 @@ function decSize<C>(map : { size : nat, hash : int | null, content: C }) : { siz
     return map;
 }
 
-function HashMapDataT<K, V>(keyT : Thing<K>, valueT : Thing<V>) : MapThing<HashMapData<K, V>, K, V> {
-    const assoc = AssocArrayT(keyT, valueT, false);
-    const thing : MapThing<HashMapData<K, V>, K, V> = {
-        keyT: keyT,
-        valueT: valueT,
+function HashMapDataT<K, V>(keyT : Things<K>, valueT : Things<V>) : MapThings<HashMapData<K, V>, K, V> {
+    const assoc = AssocArrays(keyT, valueT, false);
+    const thing : MapThings<HashMapData<K, V>, K, V> = {
+        keys: keyT,
+        values: valueT,
         empty(): HashMapData<K, V> {
             return { size : 0, hash : EmptyMapHash, content : new Map() };
         },
@@ -148,11 +147,11 @@ freeze(HashMapDataT);
 
 export type HashMap<K, V> = SealedMap
 
-export function HashMapT<K, V>(keyT : Thing<K>, valueT : Thing<V>) : MapThing<HashMap<K, V>, K, V> {
-    return SealedMapT(HashMapDataT(keyT, valueT));
+export function HashMaps<K, V>(keys : Things<K>, values : Things<V>) : MapThings<HashMap<K, V>, K, V> {
+    return SealedMaps(HashMapDataT(keys, values));
 }
 
-testMapThing(HashMapT(NumberT, NumberT));
+testMapThings(HashMaps(Numbers, Numbers));
 
 insta.endUnit("things", "hash_map");
 

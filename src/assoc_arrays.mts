@@ -1,21 +1,21 @@
-import { Thing } from "./thing.mjs";
+import { Things } from "./things.mjs";
 import { freeze } from "./utils.mjs";
-import { int, NumberT } from "./primitives.mjs";
-import { MapThing } from "./map_thing.mjs";
+import { int, Numbers } from "./primitives.mjs";
+import { MapThings } from "./map_things.mjs";
 import * as insta from "instatest";
-import { testMapThing } from "./test_map_thing.mjs";
-import { EmptyMapHash, MapCheckKeyValue, MapCompare, MapFrom, MapHash, MapPrint, SealedMap, SealedMapT } from "./map_utils.mjs";
+import { testMapThings } from "./test_map_things.mjs";
+import { EmptyMapHash, MapCheckKeyValue, MapCompare, MapFrom, MapHash, MapPrint, SealedMap, SealedMaps } from "./map_utils.mjs";
 
 insta.beginUnit("things", "assoc_array");
 
 type AssocArrayData<Key, Value> = {hash : int | null, array: [Key, Value][] };
 
 /** A [[MapThing]] for (possibly ordered) association arrays. */
-function AssocArrayDataT<Key, Value>(keyT : Thing<Key>, valueT : Thing<Value>, ordered : boolean) : MapThing<AssocArrayData<Key, Value>, Key, Value> {
-    if (!keyT.immutable) throw new Error("Keys must be immutable.");
-    const thing : MapThing<AssocArrayData<Key, Value>, Key, Value> = {
-        keyT: keyT,
-        valueT: valueT,
+function AssocArrayDataT<Key, Value>(keys : Things<Key>, values : Things<Value>, ordered : boolean) : MapThings<AssocArrayData<Key, Value>, Key, Value> {
+    if (!keys.immutable) throw new Error("Keys must be immutable.");
+    const thing : MapThings<AssocArrayData<Key, Value>, Key, Value> = {
+        keys: keys,
+        values: values,
         empty(): AssocArrayData<Key, Value> {
             return {hash : EmptyMapHash, array: []};
         },
@@ -30,7 +30,7 @@ function AssocArrayDataT<Key, Value>(keyT : Thing<Key>, valueT : Thing<Value>, o
         },
         get(map: AssocArrayData<Key, Value>, key: Key): Value | undefined {
             for (const [k, v] of map.array) {
-                const c = keyT.compare(k, key);
+                const c = keys.compare(k, key);
                 if (c === 0) return v; 
                 if (ordered) {
                     if (c > 0) return undefined; 
@@ -41,7 +41,7 @@ function AssocArrayDataT<Key, Value>(keyT : Thing<Key>, valueT : Thing<Value>, o
         },
         has(map: AssocArrayData<Key, Value>, key: Key): boolean {
             for (const [k, v] of map.array) {
-                const c = keyT.compare(k, key);
+                const c = keys.compare(k, key);
                 if (c === 0) return true; 
                 if (ordered) {
                     if (c > 0) return false; 
@@ -53,7 +53,7 @@ function AssocArrayDataT<Key, Value>(keyT : Thing<Key>, valueT : Thing<Value>, o
         put(map: AssocArrayData<Key, Value>, key: Key, value: Value): { old: Value | undefined; result: AssocArrayData<Key, Value>; } {
             MapCheckKeyValue(thing, key, value);
             for (const [i, [k, v]] of map.array.entries()) {
-                const c = keyT.compare(k, key);
+                const c = keys.compare(k, key);
                 if (c === 0) {
                     map.array[i] = [key, value];
                     map.hash = null;
@@ -74,7 +74,7 @@ function AssocArrayDataT<Key, Value>(keyT : Thing<Key>, valueT : Thing<Value>, o
         putIfNew(map: AssocArrayData<Key, Value>, key: Key, value: Value): { old: Value | undefined; result: AssocArrayData<Key, Value>; } {
             MapCheckKeyValue(thing, key, value);
             for (const [i, [k, v]] of map.array.entries()) {
-                const c = keyT.compare(k, key);
+                const c = keys.compare(k, key);
                 if (c === 0) {
                     return {old: v, result: map};                    
                 } 
@@ -92,7 +92,7 @@ function AssocArrayDataT<Key, Value>(keyT : Thing<Key>, valueT : Thing<Value>, o
         },
         remove(map: AssocArrayData<Key, Value>, key: Key): { old: Value | undefined; result: AssocArrayData<Key, Value>; } {
             for (const [i, [k, v]] of map.array.entries()) {
-                const c = keyT.compare(k, key);
+                const c = keys.compare(k, key);
                 if (c === 0) {
                     map.array.splice(i, 1);
                     map.hash = null;
@@ -125,10 +125,10 @@ function AssocArrayDataT<Key, Value>(keyT : Thing<Key>, valueT : Thing<Value>, o
             return map.hash;
         },
         clone(map: AssocArrayData<Key, Value>): AssocArrayData<Key, Value> {
-            if (keyT.immutable && valueT.immutable) return {hash: map.hash, array: [...map.array]};
+            if (keys.immutable && values.immutable) return {hash: map.hash, array: [...map.array]};
             let brr : [Key, Value][] = [];
             for (const [k, v] of map.array) {
-                brr.push([keyT.clone(k), valueT.clone(v)]);
+                brr.push([keys.clone(k), values.clone(v)]);
             }
             return {hash: map.hash, array: brr};
         },
@@ -142,12 +142,12 @@ freeze(AssocArrayDataT);
 
 export type AssocArray<Key, Value> = SealedMap
 
-export function AssocArrayT<Key, Value>(keyT : Thing<Key>, valueT : Thing<Value>, ordered : boolean) : MapThing<AssocArray<Key, Value>, Key, Value> {
-    return SealedMapT(AssocArrayDataT(keyT, valueT, ordered));
+export function AssocArrays<Key, Value>(keys : Things<Key>, values : Things<Value>, ordered : boolean) : MapThings<AssocArray<Key, Value>, Key, Value> {
+    return SealedMaps(AssocArrayDataT(keys, values, ordered));
 }
-freeze(AssocArrayT);
+freeze(AssocArrays);
 
-testMapThing(AssocArrayT(NumberT, NumberT, true));
-testMapThing(AssocArrayT(NumberT, NumberT, false));
+testMapThings(AssocArrays(Numbers, Numbers, true));
+testMapThings(AssocArrays(Numbers, Numbers, false));
 
 insta.endUnit("things", "assoc_array");
