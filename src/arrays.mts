@@ -1,17 +1,17 @@
-import {Thing} from "./thing.mjs";
+import {Things} from "./things.mjs";
 import {arrayHashSeed, combineHashes, freeze, joinStrings} from "./utils.mjs";
-import {int, NatT, StringT} from "./primitives.mjs";
+import {int, Nats, Strings} from "./primitives.mjs";
 import * as insta from "instatest";
 
 insta.beginUnit("things", "array");
 
 /** Views any array as a thing, given its elements are viewed as things. */
-export function ArrayT<E>(elemT : Thing<E>) : Thing<Array<E>> {
-    const thing : Thing<Array<E>> = {
+export function Arrays<E>(elems : Things<E>) : Things<Array<E>> {
+    const thing : Things<Array<E>> = {
         inDomain(arr: E[]): boolean {
             if (!(arr instanceof Array)) return false;
             for (const e of arr) {
-                if (!elemT.inDomain(e)) return false;
+                if (!elems.inDomain(e)) return false;
             }
             return true;
         },
@@ -20,10 +20,10 @@ export function ArrayT<E>(elemT : Thing<E>) : Thing<Array<E>> {
         },
         compare(x: E[], y: E[]): number {
             const len = x.length;
-            let c = NatT.compare(len, y.length);
+            let c = Nats.compare(len, y.length);
             if (c !== 0) return c;
             for (let i=0; i<len; i++) {
-                c = elemT.compare(x[i], y[i]);
+                c = elems.compare(x[i], y[i]);
                 if (c !== 0) return c;
             }
             return 0;
@@ -32,35 +32,35 @@ export function ArrayT<E>(elemT : Thing<E>) : Thing<Array<E>> {
             return combineHashes(function*() { 
                 yield arrayHashSeed;
                 yield arr.length;
-                for (const e of arr) yield elemT.hashOf(e);
+                for (const e of arr) yield elems.hashOf(e);
             }()); 
         },
         clone(arr: E[]): E[] {
-            if (elemT.immutable) return [...arr];
+            if (elems.immutable) return [...arr];
             const brr: E[] = [];
             for (const e of arr) {
-                brr.push(elemT.clone(e));
+                brr.push(elems.clone(e));
             }
             return brr;
         },
         immutable: false,
-        print(arr: E[]): string { return `[${ joinStrings(", ", arr.map(elemT.print)) }]` }
+        print(arr: E[]): string { return `[${ joinStrings(", ", arr.map(elems.print)) }]` }
 
     };
     freeze(thing);
     return thing;
 }
-freeze(ArrayT);
+freeze(Arrays);
 
-export function ReadonlyArrayT<E>(elemT : Thing<E>) : Thing<Readonly<Array<E>>> {
-    return ArrayT(elemT);
+export function ReadonlyArrays<E>(elems : Things<E>) : Things<Readonly<Array<E>>> {
+    return Arrays(elems);
 }
-freeze(ReadonlyArrayT);
+freeze(ReadonlyArrays);
 
 insta.test("compare", () => {
     const a = [3, 4, 5];
     const b = [5, 4, 3];
-    const T = ArrayT(NatT);
+    const T = Arrays(Nats);
     insta.assert(T.compare(a, b) < 0);
     insta.assert(T.compare(b, a) > 0);
     insta.assert(T.compare(a, b.reverse()) === 0);
@@ -69,7 +69,7 @@ insta.test("compare", () => {
 
 insta.test("clone", () => {
     const a = [14, 3, 25];
-    const T = ArrayT(NatT);
+    const T = Arrays(Nats);
     const b = T.clone(a);
     insta.assert(T.equals(a, b));
     a[0] = 7;

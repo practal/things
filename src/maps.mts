@@ -1,25 +1,25 @@
 import { freeze } from "./utils.mjs";
-import { int, NumberT } from "./primitives.mjs";
-import { Thing } from "./thing.mjs";
-import { MapThing } from "./map_thing.mjs";
+import { int, Numbers } from "./primitives.mjs";
+import { Things } from "./things.mjs";
+import { MapThings } from "./map_things.mjs";
 import { Anything } from "./anything.mjs";
 import { MapCheckKeyValue, MapCompare, MapFrom, MapHash, MapPrint } from "./map_utils.mjs";
 import * as insta from "instatest";
-import { testMapThing } from "./test_map_thing.mjs";
+import { testMapThings } from "./test_map_things.mjs";
 
 insta.beginUnit("things", "map");
 
 /** 
- * Views a Map as as [[MapThing | map thing]] as long as keys and values are viewed as things too.
- * This only is well-defined if the equality of keys coincides with equality of [[Anything]] on the domain of keyT. 
- * This is for example the case if keyT is [[Anything]], [[NumberT]], [[IntT]], [[NatT]] or [[StringT]]. 
- * If you cannot guarantee for this to be the case, use [[HashMapT]] instead.
+ * Views maps as as [[MapThings | map things]] as long as keys and values are viewed as things too.
+ * This only is well-defined if the equality of keys coincides with equality of [[Anything]] on the domain of keys. 
+ * This is for example the case if keys is [[Anything]], [[NumberT]], [[IntT]], [[NatT]] or [[StringT]]. 
+ * If you cannot guarantee for this to be the case, use [[HashMaps]] instead.
  */ 
-export function MapT<Key, Value>(keyT : Thing<Key>, valueT : Thing<Value>) : MapThing<Map<Key, Value>, Key, Value> {
-    if (!keyT.immutable) throw new Error("Keys must be immutable.");
-    const thing : MapThing<Map<Key, Value>, Key, Value> = {
-        keyT: keyT,
-        valueT: valueT,
+export function Maps<Key, Value>(keys : Things<Key>, values : Things<Value>) : MapThings<Map<Key, Value>, Key, Value> {
+    if (!keys.immutable) throw new Error("Keys must be immutable.");
+    const thing : MapThings<Map<Key, Value>, Key, Value> = {
+        keys: keys,
+        values: values,
         empty(): Map<Key, Value> {
             return new Map<Key, Value>();
         },
@@ -63,7 +63,7 @@ export function MapT<Key, Value>(keyT : Thing<Key>, valueT : Thing<Value>) : Map
         inDomain(map: Map<Key, Value>): boolean {
             if (!(map instanceof Map)) return false;
             for (const [k, v] of map.entries()) {
-                if (!(keyT.inDomain(k) && valueT.inDomain(v))) return false;
+                if (!(keys.inDomain(k) && values.inDomain(v))) return false;
             }
             return true;
         },
@@ -77,10 +77,10 @@ export function MapT<Key, Value>(keyT : Thing<Key>, valueT : Thing<Value>) : Map
             return MapHash(thing, map);
         },
         clone(map: Map<Key, Value>): Map<Key, Value> {
-            if (keyT.immutable && valueT.immutable) return new Map(map.entries());
+            if (keys.immutable && values.immutable) return new Map(map.entries());
             let result: Map<Key, Value> = new Map();
             for (const [k, v] of map.entries()) {
-                result.set(keyT.clone(k), valueT.clone(v));
+                result.set(keys.clone(k), values.clone(v));
             }
             return result;
         },
@@ -91,8 +91,8 @@ export function MapT<Key, Value>(keyT : Thing<Key>, valueT : Thing<Value>) : Map
     freeze(thing);
     return thing;
 }
-freeze(MapT);
+freeze(Maps);
 
-testMapThing(MapT(NumberT, NumberT));
+testMapThings(Maps(Numbers, Numbers));
 
 insta.endUnit("things", "map");

@@ -1,9 +1,9 @@
-import { NumberT } from "./primitives.mjs";
-import { Thing } from "./thing.mjs";
+import { Numbers } from "./primitives.mjs";
+import { Things } from "./things.mjs";
 import { freeze } from "./utils.mjs";
 
-export function ReverseOrderT<T>(thing : Thing<T>) : Thing<T> {
-    const reversed : Thing<T> = {
+export function ReverseOrder<T>(thing : Things<T>) : Things<T> {
+    const reversed : Things<T> = {
         inDomain(x: T): boolean {
             return thing.inDomain(x);
         },
@@ -27,6 +27,6 @@ export function ReverseOrderT<T>(thing : Thing<T>) : Thing<T> {
     freeze(reversed);
     return reversed;
 }
-freeze(ReverseOrderT);
+freeze(ReverseOrder);
 
-export const NumberDescendingT = ReverseOrderT(NumberT);
+export const NumbersDescending = ReverseOrder(Numbers);

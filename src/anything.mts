@@ -1,9 +1,9 @@
-import {Thing} from "./thing.mjs";
+import {Things} from "./things.mjs";
 import {bigintHashSeed, combineHashes, falseHash, freeze, functionHashSeed, nullHash, objectHashSeed, stringHashSeed, symbolHashSeed, trueHash, undefinedHash} from "./utils.mjs";
-import {int, NumberT, StringT} from "./primitives.mjs";
+import {int, Numbers, Strings} from "./primitives.mjs";
 
-/** Provides default [[Thing]] functionality for the type `any`. */
-export const Anything : Thing<any> = {
+/** Provides default [[Things]] functionality for the type `any`. */
+export const Anything : Things<any> = {
     /** Always returns true. */
     inDomain(x: any): boolean {
         return true;
@@ -35,13 +35,13 @@ export const Anything : Thing<any> = {
     },
     hashOf(x: any): int {
         function hash(seed: int): int {
-            return combineHashes([seed, StringT.hashOf(String(x))]);
+            return combineHashes([seed, Strings.hashOf(String(x))]);
         }
         if (x === null)
             return nullHash;
         switch (typeof (x)) {
             case "undefined": return undefinedHash;
-            case "number": return NumberT.hashOf(x);
+            case "number": return Numbers.hashOf(x);
             case "boolean": return x ? trueHash : falseHash;
             case "string": return hash(stringHashSeed);
             case "object": return hash(objectHashSeed);
