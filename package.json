@@ -1,7 +1,7 @@
 {
   "name": "hybrid-module-template",
-  "version": "4.0.0",
-  "description": "Template for creating a hybrid ESM/CommonJS typescript module.",
+  "version": "4.0.1",
+  "description": "Data structures and utilities for TypeScript.",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "type": "module",
@@ -17,14 +17,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/phlegmaticprogrammer/hybrid-module-template.git"
+    "url": "git+https://github.com/practal/things.git"
   },
   "author": "Steven Obua",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/phlegmaticprogrammer/hybrid-module-template/issues"
+    "url": "https://github.com/practal/things/issues"
   },
-  "homepage": "https://github.com/phlegmaticprogrammer/hybrid-module-template#readme",
+  "homepage": "https://github.com/practal/things#readme",
   "devDependencies": {
     "@types/node": "^18.15.11",
     "typescript": "^5.0.3"
