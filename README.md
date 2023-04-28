@@ -1,2 +1,3 @@
-# hybrid-module-template
-Template repository for a hybrid ESM / CommonJS module.
+# things
+
+Data structures and utilities for TypeScript.
