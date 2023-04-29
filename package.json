@@ -1,5 +1,5 @@
 {
-  "name": "hybrid-module-template",
+  "name": "things",
   "version": "4.0.1",
   "description": "Data structures and utilities for TypeScript.",
   "main": "dist/cjs/index.js",
