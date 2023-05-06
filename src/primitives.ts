@@ -78,6 +78,12 @@ function hashString(x : string) : int {
 export const string = mkOrderAndHash("string", 
     x => typeof x === "string", compareString, hashString);
 
+export const stringNFC = mkOrderAndHash<string>("stringNFC", 
+    s => string.is(s), 
+    (x, y) => string.compare(x.normalize("NFC"), y.normalize("NFC")),
+    x => string.hash(x.normalize("NFC")),
+    x => string.display(x.normalize("NFC")));
+
 const hashTrue = string.hash("true");
 const hashFalse = string.hash("false");
 export const boolean : Hash<boolean> & Order<boolean> = mkOrderAndHash("boolean",
