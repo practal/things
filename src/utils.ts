@@ -1,4 +1,3 @@
-import { performance } from "perf_hooks";
 import { debug } from "./debug.js";
 import { AssertionFailed } from "./test.js";
 
