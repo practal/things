@@ -2,7 +2,7 @@ import { int } from "./primitives.js";
 import { assertNeverT } from "./test.js";
 import { freeze } from "./utils.js";
 
-export const enum Relation {
+export enum Relation {
     UNRELATED,
     LESS,
     EQUAL,
