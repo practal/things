@@ -1,6 +1,6 @@
 {
   "name": "things",
-  "version": "4.2.2",
+  "version": "4.3.0",
   "description": "Data structures and utilities for TypeScript.",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
