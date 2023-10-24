@@ -89,8 +89,10 @@ export function assertFalseT(condition : boolean) : asserts condition is false  
 export function assertCrashT(run : () => any) : void {
     try {
         run();
-        throw new AssertionFailed();
-    } catch {}
+    } catch {
+        return;
+    }
+    throw new AssertionFailed();
 }
 
 export function assertNeverT(value : never) : never {
