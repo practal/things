@@ -73,19 +73,6 @@ export function Test(test : Test, descr? : string) {
 }
 freeze(Test);
 
-export function CrashTest(test : () => void, descr? : string) {
-    function t() {
-        try {
-            test();
-        } catch {
-            return;
-        }
-        assertT(false);
-    }
-    Test(t, descr);
-}
-freeze(CrashTest);
-
 export function MissTest(test : Test, descr? : string) {
     missed += 1;
 }
@@ -97,6 +84,13 @@ export function assertT(condition : any) : asserts condition is true {
 
 export function assertFalseT(condition : boolean) : asserts condition is false  {
     if (condition !== false) throw new AssertionFailed();
+}
+
+export function assertCrashT(run : () => any) : void {
+    try {
+        run();
+        throw new AssertionFailed();
+    } catch {}
 }
 
 export function assertNeverT(value : never) : never {
