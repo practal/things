@@ -77,8 +77,9 @@ export function CrashTest(test : () => void, descr? : string) {
     function t() {
         try {
             test();
+        } catch {
             return;
-        } catch {}
+        }
         assertT(false);
     }
     Test(t, descr);
