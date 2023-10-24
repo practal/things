@@ -73,6 +73,17 @@ export function Test(test : Test, descr? : string) {
 }
 freeze(Test);
 
+export function CrashTest(test : () => void, descr? : string) {
+    function t() {
+        try {
+            test();
+            assertT(false);
+        } catch {}
+    }
+    Test(t, descr);
+}
+freeze(CrashTest);
+
 export function MissTest(test : Test, descr? : string) {
     missed += 1;
 }
