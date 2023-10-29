@@ -84,3 +84,7 @@ export function assertFalse(condition : boolean) : asserts condition is false  {
 export function assertNever(value : never) : never {
     throw new AssertionFailed("unexpected value '" + value + "'");
 }
+
+export function assertIsDefined<T>(value : T) : asserts value is NonNullable<T> {
+    if (value === undefined || value === null) throw new AssertionFailed("undefined value");
+}
