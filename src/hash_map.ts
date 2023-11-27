@@ -3,8 +3,6 @@ import { combineHashes, combineHashesOrderInvariant, int, nat, string } from "./
 import { Hash } from "./things.js";
 import { freeze } from "./utils.js";
 
-
-
 export class HashMap<K, V> implements Iterable<[K, V]>{
 
     #hash : Hash<K>
