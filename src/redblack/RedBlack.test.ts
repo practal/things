@@ -4,8 +4,6 @@ import {RedBlackSet} from "./RedBlackSet.js";
 import { RedBlackMap } from "./RedBlackMap.js";
 
 function assertRB(tree : RB.RedBlackTree<nat>) {
-    //console.log("-------------");
-    //printRB(tree);
 
     function height(tree : RB.RedBlackTree<nat>) : nat {
         if (RB.isEmpty(tree)) return 1;
@@ -24,23 +22,7 @@ function assertRB(tree : RB.RedBlackTree<nat>) {
     height(tree);
 }
 
-function printRB(tree : RB.RedBlackTree<nat>) {
-
-    function print(indent : string, tree : RB.RedBlackTree<nat>) {
-        if (RB.isEmpty(tree)) console.log(indent + "*");
-        else {
-            const color = RB.isRed(tree) ? "Red" : "Black";
-            console.log(indent + color + " " + tree.elem);
-            print(indent + "  ", tree.left);
-            print(indent + "  ", tree.right);
-        }
-    }
-
-    print("", tree);
-}
-
 function assertEqualSetTree(A : Set<nat>, B : RB.RedBlackTree<nat>) {
-    //console.log("number of elements: " + A.size);
     const sorted = [...RB.iterateElements(B)];
     assertT(A.size === sorted.length);
     let last = -1;

@@ -1,8 +1,6 @@
-import { Order, freeze, nat } from "../index.js"
+import { Defined, Order, freeze, nat } from "../index.js"
 import { RedBlackTree, deleteElement, empty, findEqualElement, findMaximumElement, findMinimumElement, 
     insertElement, isElementOf, iterateElements } from "./RedBlackTree.js"
-
-export type Defined = Exclude<any, undefined>
 
 export interface RedBlackSet<E extends Defined> extends Iterable<E> {
     

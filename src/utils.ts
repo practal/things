@@ -90,3 +90,4 @@ export function assertIsDefined<T>(value : T) : asserts value is NonNullable<T> 
 }
 
 export type NotUndefined<T> = T extends undefined ? never : T;
+export type Defined = Exclude<any, undefined>;
