@@ -1,10 +1,10 @@
-import { Defined, Order, freeze, nat } from "../index.js"
+import { Defined, Compare, freeze, nat } from "../index.js"
 import { RedBlackTree, deleteElement, empty, findEqualElement, findMaximumElement, findMinimumElement, 
     insertElement, isElementOf, iterateElements } from "./RedBlackTree.js"
 
 export interface RedBlackSet<E extends Defined> extends Iterable<E> {
     
-    order : Order<E>
+    order : Compare<E>
 
     tree : RedBlackTree<E>    
 
@@ -38,11 +38,11 @@ export interface RedBlackSet<E extends Defined> extends Iterable<E> {
 
 class RedBlackSetImpl<E extends Defined> implements RedBlackSet<E> {
 
-    order : Order<E>
+    order : Compare<E>
     tree : RedBlackTree<E>
     size : number
 
-    constructor(order : Order<E>, tree : RedBlackTree<E>, size : number) {
+    constructor(order : Compare<E>, tree : RedBlackTree<E>, size : number) {
         this.order = order;
         this.tree = tree;
         this.size = size;
@@ -126,7 +126,7 @@ class RedBlackSetImpl<E extends Defined> implements RedBlackSet<E> {
 }
 freeze(RedBlackSetImpl);
 
-export function RedBlackSet<E extends Defined>(order : Order<E>, elems? : Iterable<E>) : RedBlackSet<E> {
+export function RedBlackSet<E extends Defined>(order : Compare<E>, elems? : Iterable<E>) : RedBlackSet<E> {
     const rb = new RedBlackSetImpl(order, empty(), 0);
     if (elems === undefined) return rb;
     else return rb.insertMultiple(elems);

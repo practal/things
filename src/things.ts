@@ -39,7 +39,13 @@ export interface Equality<T> extends Thing<T> {
 
 }
 
-export interface Order<T> extends Equality<T> {
+export interface Compare<T> {
+
+    compare(x : T, y : T) : Relation
+
+}
+
+export interface Order<T> extends Equality<T>, Compare<T> {
 
     /** 
      * Here we can assume that `is(x)` and `is(y)` both hold. 

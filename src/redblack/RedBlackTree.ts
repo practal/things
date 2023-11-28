@@ -1,4 +1,4 @@
-import { Order, Relation, assertNever, freeze, nat } from "../index.js";
+import { Compare, Relation, assertNever, freeze, nat } from "../index.js";
 
 export type RedBlackTree<E> = Red<E> | Black<E> | null;
 
@@ -44,7 +44,7 @@ export function empty<E>() : RedBlackTree<E> {
     return null;
 }
 
-export function isElementOf<E>(order : Order<E>, x : E, tree : RedBlackTree<E>) : boolean {
+export function isElementOf<E>(order : Compare<E>, x : E, tree : RedBlackTree<E>) : boolean {
 
     function member(tree : RedBlackTree<E>) : boolean {
         if (isEmpty(tree)) return false;
@@ -61,7 +61,7 @@ export function isElementOf<E>(order : Order<E>, x : E, tree : RedBlackTree<E>) 
     return member(tree);
 }
 
-export function findEqualElement<E>(order : Order<E>, x : E, tree : RedBlackTree<E>) : E | undefined {
+export function findEqualElement<E>(order : Compare<E>, x : E, tree : RedBlackTree<E>) : E | undefined {
 
     function find(tree : RedBlackTree<E>) : E | undefined {
         if (isEmpty(tree)) return undefined;
@@ -169,7 +169,7 @@ function balance<E>(left : RedBlackTree<E>, elem : E, right : RedBlackTree<E>) :
 /**
  * Inserts a new element into the tree. Returns undefined if the element is already part of the tree.
  */
-export function insertElement<E>(order : Order<E>, x : E, tree : RedBlackTree<E>) : { result : RedBlackTree<E>, previous : E | undefined } {
+export function insertElement<E>(order : Compare<E>, x : E, tree : RedBlackTree<E>) : { result : RedBlackTree<E>, previous : E | undefined } {
 
     let previous : E | undefined = undefined;
 
@@ -206,7 +206,7 @@ export function insertElement<E>(order : Order<E>, x : E, tree : RedBlackTree<E>
 /**
  * Deletes an existing element from the tree. Returns undefined if the element is already part of the tree.
  */
-export function deleteElement<E>(order : Order<E>, x : E, tree : RedBlackTree<E>) : { result : RedBlackTree<E>, deleted : E | undefined }
+export function deleteElement<E>(order : Compare<E>, x : E, tree : RedBlackTree<E>) : { result : RedBlackTree<E>, deleted : E | undefined }
 {
 
     let deleted : E | undefined = undefined;

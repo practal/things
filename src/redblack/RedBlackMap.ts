@@ -1,4 +1,4 @@
-import { Order, Relation, assertTrue, freeze, nat } from "../index.js";
+import { Compare, Relation, assertTrue, freeze, nat } from "../index.js";
 import { RedBlackSet } from "./RedBlackSet.js"
 
 export interface RedBlackMap<K, V> extends Iterable<[K, V]> {
@@ -35,27 +35,11 @@ function* promoteMultiple<K, V>(keys : Iterable<K>) : Generator<[K, V], void, vo
     for (const key of keys) yield promote(key); 
 }
 
-export function promoteOrder<K>(key : Order<K>) : Order<[K, any]> {
-    function is(value: any): value is [K, any] {
-        if (!Array.isArray(value)) return false;
-        if (value.length !== 2) return false;
-        return key.is(value[0]);
-    }
-    const order : Order<[K, any]> = {
+export function promoteCompare<K>(key : Compare<K>) : Compare<[K, any]> {
+    const order : Compare<[K, any]> = {
         compare: function (x: [K, any], y: [K, any]): Relation {
             return key.compare(x[0], y[0]);
         },
-        equal: function (x: [K, any], y: [K, any]): boolean {
-            return key.equal(x[0], y[0]);
-        },
-        name: "[" + key.name + ", *]",
-        is: is,
-        assert: function (value: any): asserts value is [K, any] {
-            assertTrue(is(value));
-        },
-        display: function (value: [K, any]): string {
-            return key.display(value[0]) + " -> " + value[1];
-        }
     };
     return order;
 }
@@ -118,7 +102,7 @@ class RedBlackMapImpl<K, V> implements Iterable<[K, V]> {
 }
 freeze(RedBlackMapImpl);
 
-export function RedBlackMap<K, V>(order : Order<K>, keyValuePairs? : Iterable<[K, V]>) : RedBlackMap<K, V> {
-    return new RedBlackMapImpl(RedBlackSet(promoteOrder(order), keyValuePairs));
+export function RedBlackMap<K, V>(order : Compare<K>, keyValuePairs? : Iterable<[K, V]>) : RedBlackMap<K, V> {
+    return new RedBlackMapImpl(RedBlackSet(promoteCompare(order), keyValuePairs));
 }
 freeze(RedBlackMap);
