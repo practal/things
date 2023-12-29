@@ -39,6 +39,15 @@ export class Digraph {
         }
     }
 
+    delete(vertex : Vertex) : boolean {
+        int.assert(vertex);
+        const succs = this.#edges.get(vertex);
+        if (succs === undefined) return false;
+        this.#edge_count -= succs.size;
+        this.#edges.delete(vertex);
+        return true;
+    }
+
     hasVertex(vertex : Vertex) : boolean {
         return this.#edges.has(vertex);
     }
@@ -68,6 +77,16 @@ export class Digraph {
             }        
         }
         return changed;
+    }
+
+    disconnect(from : Vertex, to : Vertex) : boolean {
+        int.assert(from);
+        int.assert(to);
+        let succs = this.#edges.get(from);
+        if (succs === undefined || !succs.has(to)) return false;
+        succs.delete(to);
+        this.#edge_count -= 1;
+        return true;
     }
 
     get vertices() : Iterable<Vertex> {
@@ -319,3 +338,27 @@ freeze(stronglyConnectedComponents);
 
 
 
+export function sourceVertices(graph : Digraph) : Set<Vertex> {
+    const outgoing : Set<Vertex> = new Set();
+    for (const vertex of graph.vertices) {
+        for (const succ of graph.outgoing(vertex)) outgoing.add(succ);
+    }
+    const sources : Set<Vertex> = new Set();
+    for (const vertex of graph.vertices) {
+        if (!outgoing.has(vertex)) sources.add(vertex);
+    }
+    return sources;
+}
+
+export function sinkVertices(graph : Digraph) : Set<Vertex> {
+    const sinks : Set<Vertex> = new Set();
+    for (const vertex of graph.vertices) {
+        let isSink = true;
+        for (const _ of graph.outgoing(vertex)) {
+            isSink = false;
+            break;
+        }
+        if (isSink) sinks.add(vertex);
+    }
+    return sinks;
+}
