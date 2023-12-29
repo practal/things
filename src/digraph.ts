@@ -103,6 +103,12 @@ export class Digraph {
         return it();
     }
 
+    countOutgoing(vertex : Vertex) : nat {
+        const succs = this.#edges.get(vertex);
+        if (succs === undefined) return 0;
+        return succs.size;        
+    }
+
     get isEmpty() : boolean {
         return this.vertexCount === 0;
     }
@@ -289,8 +295,6 @@ freeze(backEdgesOfTopologicalSort);
     let sorted : Vertex[] = [];
     let visited : Set<Vertex> = new Set();
 
-    const count = graph.vertexCount;
-
     function visit(vertex : Vertex) {
         if (visited.has(vertex)) return;
         visited.add(vertex);
@@ -335,8 +339,6 @@ export function stronglyConnectedComponents(graph : Digraph) : Set<Vertex>[] {
     return weaklyConnectedComponents(forest);
 }
 freeze(stronglyConnectedComponents);
-
-
 
 export function sourceVertices(graph : Digraph) : Set<Vertex> {
     const outgoing : Set<Vertex> = new Set();
