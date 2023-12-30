@@ -468,3 +468,15 @@ export function compareGraphs(g : Digraph, h : Digraph) : Relation {
     if (sup) return Relation.GREATER;
     return Relation.UNRELATED;
 }
+
+export function mapVertices(g : Digraph, f : (v : Vertex) => Vertex) : Digraph {
+    const h = new Digraph();
+    for (const v of g.vertices) {
+        const w = f(v);
+        h.insert(w);
+        for (const succ of g.outgoing(v)) {
+            h.connect(w, f(succ));
+        }
+    }
+    return h;
+}
