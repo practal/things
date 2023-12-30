@@ -9,6 +9,15 @@ export enum Relation {
     GREATER
 }
 
+export function relationAsNumber(r : Relation) : number | undefined {
+    switch(r) {
+        case Relation.LESS: return -1;
+        case Relation.EQUAL: return 0;
+        case Relation.GREATER: return 1;
+        default: return undefined;
+    }
+}
+
 export function invertRelation(relation : Relation) : Relation {
     switch (relation) {
         case Relation.LESS: return Relation.GREATER;
