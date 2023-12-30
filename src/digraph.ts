@@ -1,5 +1,6 @@
+import { Relation } from "./index.js";
 import { int, nat } from "./primitives.js";
-import { freeze } from "./utils.js";
+import { force, freeze } from "./utils.js";
 
 export type Vertex = int
 
@@ -130,6 +131,18 @@ export class Digraph {
 
 }
 freeze(Digraph);
+
+export function printGraph(graph : Digraph, 
+    label : (v : Vertex) => string = v => v.toString(), 
+    println : (s : string) => void = console.log) 
+{
+    println("Graph has " + graph.vertexCount + " vertices and " + graph.edgeCount + " edges:");
+    for (const vertex of graph.vertices) {
+        const succs = [...graph.outgoing(vertex)].map(label).join(", ");
+        println("  Vertex " + label(vertex) + ": " + succs);
+    }
+    println("  □");
+}
 
 export type DFSNode = {
     parent : Vertex | null,
@@ -363,4 +376,95 @@ export function sinkVertices(graph : Digraph) : Set<Vertex> {
         if (isSink) sinks.add(vertex);
     }
     return sinks;
+}
+
+export function KahnTopologicalSortDepthFirstWithCompare(graph : Digraph, 
+    compare : (x: Vertex, y: Vertex) => number) : 
+    { sorted : Vertex[], remaining_transposed : Digraph }
+{
+    const transposed = transposeDigraph(graph);
+    const sources = [...sinkVertices(transposed)];
+    const sorted : Vertex[] = [];
+    sources.sort((x, y) => -compare(x, y));  // first source to consider is at the end
+    while (true) {
+        const source = sources.pop();
+        if (source === undefined) return { sorted : sorted, remaining_transposed : transposed };
+        sorted.push(source);
+        const succs : Vertex[] = [];
+        for (const succ of graph.outgoing(source)) {
+            transposed.disconnect(succ, source);
+            if (transposed.countOutgoing(succ) === 0) succs.push(succ);
+        }
+        succs.sort((x, y) => -compare(x, y)); 
+        sources.push(...succs);
+    }
+}
+
+export function KahnTopologicalSortDepthFirst(graph : Digraph) : 
+    { sorted : Vertex[], remaining_transposed : Digraph }
+{
+    const transposed = transposeDigraph(graph);
+    const sources = [...sinkVertices(transposed)];
+    const sorted : Vertex[] = [];
+    while (true) {
+        const source = sources.pop();
+        if (source === undefined) {
+            return { sorted : sorted, remaining_transposed : transposed };
+        }
+        sorted.push(source);
+        for (const succ of graph.outgoing(source)) {
+            transposed.disconnect(succ, source);
+            if (transposed.countOutgoing(succ) === 0) sources.push(succ);
+        }
+    }
+}
+
+export function transitiveReductionAndClosureOfDAG(graph : Digraph) : { reduction : Digraph, closure : Digraph } {
+    const closure = new Digraph();
+    const reduction = new Digraph();
+    const topsort = KahnTopologicalSortDepthFirst(graph);
+    if (topsort.remaining_transposed.edgeCount > 0) throw new Error("graph has cycles");
+    const sorted = topsort.sorted;
+    const Index = new Map<number, number>();
+    for (const [i, vertex] of sorted.entries()) {
+        Index.set(vertex, i);
+    }
+    const N = sorted.length;
+    for (let i = N-1; i >= 0; i--) {
+        const vertex = sorted[i];
+        closure.connect(vertex, vertex);
+        const succs = [...graph.outgoing(vertex)];
+        succs.sort((u, v) => force(Index.get(u)) - force(Index.get(v)));
+        for (const succ of succs) {
+            if (!closure.hasEdge(vertex, succ)) {
+                const j = force(Index.get(succ));
+                for (let l = j; l < N; l++) {
+                    const w = sorted[l];
+                    if (closure.hasEdge(succ, w)) closure.connect(vertex, w);
+                }
+                reduction.connect(vertex, succ);
+            }
+        }
+    }
+    for (const vertex of sorted) closure.disconnect(vertex, vertex);
+    return { reduction : reduction, closure : closure };
+}
+
+export function isSubgraph(sub : Digraph, g : Digraph) : boolean {
+    for (const vertex of sub.vertices) {
+        if (!g.hasVertex(vertex)) return false;
+        for (const succ of sub.outgoing(vertex)) {
+            if (!g.hasEdge(vertex, succ)) return false;
+        }
+    }
+    return true;
+}
+
+export function compareGraphs(g : Digraph, h : Digraph) : Relation {
+    const sub = isSubgraph(g, h);
+    const sup = isSubgraph(h, g);
+    if (sub && sup) return Relation.EQUAL;
+    if (sub) return Relation.LESS;
+    if (sup) return Relation.GREATER;
+    return Relation.UNRELATED;
 }
