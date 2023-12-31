@@ -42,7 +42,19 @@ function testTransitiveReduction2() {
     assertT(compareGraphs(reduction, r) === Relation.EQUAL);
 }
 
+function testTransitiveReduction3() {
+    const g = new Digraph();
+    const A = 1;
+    const B = 2;
+    g.insert(A);
+    g.insert(B);
+    const {reduction, closure} = transitiveReductionAndClosureOfDAG(g);
+    assertT(reduction.vertexCount === 2 && reduction.edgeCount === 0);
+    assertT(closure.vertexCount === 2 && reduction.edgeCount === 0);
+}
+
 Test(() => {
     testTransitiveReduction1();
     testTransitiveReduction2();
+    testTransitiveReduction3();
 }, "Transitive Reduction and Closure of DAG");

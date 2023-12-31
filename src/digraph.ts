@@ -432,6 +432,7 @@ export function transitiveReductionAndClosureOfDAG(graph : Digraph) : { reductio
     const N = sorted.length;
     for (let i = N-1; i >= 0; i--) {
         const vertex = sorted[i];
+        reduction.insert(vertex);
         closure.connect(vertex, vertex);
         const succs = [...graph.outgoing(vertex)];
         succs.sort((u, v) => force(Index.get(u)) - force(Index.get(v)));
