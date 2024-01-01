@@ -9,6 +9,8 @@ export enum Relation {
     GREATER
 }
 
+export type Total = Relation.LESS | Relation.EQUAL | Relation.GREATER
+
 export function relationAsNumber(r : Relation) : number | undefined {
     switch(r) {
         case Relation.LESS: return -1;

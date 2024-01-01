@@ -1,4 +1,4 @@
-import { Digraph, Relation, Test, assertT, compareGraphs, printGraph, transitiveReductionAndClosureOfDAG } from "./index.js";
+import { Digraph, Relation, Test, assertT, compareGraphs, transitiveReductionAndClosureOfDAG } from "./index.js";
 
 function testTransitiveReduction1() {
     const g = new Digraph();
