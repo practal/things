@@ -1,4 +1,5 @@
-import { freeze, privateConstructor } from "./utils.js";
+import { nat } from "primitives.js";
+import { assertTrue, freeze, privateConstructor } from "./utils.js";
 
 class ListIterator<V> implements Iterator<V> {
     #list : List<V>
@@ -66,6 +67,19 @@ export class List<V> implements Iterable<V> {
 
     get tail() : List<V> | undefined {
         return this.#tail;
+    }
+
+    get(index : nat) : V {
+        assertTrue(nat.is(index));
+        let l : List<V> = this;
+        let i = 0;
+        while (i > 0) {
+            if (l.#tail === undefined) throw Error("List.get(" + index + ")");
+            l = l.#tail;
+            i--;
+        }
+        if (l.#head === undefined) throw Error("List.get(" + index + ")");
+        return l.#head;
     }
 
     get length() : number {
