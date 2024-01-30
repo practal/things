@@ -48,6 +48,14 @@ export class List<V> implements Iterable<V> {
         else return false;
     }
 
+    static from<V>(...values : V[]) : List<V> {
+        let l : List<V> = List.empty;
+        for (let i = values.length-1; i >= 0; i--) {
+            l = l.cons(values[i]);
+        }
+        return l;
+    }
+
     get isEmpty() : boolean {
         return this.#tail === undefined;
     }
