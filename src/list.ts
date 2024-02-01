@@ -72,7 +72,7 @@ export class List<V> implements Iterable<V> {
     get(index : nat) : V {
         assertTrue(nat.is(index));
         let l : List<V> = this;
-        let i = 0;
+        let i = index;
         while (i > 0) {
             if (l.#tail === undefined) throw Error("List.get(" + index + ")");
             l = l.#tail;
