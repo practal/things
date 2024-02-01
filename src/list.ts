@@ -1,4 +1,4 @@
-import { nat } from "primitives.js";
+import { nat } from "./primitives.js";
 import { assertTrue, freeze, privateConstructor } from "./utils.js";
 
 class ListIterator<V> implements Iterator<V> {
