@@ -95,5 +95,10 @@ export class List<V> implements Iterable<V> {
 
     [Symbol.iterator]():Iterator<V> { return new ListIterator(this); }
 
+    toString() : string {
+        const es = [...this].map(v => "" + v);
+        return es.join("→");
+    }
+
 }
 freeze(List);
