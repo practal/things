@@ -79,16 +79,16 @@ freeze(ArrayHash);
 export function ArrayOrder<E>(thing : Order<E>) : Order<E[]> {
     return mkOrder("Array", 
         A => arrayIs(thing, A),
-        (A, B) => arrayCompare(thing, A, B));
+        (A, B) => arrayCompareLexicographically(thing, A, B));
 }
 freeze(ArrayOrder);
 
 export function ArrayOrderAndHash<E>(thing : Order<E> & Hash<E>, 
-    display : (value : E[]) => string = v => "" + v) : Order<E[]> & Hash<E[]>
+    display : (value : E[]) => string = vs => "[" + vs.map(v => thing.display(v)).join(", ") + "]") : Order<E[]> & Hash<E[]>
 {
     return mkOrderAndHash("Array", 
         A => arrayIs(thing, A),
-        (A, B) => arrayCompare(thing, A, B),
+        (A, B) => arrayCompareLexicographically(thing, A, B),
         A => arrayHash(thing, A),
         display);
 }
