@@ -35,11 +35,11 @@ export function force<V>(value : V | undefined | null) : V {
 freeze(force);
 
 export function isUnicodeLetter(c : string) : boolean {
-    return RegExp(/^\p{L}/,'u').test(c);
+    return RegExp(/^\p{L}$/u).test(c);
 }
 
 export function isUnicodeDigit(c : string) : boolean {
-    return RegExp(/^\p{N}/,'u').test(c);
+    return RegExp(/^\p{N}$/u).test(c);
 }
 
 export function groupBy<E, G>(groupOf : (elem : E) => G, elems : Iterable<E>) : [G, E[]][] {
