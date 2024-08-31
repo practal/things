@@ -42,6 +42,18 @@ export function isUnicodeDigit(c : string) : boolean {
     return RegExp(/^\p{N}$/u).test(c);
 }
 
+export function isUnicodePunctuation(c : string) : boolean {
+    return RegExp(/^\p{P}$/u).test(c);
+}
+
+export function isUnicodeMathSymbol(c : string) : boolean {
+    return RegExp(/^\p{Sm}$/u).test(c);
+}
+
+export function isUnicodeSpace(c : string) : boolean {
+    return RegExp(/^\p{Zs}$/u).test(c);
+}
+
 export function groupBy<E, G>(groupOf : (elem : E) => G, elems : Iterable<E>) : [G, E[]][] {
     let groups : [G, E[]][] = [];
     let group : [G, E[]] | undefined = undefined;
