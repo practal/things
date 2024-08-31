@@ -1,4 +1,5 @@
 import { debug } from "./debug.js";
+import { nat } from "./primitives.js";
 import { AssertionFailed } from "./test.js";
 
 export function freeze<V>(x : V) : V {
@@ -103,3 +104,7 @@ export function assertIsDefined<T>(value : T) : asserts value is NonNullable<T> 
 
 export type NotUndefined<T> = T extends undefined ? never : T;
 export type Defined = Exclude<any, undefined>;
+
+export function hexString(code : nat, minLength : nat) : string {
+    return code.toString(16).padStart(minLength, '0').toUpperCase();
+}
