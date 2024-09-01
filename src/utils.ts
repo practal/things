@@ -113,6 +113,6 @@ export function assertIsDefined<T>(value : T) : asserts value is NonNullable<T> 
 export type NotUndefined<T> = T extends undefined ? never : T;
 export type Defined = Exclude<any, undefined>;
 
-export function hexString(code : nat, minLength : nat) : string {
+export function hexString(code : nat, minLength : nat = 0) : string {
     return code.toString(16).padStart(minLength, '0').toUpperCase();
 }
