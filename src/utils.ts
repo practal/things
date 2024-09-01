@@ -47,6 +47,14 @@ export function isUnicodePunctuation(c : string) : boolean {
     return RegExp(/^\p{P}$/u).test(c);
 }
 
+export function isUnicodeDelimiterOpen(c : string) : boolean {
+    return RegExp(/^\p{Ps}|\p{Pi}$/u).test(c);
+}
+
+export function isUnicodeDelimiterClose(c : string) : boolean {
+    return RegExp(/^\p{Pe}|\p{Pf}$/u).test(c);
+}
+
 export function isUnicodeMathSymbol(c : string) : boolean {
     return RegExp(/^\p{Sm}$/u).test(c);
 }
