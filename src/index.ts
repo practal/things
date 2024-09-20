@@ -13,3 +13,5 @@ export * from "./utils.js";
 export * from "./redblack/RedBlackTree.js";
 export * from "./redblack/RedBlackSet.js";
 export * from "./redblack/RedBlackMap.js";
+
+console.log("Things is in da house!!!");
