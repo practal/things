@@ -94,20 +94,26 @@ export function timeIt<R>(label : string, op : () => R, print : Printer = debug)
     return result;
 }
 
-export function assertTrue(condition : boolean) : asserts condition is true {
-    if (condition !== true) throw new AssertionFailed();
+export function assertTrue(condition : boolean, message? : string) : asserts condition is true {
+    if (condition !== true) throw new AssertionFailed(message);
 }
 
-export function assertFalse(condition : boolean) : asserts condition is false  {
-    if (condition !== false) throw new AssertionFailed();
+export function assertFalse(condition : boolean, message? : string) : asserts condition is false  {
+    if (condition !== false) throw new AssertionFailed(message);
 }
 
-export function assertNever(value : never) : never {
-    throw new AssertionFailed("unexpected value '" + value + "'");
+function addMessage(s : string, message? : string) {
+    if (message === undefined) return s;
+    else return s + ", " + message;
 }
 
-export function assertIsDefined<T>(value : T) : asserts value is NonNullable<T> {
-    if (value === undefined || value === null) throw new AssertionFailed("undefined value");
+export function assertNever(value : never, message? : string) : never {
+    throw new AssertionFailed(addMessage("unexpected value '" + value + "'", message));
+}
+
+export function assertIsDefined<T>(value : T, message? : string) : asserts value is NonNullable<T> {
+    if (value === undefined || value === null) 
+        throw new AssertionFailed(addMessage("undefined value", message));
 }
 
 export type NotUndefined<T> = T extends undefined ? never : T;
