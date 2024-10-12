@@ -10,6 +10,7 @@ export * from "./primitives.js";
 export * from "./test.js";
 export * from "./things.js";
 export * from "./utils.js";
+export * from "./array_utils.js";
 export * from "./redblack/RedBlackTree.js";
 export * from "./redblack/RedBlackSet.js";
 export * from "./redblack/RedBlackMap.js";
