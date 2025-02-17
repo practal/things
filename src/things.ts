@@ -78,6 +78,8 @@ export interface Hash<T> extends Equality<T> {
 
 }
 
+export interface Data<T> extends Order<T>, Hash<T> {}
+
 const defaultThingName = "thing";
 
 export function mkThing<T>(
@@ -214,4 +216,14 @@ export function mkOrderAndHash<T>(
 }
 freeze(mkOrderAndHash);
 
+export function mkData<T>(
+    name : string | undefined, 
+    check : (x : T) => boolean, 
+    compare : (x : T, y : T) => Relation,
+    hash : (x : T) => int,
+    display : (value : T) => string = (v) => "" + v) : Data<T>
+{
+    return mkOrderAndHash<T>(name, check, compare, hash, display);
+}
+freeze(mkData);
 
