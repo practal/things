@@ -39,6 +39,10 @@ export function isUnicodeLetter(c : string) : boolean {
     return RegExp(/^\p{L}$/u).test(c);
 }
 
+export function isDigit(c : string) : boolean {
+    return c.length === 1 && c >= "0" && c <= "9";
+}
+
 export function isUnicodeDigit(c : string) : boolean {
     return RegExp(/^\p{N}$/u).test(c);
 }
