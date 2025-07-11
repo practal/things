@@ -1,5 +1,5 @@
 import { nat } from "./primitives.js";
-import { force, freeze, notImplemented } from "./utils.js";
+import { force, freeze } from "./utils.js";
 
 type Node<V> = { level : nat, in : Set<V>, out : Set<V> }
 

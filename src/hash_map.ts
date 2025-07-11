@@ -1,5 +1,5 @@
 import { AssocArray, assocArrayGet, assocArrayHas, assocArrayPut, assocArrayPutIfNew, assocArrayRemove, assocArraySingleton } from "./assoc_array.js";
-import { combineHashes, combineHashesOrderInvariant, int, nat, string } from "./primitives.js";
+import { int, nat } from "./primitives.js";
 import { Hash } from "./things.js";
 import { freeze } from "./utils.js";
 

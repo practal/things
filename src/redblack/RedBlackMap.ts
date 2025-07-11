@@ -1,4 +1,4 @@
-import { Compare, Relation, assertTrue, freeze, nat } from "../index.js";
+import { Compare, Relation, freeze, nat } from "../index.js";
 import { RedBlackSet } from "./RedBlackSet.js"
 
 export interface RedBlackMap<K, V> extends Iterable<[K, V]> {

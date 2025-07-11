@@ -1,4 +1,5 @@
-import { Thing, Equality, Relation, mkOrderAndHash, mkEquality, Hash, Order } from "./things.js";
+import { Brand } from "./brand.js";
+import { Equality, Relation, mkOrderAndHash, mkEquality, Hash, Order } from "./things.js";
 import { freeze } from "./utils.js";
 
 function compareInt(x : int, y : int) : Relation {
@@ -8,7 +9,7 @@ function compareInt(x : int, y : int) : Relation {
 }
 
 /** The type of integers. */
-export type int = number 
+export type int = number
 export const int : Hash<int> & Order<int> = mkOrderAndHash("integer", 
     x => Number.isSafeInteger(x), compareInt, x => x);
 

@@ -133,8 +133,6 @@ export class HashSet<E> implements Iterable<E> {
 }
 freeze(HashSet);
 
-const HashSetHashSeed = string.hash("HashSetHash");
-
 export const HashSetHash : Hash<HashSet<any>> = mkHash("hash set", x => x instanceof HashSet, (x, y) => x.isEqualTo(y), x => x.hashCode());
 freeze(HashSetHash);
 
