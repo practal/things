@@ -26,7 +26,7 @@ export function sourcePosition(up : nat = 1) : string | undefined {
 }
 freeze(sourcePosition);
 
-export type Test = () => void
+export type Test = () => void | Promise<void>
 
 export class AssertionFailed {
 
@@ -151,7 +151,16 @@ export function assertUNRELATEDT<E>(order : Order<E>, ...values : E[]) {
     }
 }
 
-export function runTests() {
+export type TestRunResults = {
+    readonly total : nat,
+    readonly succeeded : nat,
+    readonly failed : nat,
+    readonly crashed : nat,
+    readonly missed : nat,
+    readonly ok : boolean
+}
+
+export async function runTests() : Promise<TestRunResults> {
     debug("There are " + tests.length + " tests to run.");
     debug("------------------------------------------------");
     let succeeded = 0;
@@ -160,7 +169,7 @@ export function runTests() {
     for (const t of tests) {
         const [pos, descr, test] = t;
         try {
-            test();
+            await test();
             succeeded += 1;
         } catch(error) {
             if (error instanceof AssertionFailed) {
@@ -168,12 +177,12 @@ export function runTests() {
                 const name = descr ? "'" + descr + "' " : "";
                 if (error.message)
                     debug("Test "+name+"failed at '" + pos + "': " + error.message + ".");
-                else 
+                else
                     debug("Test "+name+"failed at '" + pos + "'.");
-            } else {                    
+            } else {
                 crashed += 1;
                 const name = descr ? "'" + descr + "' " : "";
-                debug("Test " + name + "crashed at '" + pos + "'.");
+                debug("Test " + name + "crashed at '" + pos + "': " + String(error));
             }
         }
     }
@@ -187,5 +196,13 @@ export function runTests() {
     }
     if (missed > 0) debug("!!! Because tests were disabled then, " + missed + " tests have been missed.");
     debug("");
+    return {
+        total: tests.length,
+        succeeded,
+        failed,
+        crashed,
+        missed,
+        ok: failed === 0 && crashed === 0 && succeeded === tests.length
+    };
 }
 freeze(runTests);

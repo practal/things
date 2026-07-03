@@ -4,4 +4,6 @@ import "./digraph.test.js";
 import "./list.test.js";
 
 configureDebugging(console.log);
-runTests();
+runTests().then(results => {
+    if (!results.ok) process.exitCode = 1;
+});
