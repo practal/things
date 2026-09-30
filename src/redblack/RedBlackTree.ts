@@ -1,7 +1,19 @@
 import { Compare, Relation, assertNever, freeze, nat } from "../index.js";
 
+/**
+ * Persistent ordered tree storage; `null` is the empty tree. Nodes are frozen,
+ * but their elements are not deep-frozen. Updates share unaffected subtrees.
+ * Search/update operations must use a stable comparator consistent with the
+ * tree's ordering. Comparator equality identifies one stored representative;
+ * it need not mean that two elements are identical JavaScript values.
+ * Comparisons returning `Relation.UNRELATED` cause search/update operations
+ * to throw. The tree itself stores neither its comparator nor its size.
+ * If `E` includes undefined, an undefined lookup/previous/deleted value alone
+ * cannot distinguish a stored undefined from absence; use `isElementOf`.
+ */
 export type RedBlackTree<E> = Red<E> | Black<E> | null;
 
+/** Frozen red node. Constructing a node does not validate tree invariants. */
 export class Red<E> {
     elem : E
     left : RedBlackTree<E>
@@ -15,6 +27,7 @@ export class Red<E> {
 }
 freeze(Red);
 
+/** Frozen black node. Constructing a node does not validate tree invariants. */
 export class Black<E> {
     elem : E
     left : RedBlackTree<E>
@@ -28,6 +41,7 @@ export class Black<E> {
 }
 freeze(Black);
 
+/** Whether the root is a red node; false for the empty tree. */
 export function isRed<E>(tree : RedBlackTree<E>) : tree is Red<E> {
     return tree instanceof Red;
 }
@@ -36,14 +50,17 @@ function isBlack<E>(tree : RedBlackTree<E>) : tree is Black<E> {
     return tree instanceof Black;
 }
 
+/** Whether the tree is empty. */
 export function isEmpty<E>(tree : RedBlackTree<E>) : tree is null {
     return tree === null;
 }
 
+/** Returns the empty tree (`null`). */
 export function empty<E>() : RedBlackTree<E> {
     return null;
 }
 
+/** Whether the tree contains an element comparing equal to `x`. */
 export function isElementOf<E>(order : Compare<E>, x : E, tree : RedBlackTree<E>) : boolean {
 
     function member(tree : RedBlackTree<E>) : boolean {
@@ -61,6 +78,7 @@ export function isElementOf<E>(order : Compare<E>, x : E, tree : RedBlackTree<E>
     return member(tree);
 }
 
+/** Returns the stored representative comparing equal to `x`, or undefined. */
 export function findEqualElement<E>(order : Compare<E>, x : E, tree : RedBlackTree<E>) : E | undefined {
 
     function find(tree : RedBlackTree<E>) : E | undefined {
@@ -77,26 +95,6 @@ export function findEqualElement<E>(order : Compare<E>, x : E, tree : RedBlackTr
 
     return find(tree);
 
-}
-
-export function findMinimumElement<E>(tree : RedBlackTree<E>) : E | undefined {
-
-    function find(tree : RedBlackTree<E>) : E | undefined {
-        if (isEmpty(tree)) return undefined;
-        return find(tree.left);
-    }
-
-    return find(tree);
-}
-
-export function findMaximumElement<E>(tree : RedBlackTree<E>) : E | undefined {
-
-    function find(tree : RedBlackTree<E>) : E | undefined {
-        if (isEmpty(tree)) return undefined;
-        return find(tree.right);
-    }
-
-    return find(tree);
 }
 
 function mkRed<E>(left : RedBlackTree<E>, elem : E, right : RedBlackTree<E>) : RedBlackTree<E> {
@@ -167,9 +165,26 @@ function balance<E>(left : RedBlackTree<E>, elem : E, right : RedBlackTree<E>) :
 }
 
 /**
- * Inserts a new element into the tree. Returns undefined if the element is already part of the tree.
+ * Inserts `x`, replacing the stored representative if one compares equal.
+ * Returns `{ result, previous }`, where `previous` is the old representative
+ * or undefined when none existed. The input tree is unchanged. Reinserting an
+ * identical value (`Object.is`) may reuse the input tree.
  */
 export function insertElement<E>(order : Compare<E>, x : E, tree : RedBlackTree<E>) : { result : RedBlackTree<E>, previous : E | undefined } {
+    return insertElementWithPolicy(order, x, tree, true);
+}
+
+/**
+ * Inserts `x` only if no stored element compares equal. When one exists, returns
+ * the original tree and that element as `previous`, without replacing it or
+ * allocating tree nodes. Otherwise returns the extended tree and undefined as
+ * `previous`. The input tree is unchanged in either case.
+ */
+export function insertElementIfAbsent<E>(order : Compare<E>, x : E, tree : RedBlackTree<E>) : { result : RedBlackTree<E>, previous : E | undefined } {
+    return insertElementWithPolicy(order, x, tree, false);
+}
+
+function insertElementWithPolicy<E>(order : Compare<E>, x : E, tree : RedBlackTree<E>, replaceExisting : boolean) : { result : RedBlackTree<E>, previous : E | undefined } {
 
     let previous : E | undefined = undefined;
 
@@ -179,19 +194,22 @@ export function insertElement<E>(order : Compare<E>, x : E, tree : RedBlackTree<
         switch(c) {
             case Relation.UNRELATED: throw new Error("RedBlackTree: Cannot compare '" + x + "' with '" + tree.elem + "'.");
             case Relation.EQUAL: {
-                previous = tree.elem; 
+                previous = tree.elem;
+                if (!replaceExisting || Object.is(x, tree.elem)) return tree;
                 if (isRed(tree)) return mkRed(tree.left, x, tree.right);
                 // @ts-ignore
                 else return mkBlack(tree.left, x, tree.right);
             }
             case Relation.LESS: {
                 const left = insert(tree.left);
+                if (left === tree.left) return tree;
                 if (isRed(tree)) return mkRed(left, tree.elem, tree.right); 
                 tree = tree as Black<E>;
                 return balance(left, tree.elem, tree.right);
             }
             case Relation.GREATER: {
                 const right = insert(tree.right);
+                if (right === tree.right) return tree;
                 if (isRed(tree)) return mkRed(tree.left, tree.elem, right);
                 tree = tree as Black<E>;                
                 return balance(tree.left, tree.elem, right);
@@ -200,11 +218,15 @@ export function insertElement<E>(order : Compare<E>, x : E, tree : RedBlackTree<
         }
     }
 
-    return { result: forceBlack(insert(tree)), previous: previous };
+    const result = insert(tree);
+    return { result: !replaceExisting && result === tree ? tree : forceBlack(result), previous };
 }
 
 /**
- * Deletes an existing element from the tree. Returns undefined if the element is already part of the tree.
+ * Removes the stored representative comparing equal to `x`. Returns
+ * `{ result, deleted }`, where `deleted` is the removed element or undefined
+ * when none existed. The input tree is unchanged; an absent deletion need not
+ * reuse it.
  */
 export function deleteElement<E>(order : Compare<E>, x : E, tree : RedBlackTree<E>) : { result : RedBlackTree<E>, deleted : E | undefined }
 {
@@ -296,6 +318,7 @@ export function deleteElement<E>(order : Compare<E>, x : E, tree : RedBlackTree<
     return { result: forceBlack(del(tree)), deleted: deleted };
 }
 
+/** Iterates stored representatives in ascending order. */
 export function* iterateElements<E>(tree : RedBlackTree<E>) : Generator<E, void, void> {
     if (tree !== null) {
         yield* iterateElements(tree.left);
@@ -304,6 +327,7 @@ export function* iterateElements<E>(tree : RedBlackTree<E>) : Generator<E, void,
     }
 }
 
+/** Counts black nodes down the leftmost path, including the empty leaf as one. */
 export function blackHeight<E>(tree : RedBlackTree<E>) : nat {
     if (isEmpty(tree)) return 1;
     else if (isRed(tree)) return blackHeight(tree.left);
