@@ -4,6 +4,6 @@
         "module": "CommonJS",
         //"moduleResolution": "nodenext",
         "outDir": "dist/cjs",
-        "target": "es2015"
+        "target": "es2022"
     }
 }

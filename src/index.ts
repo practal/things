@@ -15,3 +15,4 @@ export * from "./redblack/RedBlackTree.js";
 export * from "./redblack/RedBlackSet.js";
 export * from "./redblack/RedBlackMap.js";
 export * from "./brand.js";
+export * from "./opaque.js";

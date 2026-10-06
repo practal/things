@@ -1,17 +1,8 @@
+import { freeze } from "./freeze.js";
+export { freeze } from "./freeze.js";
 import { debug } from "./debug.js";
 import { nat } from "./primitives.js";
 import { AssertionFailed } from "./test.js";
-
-export function freeze<V>(x : V) : V {
-    if (typeof x === "function") {
-        Object.freeze(x.prototype);
-        Object.freeze(x);    
-    } else {
-        Object.freeze(x);
-    }
-    return x;
-}
-freeze(freeze);
 
 export function notImplemented() : never {
     throw new Error("not implemented yet");
